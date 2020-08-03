@@ -72,6 +72,7 @@ class StationController extends Controller
             return response()->json(['error' => $exception->getMessage()], 400);
         }
     }
+
     /**
      * Update a station
      *
@@ -107,6 +108,33 @@ class StationController extends Controller
             $station->save();
 
             return response()->json(['station' => $station], 204);
+        } catch (ModelNotFoundException $exception) {
+            return response()->json(['error' => 'Station not found'], 404);
+        } catch (\Exception $exception) {
+            return response()->json(['error' => $exception->getMessage()], 400);
+        }
+    }
+
+    /**
+     * View a station
+     *
+     * @param Request $request
+     * @param string $id
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function show(Request $request, string $id): JsonResponse
+    {
+        $operator = $request->user();
+
+        $request['id'] = $id;
+
+        $this->validate($request, ['id' => 'required|uuid']);
+
+        try {
+            $station = Station::where('id', $id)->where('user_id', $operator->id)->firstOrFail();
+
+            return response()->json(['station' => $station], 200);
         } catch (ModelNotFoundException $exception) {
             return response()->json(['error' => 'Station not found'], 404);
         } catch (\Exception $exception) {
