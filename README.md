@@ -28,7 +28,7 @@ docker-compose exec apache bash -c 'php artisan migrate'
 Todos os requests deverão conter no mínimo os cabeçalhos mencionados abaixo:
 
 ```http request
-GET https://api.bramonmeteor.org/v1/estacoes/
+GET https://api.bramonmeteor.org/v1/admin/operators
 Accept: */*
 Cache-Control: no-cache
 Authorization: Bearer XOXOXOXOXOXOXOXO

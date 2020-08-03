@@ -16,14 +16,14 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'v1/admin', 'namespace' => 'Admin', 'middleware' => ['auth', 'admin']], function () {
 
     # Operators
-    Route::get('operators', 'Admin\OperatorController::index');
-    Route::post('operators', 'Admin\OperatorController::create');
-    Route::get('operators/{id}', 'Admin\OperatorController::show');
-    Route::put('operators/{id}', 'Admin\OperatorController::update');
+    Route::get('operators', 'OperatorController@index');
+    Route::post('operators', 'OperatorController@create');
+    Route::get('operators/{id}', 'OperatorController@show');
+    Route::put('operators/{id}', 'OperatorController@update');
 
     # Stations
-    Route::get('stations', 'Admin\stationController::index');
-    Route::post('stations', 'Admin\stationController::create');
-    Route::get('stations/{id}', 'Admin\stationController::show');
-    Route::put('stations/{id}', 'Admin\stationController::update');
+    Route::get('stations', 'StationController@index');
+    Route::post('stations', 'StationController@create');
+    Route::get('stations/{id}', 'StationController@show');
+    Route::put('stations/{id}', 'StationController@update');
 });

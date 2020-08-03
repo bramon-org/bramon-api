@@ -2,9 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 
-class ExampleMiddleware
+class Admin
 {
     /**
      * Handle an incoming request.
@@ -15,6 +16,10 @@ class ExampleMiddleware
      */
     public function handle($request, Closure $next)
     {
+        if ($request->user()->role !== User::ROLE_ADMIN) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
         return $next($request);
     }
 }
