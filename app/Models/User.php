@@ -84,4 +84,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         return uniqid(uniqid(), true);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function stations()
+    {
+        return $this->hasMany('App\Models\Station');
+    }
 }
