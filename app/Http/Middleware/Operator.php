@@ -16,7 +16,7 @@ class Operator
      */
     public function handle($request, Closure $next)
     {
-        if ($request->user()->role !== User::ROLE_OPERATOR) {
+        if (!in_array($request->user()->role, [User::ROLE_OPERATOR, User::ROLE_ADMIN])) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 

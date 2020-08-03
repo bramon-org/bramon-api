@@ -16,8 +16,22 @@ abstract class TestCase extends BaseTestCase
     /**
      * @var array
      */
-    const DEFAULT_HEADERS = [
+    const DEFAULT_ADMIN_HEADERS = [
         'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
+    ];
+
+    /**
+     * @var array
+     */
+    const DEFAULT_OPERATOR_HEADERS = [
+        'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ8',
+    ];
+
+    /**
+     * @var array
+     */
+    const DEFAULT_EDITOR_HEADERS = [
+        'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ7',
     ];
 
     /**

@@ -14,7 +14,7 @@ class OperatorControllerTest extends TestCase
      */
     public function listOperators()
     {
-        $this->get('/v1/admin/operators', self::DEFAULT_HEADERS);
+        $this->get('/v1/admin/operators', self::DEFAULT_ADMIN_HEADERS);
 
         $this->assertNotEmpty($this->response->getContent());
         $this->assertResponseStatus(200);
@@ -33,7 +33,7 @@ class OperatorControllerTest extends TestCase
             'role' => \App\Models\User::ROLE_OPERATOR,
         ];
 
-        $this->post('/v1/admin/operators', $data, self::DEFAULT_HEADERS);
+        $this->post('/v1/admin/operators', $data, self::DEFAULT_ADMIN_HEADERS);
 
         $this->assertNotEmpty($this->response->getContent());
         $this->assertResponseStatus(201);
@@ -52,13 +52,13 @@ class OperatorControllerTest extends TestCase
             'role' => \App\Models\User::ROLE_OPERATOR,
         ];
 
-        $this->post('/v1/admin/operators', $data, self::DEFAULT_HEADERS);
+        $this->post('/v1/admin/operators', $data, self::DEFAULT_ADMIN_HEADERS);
 
         $operator = json_decode($this->response->getContent(), true);
 
         $data['mobile_phone'] = $this->faker->phoneNumber;
 
-        $this->put('/v1/admin/operators/' . $operator['operator']['id'], $data, self::DEFAULT_HEADERS);
+        $this->put('/v1/admin/operators/' . $operator['operator']['id'], $data, self::DEFAULT_ADMIN_HEADERS);
 
         $this->assertResponseStatus(204);
     }
@@ -76,11 +76,11 @@ class OperatorControllerTest extends TestCase
             'role' => \App\Models\User::ROLE_OPERATOR,
         ];
 
-        $this->post('/v1/admin/operators', $data, self::DEFAULT_HEADERS);
+        $this->post('/v1/admin/operators', $data, self::DEFAULT_ADMIN_HEADERS);
 
         $operator = json_decode($this->response->getContent(), true);
 
-        $this->get('/v1/admin/operators/' . $operator['operator']['id'], self::DEFAULT_HEADERS);
+        $this->get('/v1/admin/operators/' . $operator['operator']['id'], self::DEFAULT_ADMIN_HEADERS);
 
         $this->assertResponseStatus(200);
     }
