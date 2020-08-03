@@ -27,7 +27,7 @@ class OperatorController extends Controller
      */
     public function index(): JsonResponse
     {
-        $operators = User::get();
+        $operators = User::paginate(15);
 
         return response()->json($operators);
     }
@@ -56,5 +56,52 @@ class OperatorController extends Controller
         $operator->save();
 
         return response()->json(['operator' => $operator], 201);
+    }
+
+    /**
+     * Update an operator
+     *
+     * @param Request $request
+     * @param string $id
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function update(Request $request, string $id): JsonResponse
+    {
+        $request['id'] = $id;
+
+        $this->validate($request, [
+            'id'            => 'required|uuid',
+            'name'          => 'required|string|max:255',
+            'email'         => 'required|string|email|max:255',
+            'mobile_phone'  => 'required|max:30',
+            'role'          => 'required|in:' . implode(',', User::AVAILABLE_ROLES),
+        ]);
+
+        $operator = User::where('id', $id)->firstOrFail();
+        $operator->fill($request->all());
+        $operator->last_request_ip = $request->ip();
+        $operator->save();
+
+        return response()->json(['operator' => $operator], 204);
+    }
+
+    /**
+     * Show an operator
+     *
+     * @param Request $request
+     * @param string $id
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function show(Request $request, string $id): JsonResponse
+    {
+        $request['id'] = $id;
+
+        $this->validate($request, ['id' => 'required|uuid']);
+
+        $operator = User::where('id', $id)->firstOrFail();
+
+        return response()->json(['operator' => $operator], 200);
     }
 }
