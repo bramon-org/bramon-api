@@ -44,7 +44,7 @@ class OperatorController extends Controller
         $this->validate($request, [
             'name'          => 'required|string|max:255',
             'email'         => 'required|string|email|max:255',
-            'mobile_phone'  => 'required|max:30',
+            'mobile_phone'  => 'required|string|max:50',
             'role'          => 'required|in:' . implode(',', User::AVAILABLE_ROLES),
         ]);
 

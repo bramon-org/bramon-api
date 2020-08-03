@@ -14,6 +14,13 @@ abstract class TestCase extends BaseTestCase
     protected $faker;
 
     /**
+     * @var array
+     */
+    const DEFAULT_HEADERS = [
+        'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
+    ];
+
+    /**
      * Creates the application.
      *
      * @return \Laravel\Lumen\Application
