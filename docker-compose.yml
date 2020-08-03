@@ -2,7 +2,7 @@ version: '3.4'
 services:
   apache:
     container_name: bramon_api_apache
-    image: 'php:7.4-apache'
+    image: 'php:7.2-apache'
     build:
       context: .
       target: dev
@@ -20,7 +20,7 @@ services:
 
   mysqldb:
     container_name: bramon_api_database
-    image: mysql:8.0
+    image: mysql:5.7
     restart: always
     ports:
       - '3306:3306'

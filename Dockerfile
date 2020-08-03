@@ -1,4 +1,4 @@
-FROM php:7.4-apache AS dev
+FROM php:7.2-apache AS dev
 
 WORKDIR /var/www/html/
 
@@ -40,7 +40,7 @@ COPY . /var/www/html/
 
 ###
 
-FROM php:7.4-apache AS artifact
+FROM php:7.2-apache AS artifact
 
 RUN pecl install redis-5.1.1 \
     && docker-php-ext-enable redis
