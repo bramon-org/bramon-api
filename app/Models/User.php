@@ -12,6 +12,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 {
     use Authenticatable, Authorizable;
 
+    const ROLE_ADMIN = 'admin';
+    const ROLE_OPERATOR = 'operator';
+    const ROLE_EDITOR = 'editor';
+
     /**
      * The attributes that are mass assignable.
      *
