@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Traits\AssignUuid;
+use App\Traits\Encryptable;
 use Illuminate\Auth\Authenticatable;
 use Laravel\Lumen\Auth\Authorizable;
 use Illuminate\Database\Eloquent\Model;
@@ -10,11 +12,23 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract
 {
-    use Authenticatable, Authorizable;
+    use Authenticatable, Authorizable, AssignUuid, Encryptable;
 
     const ROLE_ADMIN = 'admin';
     const ROLE_OPERATOR = 'operator';
     const ROLE_EDITOR = 'editor';
+
+    /**
+     * @var string
+     */
+    protected $keyType = 'string';
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
 
     /**
      * The attributes that are mass assignable.
@@ -22,7 +36,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $fillable = [
-        'name', 'email',
+        'name',
+        'email',
     ];
 
     /**
@@ -32,5 +47,13 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     protected $hidden = [
         'password',
+    ];
+
+    /**
+     * The attributes that encrypted on the database.
+     * @var array
+     */
+    protected $encryptable = [
+        'api_token',
     ];
 }

@@ -1,7 +1,18 @@
 <?php
 
-abstract class TestCase extends Laravel\Lumen\Testing\TestCase
+namespace Tests\Functional;
+
+use Laravel\Lumen\Testing\DatabaseMigrations;
+use Laravel\Lumen\Testing\DatabaseTransactions;
+use Laravel\Lumen\Testing\TestCase as BaseTestCase;
+
+abstract class TestCase extends BaseTestCase
 {
+    /**
+     * @var \Faker\Generator
+     */
+    protected $faker;
+
     /**
      * Creates the application.
      *
@@ -9,6 +20,8 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
      */
     public function createApplication()
     {
-        return require __DIR__.'/../../bootstrap/app.php';
+        $this->faker = \Faker\Factory::create();
+
+        return require __DIR__ . '/../../bootstrap/app.php';
     }
 }

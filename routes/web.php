@@ -10,7 +10,7 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
-
+/** @var \Laravel\Lumen\Routing\Router $router */
 $router->get('/', function () use ($router) {
-    return $router->app->version();
+    return response()->json(['version' => 'OK', 'now' => \Carbon\Carbon::now()]);
 });
