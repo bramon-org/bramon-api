@@ -36,7 +36,7 @@ RUN curl -sS https://getcomposer.org/installer | \
 
 RUN a2enmod headers rewrite negotiation
 
-COPY . /var/www/html/
+COPY . .
 
 ###
 
@@ -47,4 +47,6 @@ RUN pecl install redis-5.1.1 \
 
 RUN a2enmod headers
 
-COPY . /var/www/html/
+COPY . .
+
+ENTRYPOINT [ "./docker-entrypoint.sh"]
