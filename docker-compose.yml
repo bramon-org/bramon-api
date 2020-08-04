@@ -1,0 +1,30 @@
+version: '3.4'
+services:
+  apache:
+    container_name: bramon_api_apache
+    image: 'php:7.4-apache'
+    build:
+      context: .
+      target: dev
+      dockerfile: Dockerfile
+    working_dir: /var/www/html
+    restart: always
+    ports:
+      - '80:80'
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - mysqldb
+    links:
+      - mysqldb
+
+  mysqldb:
+    container_name: bramon_api_database
+    image: mysql:5.7
+    restart: always
+    ports:
+      - '3306:3306'
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=bramon_api
+
