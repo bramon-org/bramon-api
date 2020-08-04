@@ -27,7 +27,7 @@ class CaptureController extends Controller
      */
     public function index(): JsonResponse
     {
-        $operators = User::paginate(15);
+        $operators = Capture::paginate(15);
 
         return response()->json($operators);
     }
