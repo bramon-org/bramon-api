@@ -44,12 +44,15 @@ class OperatorController extends Controller
         $this->validate($request, [
             'name'          => 'required|string|max:255',
             'email'         => 'required|string|email|max:255',
-            'mobile_phone'  => 'required|string|max:50',
+            'city'          => 'required|string|max:255',
+            'state'         => 'required|string|max:255',
+            'mobile_phone'  => 'required|string|max:100',
             'role'          => 'required|in:' . implode(',', User::AVAILABLE_ROLES),
         ]);
 
         $operator = new User;
         $operator->fill($request->all());
+        $operator->email = $request->get('email');
         $operator->password = $operator->generatePassword();
         $operator->last_request_ip = $request->ip();
         $operator->api_token = $operator->generateApiToken();
@@ -73,7 +76,8 @@ class OperatorController extends Controller
         $this->validate($request, [
             'id'            => 'required|uuid',
             'name'          => 'required|string|max:255',
-            'email'         => 'required|string|email|max:255',
+            'city'         => 'required|string|max:255',
+            'state'         => 'required|string|max:255',
             'mobile_phone'  => 'required|max:50',
             'role'          => 'required|in:' . implode(',', User::AVAILABLE_ROLES),
         ]);

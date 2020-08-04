@@ -2,8 +2,7 @@
 
 namespace Tests\Functional\Operator;
 
-use Laravel\Lumen\Testing\DatabaseMigrations;
-use Laravel\Lumen\Testing\DatabaseTransactions;
+use App\Models\User;
 use Tests\Functional\TestCase;
 
 class OperatorControllerTest extends TestCase
@@ -11,10 +10,13 @@ class OperatorControllerTest extends TestCase
     /**
      * @test
      * @return void
+     * @throws \Exception
      */
     public function getCurrentOperatorDetail()
     {
-        $this->get('/v1/operator/me', self::DEFAULT_OPERATOR_HEADERS);
+        $this->authenticate(User::ROLE_OPERATOR);
+
+        $this->get('/v1/operator/me', ['Authorization' => 'Bearer ' . $this->user->api_token]);
 
         $this->assertNotEmpty($this->response->getContent());
         $this->assertResponseStatus(200);
@@ -23,21 +25,20 @@ class OperatorControllerTest extends TestCase
     /**
      * @test
      * @return void
+     * @throws \Exception
      */
     public function updateOperator()
     {
+        $this->authenticate(User::ROLE_OPERATOR);
+
         $data = [
-            'email' => $this->faker->email,
             'name' => $this->faker->name,
             'mobile_phone' => $this->faker->phoneNumber,
-            'role' => \App\Models\User::ROLE_OPERATOR,
+            'city' => $this->faker->city,
+            'state' => $this->faker->state,
         ];
 
-        $this->post('/v1/admin/operators', $data, self::DEFAULT_ADMIN_HEADERS);
-
-        $data['mobile_phone'] = $this->faker->phoneNumber;
-
-        $this->put('/v1/operator/me', $data, self::DEFAULT_OPERATOR_HEADERS);
+        $this->put('/v1/operator/me', $data, ['Authorization' => 'Bearer ' . $this->user->api_token]);
 
         $this->assertResponseStatus(204);
     }

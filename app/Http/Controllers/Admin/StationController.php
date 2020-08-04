@@ -60,6 +60,7 @@ class StationController extends Controller
         try {
             $station = new Station();
             $station->fill($request->all());
+            $station->user_id = $request->get('user_id');
             $station->active = true;
             $station->save();
 
@@ -83,7 +84,6 @@ class StationController extends Controller
 
         $this->validate($request, [
             'id'                => 'required|uuid',
-            'user_id'           => 'required|uuid|exists:users,id',
             'name'              => 'required|string|max:255',
             'latitude'          => 'required|numeric',
             'longitude'         => 'required|numeric',

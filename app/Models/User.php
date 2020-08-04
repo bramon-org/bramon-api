@@ -6,6 +6,7 @@ use App\Traits\AssignUuid;
 use App\Traits\Encryptable;
 use Exception;
 use Illuminate\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Lumen\Auth\Authorizable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -45,8 +46,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     protected $fillable = [
         'name',
-        'email',
         'mobile_phone',
+        'city',
+        'state',
     ];
 
     /**
@@ -55,7 +57,16 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $hidden = [
+        'email',
         'password',
+        'mobile_phone',
+        'api_token',
+        'last_request_ip',
+        'last_request_at',
+        'active',
+        'role',
+        'created_at',
+        'updated_at',
     ];
 
     /**
@@ -86,10 +97,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function stations()
+    public function stations(): HasMany
     {
-        return $this->hasMany('App\Models\Station');
+        return $this->hasMany(Station::class);
     }
 }

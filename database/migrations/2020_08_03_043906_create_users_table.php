@@ -19,6 +19,8 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('mobile_phone')->nullable();
+            $table->string('city');
+            $table->string('state');
             $table->string('role', 25)->default(\App\Models\User::ROLE_OPERATOR);
             $table->boolean('active')->default(true);
             $table->string('api_token')->unique()->nullable();

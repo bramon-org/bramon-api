@@ -2,8 +2,7 @@
 
 namespace Tests\Functional\Admin;
 
-use Laravel\Lumen\Testing\DatabaseMigrations;
-use Laravel\Lumen\Testing\DatabaseTransactions;
+use Exception;
 use Tests\Functional\TestCase;
 
 class OperatorControllerTest extends TestCase
@@ -11,10 +10,13 @@ class OperatorControllerTest extends TestCase
     /**
      * @test
      * @return void
+     * @throws Exception
      */
     public function listOperators()
     {
-        $this->get('/v1/admin/operators', self::DEFAULT_ADMIN_HEADERS);
+        $this->authenticate();
+
+        $this->get('/v1/admin/operators', ['Authorization' => 'Bearer ' . $this->user->api_token]);
 
         $this->assertNotEmpty($this->response->getContent());
         $this->assertResponseStatus(200);
@@ -23,17 +25,22 @@ class OperatorControllerTest extends TestCase
     /**
      * @test
      * @return void
+     * @throws Exception
      */
     public function addOperator()
     {
+        $this->authenticate();
+
         $data = [
-            'email' => $this->faker->email,
-            'name' => $this->faker->name,
-            'mobile_phone' => substr($this->faker->phoneNumber, 0, 10),
-            'role' => \App\Models\User::ROLE_OPERATOR,
+            'email'         => $this->faker->email,
+            'name'          => $this->faker->name,
+            'city'          => $this->faker->city,
+            'state'         => $this->faker->state,
+            'mobile_phone'  => $this->faker->phoneNumber,
+            'role'          => \App\Models\User::ROLE_OPERATOR,
         ];
 
-        $this->post('/v1/admin/operators', $data, self::DEFAULT_ADMIN_HEADERS);
+        $this->post('/v1/admin/operators', $data, ['Authorization' => 'Bearer ' . $this->user->api_token]);
 
         $this->assertNotEmpty($this->response->getContent());
         $this->assertResponseStatus(201);
@@ -42,23 +49,21 @@ class OperatorControllerTest extends TestCase
     /**
      * @test
      * @return void
+     * @throws Exception
      */
     public function updateOperator()
     {
+        $this->authenticate();
+
         $data = [
-            'email' => $this->faker->email,
             'name' => $this->faker->name,
+            'city' => $this->faker->city,
+            'state' => $this->faker->state,
             'mobile_phone' => $this->faker->phoneNumber,
             'role' => \App\Models\User::ROLE_OPERATOR,
         ];
 
-        $this->post('/v1/admin/operators', $data, self::DEFAULT_ADMIN_HEADERS);
-
-        $operator = json_decode($this->response->getContent(), true);
-
-        $data['mobile_phone'] = $this->faker->phoneNumber;
-
-        $this->put('/v1/admin/operators/' . $operator['operator']['id'], $data, self::DEFAULT_ADMIN_HEADERS);
+        $this->put('/v1/admin/operators/' . $this->user->id, $data, ['Authorization' => 'Bearer ' . $this->user->api_token]);
 
         $this->assertResponseStatus(204);
     }
@@ -66,21 +71,13 @@ class OperatorControllerTest extends TestCase
     /**
      * @test
      * @return void
+     * @throws Exception
      */
     public function viewOperator()
     {
-        $data = [
-            'email' => $this->faker->email,
-            'name' => $this->faker->name,
-            'mobile_phone' => $this->faker->phoneNumber,
-            'role' => \App\Models\User::ROLE_OPERATOR,
-        ];
+        $this->authenticate();
 
-        $this->post('/v1/admin/operators', $data, self::DEFAULT_ADMIN_HEADERS);
-
-        $operator = json_decode($this->response->getContent(), true);
-
-        $this->get('/v1/admin/operators/' . $operator['operator']['id'], self::DEFAULT_ADMIN_HEADERS);
+        $this->get('/v1/admin/operators/' . $this->user->id, ['Authorization' => 'Bearer ' . $this->user->api_token]);
 
         $this->assertResponseStatus(200);
     }
