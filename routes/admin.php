@@ -26,4 +26,5 @@ Route::group(['prefix' => 'v1/admin', 'namespace' => 'Admin', 'middleware' => ['
     Route::post('stations', 'StationController@create');
     Route::get('stations/{id}', 'StationController@show');
     Route::put('stations/{id}', 'StationController@update');
+    Route::get('stations/{id}/list', 'StationController@fromUser');
 });
