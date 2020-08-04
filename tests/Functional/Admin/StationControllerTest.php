@@ -2,8 +2,7 @@
 
 namespace Tests\Functional\Admin;
 
-use Laravel\Lumen\Testing\DatabaseMigrations;
-use Laravel\Lumen\Testing\DatabaseTransactions;
+use Exception;
 use Tests\Functional\TestCase;
 
 class StationControllerTest extends TestCase
@@ -11,10 +10,13 @@ class StationControllerTest extends TestCase
     /**
      * @test
      * @return void
+     * @throws Exception
      */
     public function getStations()
     {
-        $this->get('/v1/admin/stations', self::DEFAULT_ADMIN_HEADERS);
+        $this->authenticate();
+
+        $this->get('/v1/admin/stations', ['Authorization' => 'Bearer ' . $this->user->api_token]);
 
         $this->assertNotEmpty($this->response->getContent());
         $this->assertResponseStatus(200);
@@ -23,11 +25,14 @@ class StationControllerTest extends TestCase
     /**
      * @test
      * @return void
+     * @throws Exception
      */
     public function addStation()
     {
+        $this->authenticate();
+
         $data = [
-            'user_id' => $this->faker->uuid,
+            'user_id' => $this->user->id,
             'name' => $this->faker->name,
             'latitude' => $this->faker->latitude,
             'longitude' => $this->faker->longitude,
@@ -39,7 +44,7 @@ class StationControllerTest extends TestCase
             'camera_capture' => $this->faker->company
         ];
 
-        $this->post('/v1/operator/stations', $data, self::DEFAULT_ADMIN_HEADERS);
+        $this->post('/v1/admin/stations', $data, ['Authorization' => 'Bearer ' . $this->user->api_token]);
 
         $this->assertResponseStatus(201);
     }
@@ -47,11 +52,14 @@ class StationControllerTest extends TestCase
     /**
      * @test
      * @return void
+     * @throws Exception
      */
     public function updateStation()
     {
+        $this->authenticate();
+
         $data = [
-            'user_id' => $this->faker->uuid,
+            'user_id' => $this->user->id,
             'name' => $this->faker->name,
             'latitude' => $this->faker->latitude,
             'longitude' => $this->faker->longitude,
@@ -63,7 +71,7 @@ class StationControllerTest extends TestCase
             'camera_capture' => $this->faker->company
         ];
 
-        $this->post('/v1/operator/stations', $data, self::DEFAULT_ADMIN_HEADERS);
+        $this->post('/v1/admin/stations', $data, ['Authorization' => 'Bearer ' . $this->user->api_token]);
 
         $station = json_decode($this->response->getContent(), true);
 
@@ -80,7 +88,7 @@ class StationControllerTest extends TestCase
             'active' => true,
         ];
 
-        $this->put('/v1/operator/stations/' . $station['station']['id'], $newData, self::DEFAULT_ADMIN_HEADERS);
+        $this->put('/v1/admin/stations/' . $station['station']['id'], $newData, ['Authorization' => 'Bearer ' . $this->user->api_token]);
 
         $this->assertResponseStatus(204);
     }
@@ -88,11 +96,14 @@ class StationControllerTest extends TestCase
     /**
      * @test
      * @return void
+     * @throws Exception
      */
     public function viewStation()
     {
+        $this->authenticate();
+
         $data = [
-            'user_id' => $this->faker->uuid,
+            'user_id' => $this->user->id,
             'name' => $this->faker->name,
             'latitude' => $this->faker->latitude,
             'longitude' => $this->faker->longitude,
@@ -104,11 +115,11 @@ class StationControllerTest extends TestCase
             'camera_capture' => $this->faker->company
         ];
 
-        $this->post('/v1/operator/stations', $data, self::DEFAULT_ADMIN_HEADERS);
+        $this->post('/v1/admin/stations', $data, ['Authorization' => 'Bearer ' . $this->user->api_token]);
 
         $station = json_decode($this->response->getContent(), true);
 
-        $this->get('/v1/operator/stations/' . $station['station']['id'], self::DEFAULT_ADMIN_HEADERS);
+        $this->get('/v1/admin/stations/' . $station['station']['id'], ['Authorization' => 'Bearer ' . $this->user->api_token]);
 
         $this->assertResponseStatus(200);
     }
@@ -116,13 +127,14 @@ class StationControllerTest extends TestCase
     /**
      * @test
      * @return void
+     * @throws Exception
      */
     public function viewStationsFromUser()
     {
-        $this->markTestIncomplete();
+        $this->authenticate();
 
         $data = [
-            'user_id' => $this->faker->uuid,
+            'user_id' => $this->user->id,
             'name' => $this->faker->name,
             'latitude' => $this->faker->latitude,
             'longitude' => $this->faker->longitude,
@@ -134,11 +146,9 @@ class StationControllerTest extends TestCase
             'camera_capture' => $this->faker->company
         ];
 
-        $this->post('/v1/operator/stations', $data, self::DEFAULT_ADMIN_HEADERS);
+        $this->post('/v1/admin/stations', $data, ['Authorization' => 'Bearer ' . $this->user->api_token]);
 
-        $station = json_decode($this->response->getContent(), true);
-
-        $this->get('/v1/operator/stations/' . $station['station']['user_id'] . '/list', self::DEFAULT_ADMIN_HEADERS);
+        $this->get('/v1/admin/stations/' . $this->user->id . '/list', ['Authorization' => 'Bearer ' . $this->user->api_token]);
 
         $this->assertResponseStatus(200);
     }

@@ -3,14 +3,12 @@
 namespace App\Models;
 
 use App\Traits\AssignUuid;
-use App\Traits\Encryptable;
-use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Station extends Model
+class Capture extends Model
 {
-    use AssignUuid, Encryptable;
+    use AssignUuid;
 
     /**
      * @var string
@@ -30,16 +28,7 @@ class Station extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
-        'latitude',
-        'longitude',
-        'azimuth',
-        'elevation',
-        'fov',
-        'camera_model',
-        'camera_lens',
-        'camera_capture',
-        'active',
+        'file',
     ];
 
     /**
@@ -49,21 +38,14 @@ class Station extends Model
      */
     protected $hidden = [
         'created_at',
-        'updated_at',
-        'user_id',
+        'updated_at'
     ];
-
-    /**
-     * The attributes that encrypted on the database.
-     * @var array
-     */
-    protected $encryptable = [];
 
     /**
      * @return BelongsTo
      */
-    public function user(): BelongsTo
+    public function station(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Station::class);
     }
 }
