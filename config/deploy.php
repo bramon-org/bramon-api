@@ -95,6 +95,8 @@ return [
     'options' => [
         'application' => env('APP_NAME', 'Laravel'),
         'repository' => 'git@github.com:bramon-org/bramon-api.git',
+        'http_user' => env('DEPLOY_HTTP_USER', 'bramon_api'),
+        'writable_mode' => 'chmod',
     ],
 
     /*
@@ -110,10 +112,8 @@ return [
 
     'hosts' => [
         'api.bramonmeteor.org' => [
-            'deploy_path' => '/home/bramon_api/api.bramonmeteor.org',
-            'user' => 'bramon_api',
-            'configFile'   => '~/.ssh/config',
-            'identityFile' => '~/.ssh/id_rsa',
+            'deploy_path' => env('DEPLOY_PATH', '/home/bramon_api/api.bramonmeteor.org'),
+            'user' => env('DEPLOY_HTTP_USER', 'bramon_api'),
             'forwardAgent' => true,
             'multiplexing' => true,
             'sshOptions'   => [
