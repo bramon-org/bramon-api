@@ -38,8 +38,8 @@ class CreateDefaultUser extends Seeder
     {
         $user = new App\Models\User();
 
-        $user->name = 'BRAMON admin';
-        $user->email = 'admin+' . rand() . '@bramonmeteor.org';
+        $user->name = 'BRAMON operator';
+        $user->email = 'operator+' . rand() . '@bramonmeteor.org';
         $user->password = '123123123';
         $user->api_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ8';
         $user->role = \App\Models\User::ROLE_OPERATOR;
@@ -55,8 +55,8 @@ class CreateDefaultUser extends Seeder
     {
         $user = new App\Models\User();
 
-        $user->name = 'BRAMON admin';
-        $user->email = 'admin+' . rand() . '@bramonmeteor.org';
+        $user->name = 'BRAMON editor';
+        $user->email = 'editor+' . rand() . '@bramonmeteor.org';
         $user->password = '123123123';
         $user->api_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ7';
         $user->role = \App\Models\User::ROLE_EDITOR;

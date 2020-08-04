@@ -22,6 +22,12 @@ Migrações
 docker-compose exec apache bash -c 'php artisan migrate'
 ```
 
+Populando a base de testes
+
+```console 
+docker-compose exec apache bash -c 'php artisan db:seed'
+```
+
 ## Mais detalhes
 
 Você pode obter mais detalhes na [documentação](docs/README.md).
