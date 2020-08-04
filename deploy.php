@@ -12,6 +12,9 @@ set('repository', 'git@github.com:bramon-org/bramon-api.git');
 // [Optional] Allocate tty for git clone. Default value is false.
 set('git_tty', true);
 
+set('writable_mode', 'chmod');
+set('http_user', 'bramon_api');
+
 // Shared files/dirs between deploys
 add('shared_files', ['.env']);
 add('shared_dirs', ['storage']);
@@ -23,7 +26,14 @@ add('writable_dirs', ['storage']);
 // Hosts
 
 host('api.bramonmeteor.org')
-    ->set('deploy_path', '~/{{application}}');
+    ->user('bramon_api')
+    ->set('deploy_path', '~/{{application}}')
+//    ->configFile('~/.ssh/config')
+//    ->identityFile('~/.ssh/id_rsa')
+    ->forwardAgent(true)
+    ->multiplexing(true)
+    ->addSshOption('UserKnownHostsFile', '/dev/null')
+    ->addSshOption('StrictHostKeyChecking', 'no');
 
 // Tasks
 

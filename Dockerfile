@@ -11,13 +11,16 @@ RUN ln -sf /dev/stdout /var/log/apache2/access.log && \
 
 RUN apt-get update && apt-get install -y libmcrypt-dev \
     libmagickwand-dev libpq-dev git zip unzip libxml2-dev \
-    libzip-dev supervisor python-pip python-setuptools --no-install-recommends \
-    && pecl install -o -f imagick \
+    libzip-dev supervisor python-pip python-setuptools \
+    openssh-client --no-install-recommends
+
+RUN pecl install -o -f imagick \
     && pecl install -o -f mcrypt \
     && pecl install -o -f zip \
     && pecl install -o -f xdebug \
-    && pecl install -o -f redis \
-    && docker-php-ext-enable mcrypt \
+    && pecl install -o -f redis
+
+RUN docker-php-ext-enable mcrypt \
     && docker-php-ext-enable imagick \
     && docker-php-ext-enable xdebug \
     && docker-php-ext-enable redis \
