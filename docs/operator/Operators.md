@@ -17,6 +17,8 @@ Authorization: Bearer XOXOXOXOXOXOXOXO
 
 {
   "name": "Test Operator",
-  "mobile_phone": "+5511222223333"
+  "mobile_phone": "+5511222223333",
+  "city": "City",
+  "state": "State"
 }
 ```

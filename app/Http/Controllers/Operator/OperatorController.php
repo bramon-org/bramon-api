@@ -36,7 +36,6 @@ class OperatorController extends Controller
      * Update an operator
      *
      * @param Request $request
-     * @param string $id
      * @return JsonResponse
      * @throws ValidationException
      */
@@ -47,6 +46,8 @@ class OperatorController extends Controller
         $this->validate($request, [
             'name'          => 'required|string|max:255',
             'mobile_phone'  => 'required|max:50',
+            'city'          => 'required|string|max:255',
+            'state'         => 'required|string|max:255',
         ]);
 
         try {

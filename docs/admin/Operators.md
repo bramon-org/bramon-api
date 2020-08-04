@@ -11,6 +11,8 @@ Authorization: Bearer XOXOXOXOXOXOXOXO
   "name": "Test Operator",
   "email": "test-operatorx@bramonmeteor.org",
   "mobile_phone": "+5511222223333",
+  "city": "City",
+  "state": "State",
   "role": "operator|admin|editor"
 }
 ```
@@ -26,6 +28,8 @@ Authorization: Bearer XOXOXOXOXOXOXOXO
   "name": "Test Operator",
   "email": "test-operatorx@bramonmeteor.org",
   "mobile_phone": "+5511222223333",
+  "city": "City",
+  "state": "State",
   "role": "operator|admin|editor"
 }
 ```
