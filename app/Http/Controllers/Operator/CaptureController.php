@@ -33,6 +33,7 @@ class CaptureController extends Controller
     {
         $captures = Capture::where('user_id', $request->user()->id)->paginate(15);
 
+        // ->makeHidden('lat1')
         return response()->json($captures);
     }
 

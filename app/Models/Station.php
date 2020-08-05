@@ -53,6 +53,15 @@ class Station extends Model
     ];
 
     /**
+     * The relations to eager load on every query.
+     *
+     * @var array
+     */
+    protected $with = [
+        'user',
+    ];
+
+    /**
      * The attributes that encrypted on the database.
      * @var array
      */

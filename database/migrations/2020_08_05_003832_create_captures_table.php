@@ -32,6 +32,8 @@ class CreateCapturesTable extends Migration
             $table->string('ev2')->nullable();
             $table->string('h1')->nullable();
             $table->string('h2')->nullable();
+            $table->string('dist1')->nullable();
+            $table->string('dist2')->nullable();
 
             $table->json('files');
 

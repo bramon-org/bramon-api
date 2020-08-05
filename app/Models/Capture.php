@@ -42,18 +42,37 @@ class Capture extends Model
         'ev2',
         'h1',
         'h2',
+        'dist1',
+        'dist2',
     ];
 
     /**
-     * The attributes excluded from the model's JSON form.
+     * The relations to eager load on every query.
+     *
+     * @var array
+     */
+    protected $with = [
+        'user',
+        'station',
+    ];
+
+    /**
+     * The attributes that should be hidden for serialization.
      *
      * @var array
      */
     protected $hidden = [
+        'station_id',
+        'user_id',
         'created_at',
         'updated_at'
     ];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
     protected $casts = [
         'files' => 'array',
     ];
@@ -64,5 +83,18 @@ class Capture extends Model
     public function station(): BelongsTo
     {
         return $this->belongsTo(Station::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function isLogged(): bool
+    {
+        return false;
     }
 }

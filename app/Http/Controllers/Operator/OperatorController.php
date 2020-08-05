@@ -23,13 +23,14 @@ class OperatorController extends Controller
     /**
      * List all operators
      *
+     * @param Request $request
      * @return JsonResponse
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $operators = User::paginate(15);
+        $operator = $request->user();
 
-        return response()->json($operators);
+        return response()->json(['operator' => $operator]);
     }
 
     /**
