@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Traits\AssignUuid;
 use App\Traits\Encryptable;
-use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 

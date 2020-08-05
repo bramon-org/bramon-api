@@ -26,13 +26,14 @@ class CaptureController extends Controller
     /**
      * List all operators
      *
+     * @param Request $request
      * @return JsonResponse
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $operators = Capture::paginate(15);
+        $captures = Capture::where('user_id', $request->user()->id)->paginate(15);
 
-        return response()->json($operators);
+        return response()->json($captures);
     }
 
     /**

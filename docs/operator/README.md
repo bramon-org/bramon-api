@@ -4,3 +4,4 @@ No namespace de Operador, somente usuários com `role` de operador ou admin pode
 
 - [Operadores](Operators.md)
 - [Estações](Stations.md)
+- [Capturas](Captures.md)
