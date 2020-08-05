@@ -5,9 +5,8 @@ namespace App\Models;
 use App\Traits\AssignUuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Capture extends Model
+class File extends Model
 {
     use AssignUuid;
 
@@ -29,22 +28,11 @@ class Capture extends Model
      * @var array
      */
     protected $fillable = [
-        'class',
-        'mag',
-        'sec',
-        'lat1',
-        'lat2',
-        'lng1',
-        'lng2',
-        'Vo',
-        'az1',
-        'az2',
-        'ev1',
-        'ev2',
-        'h1',
-        'h2',
-        'dist1',
-        'dist2',
+        'filename',
+        'type',
+        'extension',
+        'url',
+        'date',
     ];
 
     /**
@@ -52,11 +40,7 @@ class Capture extends Model
      *
      * @var array
      */
-    protected $with = [
-        'user',
-        'station',
-        'files',
-    ];
+    protected $with = [];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -64,8 +48,8 @@ class Capture extends Model
      * @var array
      */
     protected $hidden = [
-        'station_id',
-        'user_id',
+        'id',
+        'capture_id',
         'created_at',
         'updated_at'
     ];
@@ -75,29 +59,20 @@ class Capture extends Model
      *
      * @var array
      */
-    protected $casts = [];
+    protected $casts = [
+        'files' => 'array',
+    ];
 
     /**
      * @return BelongsTo
      */
-    public function station(): BelongsTo
+    public function capture(): BelongsTo
     {
-        return $this->belongsTo(Station::class);
+        return $this->belongsTo(Capture::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
-    public function user(): BelongsTo
+    public function getUrlAttribute($value)
     {
-        return $this->belongsTo(User::class);
-    }
-
-    /**
-     * @return HasMany
-     */
-    public function files()
-    {
-        return $this->hasMany(File::class);
+        return env('STORAGE_URL') . $value;
     }
 }

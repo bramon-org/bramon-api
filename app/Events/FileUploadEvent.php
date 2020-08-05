@@ -2,19 +2,19 @@
 
 namespace App\Events;
 
-use stdClass;
+use App\Models\Capture;
 
 class FileUploadEvent extends Event
 {
-    public stdClass $file;
+    public Capture $capture;
 
     /**
      * Create a new event instance.
      *
-     * @param stdClass $file
+     * @param Capture $capture
      */
-    public function __construct(stdClass $file)
+    public function __construct(Capture $capture)
     {
-        $this->file = $file;
+        $this->capture = $capture;
     }
 }

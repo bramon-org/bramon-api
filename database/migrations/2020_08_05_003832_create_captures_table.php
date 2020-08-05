@@ -35,8 +35,6 @@ class CreateCapturesTable extends Migration
             $table->string('dist1')->nullable();
             $table->string('dist2')->nullable();
 
-            $table->json('files');
-
             $table->boolean('analyzed')->default(false);
 
             $table->timestamp('date');

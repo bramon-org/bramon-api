@@ -30,18 +30,25 @@ class FileUploaderJob extends Job
         Log::info('=== FileUploaderJob  ========');
 
         $event = $this->event;
-        $inputFile = storage_path() . '/sync/' . $event->file->filename;
+        $capture = $this->event->capture;
 
-        if (!file_exists($inputFile)) {
-            return;
+        $files = $capture->files();
+
+        foreach ($files as $file) {
+            $inputFile = storage_path() . '/sync/' . $event->file->filename;
+
+            if (!file_exists($inputFile)) {
+                continue;
+            }
+
+            Storage::disk(config('filesystems.cloud'))
+                ->put(
+                    $event->file->filename,
+                    fopen($inputFile, 'r')
+                );
+
+            unlink($inputFile);
         }
 
-        Storage::disk(config('filesystems.cloud'))
-            ->put(
-                $event->file->filename,
-                fopen($inputFile, 'r')
-            );
-
-        unlink($inputFile);
     }
 }

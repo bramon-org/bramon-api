@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Operator;
 use App\Events\FileUploadEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Capture;
+use App\Models\File;
 use DateTimeImmutable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -50,7 +51,6 @@ class CaptureController extends Controller
         ]);
 
         $uploadedFiles = $request->file('files');
-        $captureFiles = [];
         $captureData = [];
         $captureDate = new DateTimeImmutable();
 
@@ -58,30 +58,29 @@ class CaptureController extends Controller
             $uploadedFiles = [ $uploadedFiles ];
         }
 
-        foreach ($uploadedFiles as $file) {
-            $captureFile = $this->sanitizeFile($file);
-            $captureDate = $captureFile->date;
-
-            if ($this->isAnalyzed($file)) {
-                $captureData = $this->readCaptureData($captureFile);
-            }
-
-            $captureFiles[] = $captureFile;
-
-            $fileToUpload = clone $captureFile;
-            $fileToUpload->path = $file->getRealPath();
-
-            event(new FileUploadEvent($captureFile));
-        }
-
         $capture = new Capture();
-        $capture->files = $captureFiles;
         $capture->station_id = $request->get('station_id');
         $capture->user_id = $request->user()->id;
         $capture->date = $captureDate;
-        $capture->analyzed = sizeof($captureData) !== 0;
         $capture->fill($captureData);
         $capture->save();
+
+        foreach ($uploadedFiles as $file) {
+            $captureFile = $this->sanitizeFile($file, $capture);
+
+            $capture->date = $captureFile->date;
+
+            if ($this->isAnalyzed($file)) {
+                $captureData = $this->readCaptureData($captureFile);
+
+                $capture->analyzed = sizeof($captureData) !== 0;
+            }
+        }
+
+        $capture->save();
+        $capture->refresh();
+
+//        event(new FileUploadEvent($capture));
 
         return response()->json(['capture' => $capture], 201);
     }
@@ -101,7 +100,7 @@ class CaptureController extends Controller
      * @param UploadedFile $file
      * @return stdClass
      */
-    private function sanitizeFile(UploadedFile $file): stdClass
+    private function sanitizeFile(UploadedFile $file, Capture $capture): File
     {
         $originalName = $file->getClientOriginalName();
         $originalExtension = $file->getClientOriginalExtension();
@@ -110,11 +109,14 @@ class CaptureController extends Controller
 
         $file->move(storage_path() . '/sync', $originalName);
 
-        $captureFile = new stdClass();
+        $captureFile = new File();
         $captureFile->filename = $originalName;
+        $captureFile->url = $originalName;
         $captureFile->type = $fileType;
         $captureFile->extension = $originalExtension;
         $captureFile->date = $originalDateTime;
+        $captureFile->capture_id = $capture->id;
+        $captureFile->save();
 
         return $captureFile;
     }
@@ -137,7 +139,7 @@ class CaptureController extends Controller
      * @param stdClass $file
      * @return array
      */
-    private function readCaptureData(stdClass $file)
+    private function readCaptureData(File $file)
     {
         $inputFile = storage_path() . '/sync/' . $file->filename;
         $xml = simplexml_load_file($inputFile);
