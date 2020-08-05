@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Operator;
 
+use App\Events\FileUploadEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Capture;
 use DateTimeImmutable;
@@ -33,7 +34,6 @@ class CaptureController extends Controller
     {
         $captures = Capture::where('user_id', $request->user()->id)->paginate(15);
 
-        // ->makeHidden('lat1')
         return response()->json($captures);
     }
 
@@ -63,10 +63,15 @@ class CaptureController extends Controller
             $captureDate = $captureFile->date;
 
             if ($this->isAnalyzed($file)) {
-                $captureData = $this->readCaptureData($file);
+                $captureData = $this->readCaptureData($captureFile);
             }
 
             $captureFiles[] = $captureFile;
+
+            $fileToUpload = clone $captureFile;
+            $fileToUpload->path = $file->getRealPath();
+
+            event(new FileUploadEvent($captureFile));
         }
 
         $capture = new Capture();
@@ -103,6 +108,8 @@ class CaptureController extends Controller
         $originalDateTime = $this->getFileDate($originalName);
         $fileType = $file->getMimeType();
 
+        $file->move(storage_path() . '/sync', $originalName);
+
         $captureFile = new stdClass();
         $captureFile->filename = $originalName;
         $captureFile->type = $fileType;
@@ -126,9 +133,14 @@ class CaptureController extends Controller
         return DateTimeImmutable::createFromFormat('Ymd_His', $fileDateTime);
     }
 
-    private function readCaptureData(UploadedFile $file)
+    /**
+     * @param stdClass $file
+     * @return array
+     */
+    private function readCaptureData(stdClass $file)
     {
-        $xml = simplexml_load_file($file->getRealPath());
+        $inputFile = storage_path() . '/sync/' . $file->filename;
+        $xml = simplexml_load_file($inputFile);
         $itemList = $xml->ua2_objects->ua2_object;
 
         $data = [];
