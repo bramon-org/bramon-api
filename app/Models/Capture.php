@@ -75,7 +75,9 @@ class Capture extends Model
      *
      * @var array
      */
-    protected $casts = [];
+    protected $casts = [
+        'analyzed' => 'bool'
+    ];
 
     /**
      * @return BelongsTo

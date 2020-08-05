@@ -3,8 +3,11 @@
 namespace App\Jobs;
 
 use App\Events\FileUploadEvent;
+use App\Models\Capture;
+use App\Models\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileUploaderJob extends Job
 {
@@ -23,32 +26,72 @@ class FileUploaderJob extends Job
     /**
      * Execute the job.
      *
-     * @return void
+     * @return bool
      */
     public function handle()
     {
-        Log::info('=== FileUploaderJob  ========');
+        Log::info('=== FileUploaderJob start ========');
 
         $event = $this->event;
-        $capture = $this->event->capture;
-
-        $files = $capture->files();
+        $capture = Capture::find($event->capture);
+        $files = $capture->files;
 
         foreach ($files as $file) {
-            $inputFile = storage_path() . '/sync/' . $event->file->filename;
+            $inputFile = storage_path() . '/sync/' . $file->filename;
 
             if (!file_exists($inputFile)) {
+                info('not exists');
                 continue;
+            }
+
+            if ($this->isAnalyzed($file)) {
+                $captureData = $this->readCaptureData($file);
+
+                $capture->analyzed = sizeof($captureData) !== 0;
+                $capture->save();
             }
 
             Storage::disk(config('filesystems.cloud'))
                 ->put(
-                    $event->file->filename,
+                    $file->filename,
                     fopen($inputFile, 'r')
                 );
 
             unlink($inputFile);
         }
 
+        Log::info('=== FileUploaderJob end ========');
+
+        return true;
+    }
+
+    /**
+     * Check if file is an analyze file.
+     *
+     * @param UploadedFile $file
+     * @return bool
+     */
+    private function isAnalyzed(File $file): bool
+    {
+        return preg_match("/A.XML$/i", $file->filename);
+    }
+
+    /**
+     * @param File $file
+     * @return array
+     */
+    private function readCaptureData(File $file)
+    {
+        $inputFile = storage_path() . '/sync/' . $file->filename;
+        $xml = simplexml_load_file($inputFile);
+        $itemList = $xml->ua2_objects->ua2_object;
+
+        $data = [];
+
+        foreach ($itemList->attributes() as $attributeKey => $attributeValue) {
+            $data[ (string) $attributeKey ] = (string) $attributeValue;
+        };
+
+        return $data;
     }
 }

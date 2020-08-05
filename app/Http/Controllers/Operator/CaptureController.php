@@ -51,8 +51,6 @@ class CaptureController extends Controller
         ]);
 
         $uploadedFiles = $request->file('files');
-        $captureData = [];
-        $captureDate = new DateTimeImmutable();
 
         if (!is_array($uploadedFiles)) {
             $uploadedFiles = [ $uploadedFiles ];
@@ -61,39 +59,17 @@ class CaptureController extends Controller
         $capture = new Capture();
         $capture->station_id = $request->get('station_id');
         $capture->user_id = $request->user()->id;
-        $capture->date = $captureDate;
-        $capture->fill($captureData);
         $capture->save();
 
         foreach ($uploadedFiles as $file) {
             $captureFile = $this->sanitizeFile($file, $capture);
-
             $capture->date = $captureFile->date;
-
-            if ($this->isAnalyzed($file)) {
-                $captureData = $this->readCaptureData($captureFile);
-
-                $capture->analyzed = sizeof($captureData) !== 0;
-            }
+            $capture->save();
         }
 
-        $capture->save();
-        $capture->refresh();
+        event(new FileUploadEvent($capture->id));
 
-//        event(new FileUploadEvent($capture));
-
-        return response()->json(['capture' => $capture], 201);
-    }
-
-    /**
-     * Check if file is an analyze file.
-     *
-     * @param UploadedFile $file
-     * @return bool
-     */
-    private function isAnalyzed(UploadedFile $file): bool
-    {
-        return preg_match("/A.XML$/i", $file->getClientOriginalName());
+        return response()->json(['capture' => Capture::find($capture->id)], 201);
     }
 
     /**
@@ -135,22 +111,4 @@ class CaptureController extends Controller
         return DateTimeImmutable::createFromFormat('Ymd_His', $fileDateTime);
     }
 
-    /**
-     * @param stdClass $file
-     * @return array
-     */
-    private function readCaptureData(File $file)
-    {
-        $inputFile = storage_path() . '/sync/' . $file->filename;
-        $xml = simplexml_load_file($inputFile);
-        $itemList = $xml->ua2_objects->ua2_object;
-
-        $data = [];
-
-        foreach ($itemList->attributes() as $attributeKey => $attributeValue) {
-            $data[ (string) $attributeKey ] = (string) $attributeValue;
-        };
-
-        return $data;
-    }
 }
