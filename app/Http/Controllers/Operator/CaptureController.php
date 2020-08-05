@@ -54,6 +54,10 @@ class CaptureController extends Controller
         $captureData = [];
         $captureDate = new DateTimeImmutable();
 
+        if (!is_array($uploadedFiles)) {
+            $uploadedFiles = [ $uploadedFiles ];
+        }
+
         foreach ($uploadedFiles as $file) {
             $captureFile = $this->sanitizeFile($file);
             $captureDate = $captureFile->date;
