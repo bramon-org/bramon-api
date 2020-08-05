@@ -28,7 +28,20 @@ class Capture extends Model
      * @var array
      */
     protected $fillable = [
-        'file',
+        'class',
+        'mag',
+        'sec',
+        'lat1',
+        'lat2',
+        'lng1',
+        'lng2',
+        'Vo',
+        'az1',
+        'az2',
+        'ev1',
+        'ev2',
+        'h1',
+        'h2',
     ];
 
     /**
@@ -39,6 +52,10 @@ class Capture extends Model
     protected $hidden = [
         'created_at',
         'updated_at'
+    ];
+
+    protected $casts = [
+        'files' => 'array',
     ];
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Tests\Functional;
 
+use App\Models\Station;
 use App\Models\User;
 use Exception;
 use Faker\Generator;
@@ -25,6 +26,11 @@ abstract class TestCase extends BaseTestCase
     protected User $user;
 
     /**
+     * @var Station
+     */
+    protected Station $station;
+
+    /**
      * Creates the application.
      *
      * @return Application
@@ -40,10 +46,23 @@ abstract class TestCase extends BaseTestCase
      * Generate an user to test
      *
      * @param string $role
+     * @return array
+     * @throws Exception
+     */
+    public function authenticate(string $role = User::ROLE_ADMIN): array
+    {
+        return [
+            $this->createDefaultUser($role),
+            $this->createDefaultStation(),
+        ];
+    }
+
+    /**
+     * @param string $role
      * @return User
      * @throws Exception
      */
-    public function authenticate(string $role = User::ROLE_ADMIN): User
+    private function createDefaultUser(string $role = User::ROLE_ADMIN): User
     {
         $this->user = new User();
         $this->user->email = $this->faker->email;
@@ -57,5 +76,26 @@ abstract class TestCase extends BaseTestCase
         $this->user->save();
 
         return $this->user;
+    }
+
+    /**
+     * @return Station
+     */
+    private function createDefaultStation(): Station
+    {
+        $this->station = new Station();
+        $this->station->user_id = $this->user->id;
+        $this->station->name = $this->faker->name;
+        $this->station->latitude = $this->faker->latitude;
+        $this->station->longitude = $this->faker->longitude;
+        $this->station->azimuth = $this->faker->numberBetween(0, 360);
+        $this->station->elevation = $this->faker->numberBetween(0, 90);
+        $this->station->fov = $this->faker->numberBetween(0, 360);
+        $this->station->camera_model = $this->faker->company;
+        $this->station->camera_lens = $this->faker->company;
+        $this->station->camera_capture = $this->faker->company;
+        $this->station->save();
+
+        return $this->station;
     }
 }

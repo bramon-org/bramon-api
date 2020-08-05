@@ -24,4 +24,8 @@ Route::group(['prefix' => 'v1/operator', 'namespace' => 'Operator', 'middleware'
     Route::post('stations', 'StationController@create');
     Route::get('stations/{id}', 'StationController@show');
     Route::put('stations/{id}', 'StationController@update');
+
+    # Captures
+    Route::get('captures', 'CaptureController@index');
+    Route::post('captures', 'CaptureController@create');
 });
