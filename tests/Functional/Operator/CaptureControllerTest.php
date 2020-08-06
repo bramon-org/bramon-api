@@ -31,8 +31,42 @@ class CaptureControllerTest extends TestCase
      */
     public function uploadSingleCapture()
     {
-        $this->markTestIncomplete();
+        $this->authenticate(User::ROLE_OPERATOR);
 
+        $headers = [
+            'Content-Type' => 'multipart/form-data',
+            'Authorization' => 'Bearer ' . $this->user->api_token,
+        ];
+
+        $files = [
+            'files' => UploadedFile::fake()->create('TLP5/2020/202006/20200607/M20200608_005550_TLP_5.avi', 5*1000)
+        ];
+
+        $servers = [];
+
+        foreach ($headers as $k => $header) {
+            $servers["HTTP_" . $k] = $header;
+        }
+
+        $this->call(
+            'POST',
+            '/v1/operator/captures',
+            ['station_id' => $this->station->id],
+            [],
+            $files,
+            $servers
+        );
+
+        $this->assertResponseStatus(422);
+    }
+
+    /**
+     * @test
+     * @return void
+     * @throws Exception
+     */
+    public function uploadMultipleCaptures()
+    {
         $this->authenticate(User::ROLE_OPERATOR);
 
         $headers = [

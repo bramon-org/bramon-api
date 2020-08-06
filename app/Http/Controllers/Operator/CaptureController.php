@@ -9,6 +9,7 @@ use App\Models\File;
 use DateTimeImmutable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use stdClass;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -47,34 +48,57 @@ class CaptureController extends Controller
     {
         $this->validate($request, [
             'station_id'    => 'required|uuid|exists:stations,id',
-            'files'         => 'required',
+            'files'         => 'required|array',
         ]);
 
-        $uploadedFiles = $request->file('files');
+        $uploadedFiles = $this->organizeUploads($request->file('files'));
+        $capturesRegistered = [];
 
-        if (!is_array($uploadedFiles)) {
-            $uploadedFiles = [ $uploadedFiles ];
-        }
-
-        $capture = new Capture();
-        $capture->station_id = $request->get('station_id');
-        $capture->user_id = $request->user()->id;
-        $capture->save();
-
-        foreach ($uploadedFiles as $file) {
-            $captureFile = $this->sanitizeFile($file, $capture);
-            $capture->date = $captureFile->date;
+        foreach ($uploadedFiles as $captureDate => $captureFiles) {
+            $capture = new Capture();
+            $capture->station_id = $request->get('station_id');
+            $capture->user_id = $request->user()->id;
             $capture->save();
+
+            foreach ($captureFiles as $file) {
+                $captureFile = $this->sanitizeFile($file, $capture);
+                $capture->date = $captureFile->date;
+                $capture->save();
+            }
+
+            $capturesRegistered[] = $capture->id;
+
+            event(new FileUploadEvent($capture->id));
         }
 
-        event(new FileUploadEvent($capture->id));
+        $captures = Capture::where('user_id', $request->user()->id)
+            ->whereIn('id', $capturesRegistered)
+            ->paginate(15);
 
-        return response()->json(['capture' => Capture::find($capture->id)], 201);
+        return response()->json(['capture' => $captures], 201);
+    }
+
+    /**
+     * @param array $files
+     * @return array
+     */
+    private function organizeUploads(array $files = []): array
+    {
+        $captures = [];
+
+        foreach ($files as $file) {
+            $fileDate = $this->getFileDate($file->getClientOriginalName());
+
+            $captures[ $fileDate->format('Ymd_His') ][] = $file;
+        }
+
+        return $captures;
     }
 
     /**
      * @param UploadedFile $file
-     * @return stdClass
+     * @param Capture $capture
+     * @return File
      */
     private function sanitizeFile(UploadedFile $file, Capture $capture): File
     {
@@ -110,5 +134,4 @@ class CaptureController extends Controller
 
         return DateTimeImmutable::createFromFormat('Ymd_His', $fileDateTime);
     }
-
 }
