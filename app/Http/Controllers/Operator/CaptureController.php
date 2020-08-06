@@ -75,6 +75,7 @@ class CaptureController extends Controller
             $capture = new Capture();
             $capture->station_id = $request->get('station_id');
             $capture->user_id = $request->user()->id;
+            $capture->date = new DateTimeImmutable();
             $capture->save();
 
             foreach ($captureFiles as $file) {
