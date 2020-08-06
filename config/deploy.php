@@ -93,10 +93,11 @@ return [
     */
 
     'options' => [
-        'application' => env('APP_NAME', 'Laravel'),
-        'repository' => 'git@github.com:bramon-org/bramon-api.git',
-        'http_user' => env('DEPLOY_HTTP_USER', 'bramon_api'),
+        'application'   => env('APP_NAME', 'Laravel'),
+        'repository'    => 'git@github.com:bramon-org/bramon-api.git',
+        'http_user'     => env('DEPLOY_HTTP_USER', 'bramon_api'),
         'writable_mode' => 'chmod',
+        'bin/php'       => '/usr/local/php74/bin/php',
     ],
 
     /*
