@@ -9,9 +9,7 @@ use App\Models\File;
 use DateTimeImmutable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
-use stdClass;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class CaptureController extends Controller
@@ -51,7 +49,26 @@ class CaptureController extends Controller
             'files'         => 'required|array',
         ]);
 
-        $uploadedFiles = $this->organizeUploads($request->file('files'));
+        $capturesRegistered = $this->createCaptures($request);
+
+        $captures = Capture
+            ::where('user_id', $request->user()->id)
+            ->whereIn('id', $capturesRegistered)
+            ->paginate(15);
+
+        return response()->json(['capture' => $captures], 201);
+    }
+
+    /**
+     * Get all files from request and save into database classified by capture date.
+     *
+     * @param Request $request
+     * @return array
+     */
+    private function createCaptures(Request $request): array
+    {
+        $filesFromRequest   = $request->file('files');
+        $uploadedFiles      = $this->organizeUploads($filesFromRequest);
         $capturesRegistered = [];
 
         foreach ($uploadedFiles as $captureDate => $captureFiles) {
@@ -71,14 +88,12 @@ class CaptureController extends Controller
             event(new FileUploadEvent($capture->id));
         }
 
-        $captures = Capture::where('user_id', $request->user()->id)
-            ->whereIn('id', $capturesRegistered)
-            ->paginate(15);
-
-        return response()->json(['capture' => $captures], 201);
+        return $capturesRegistered;
     }
 
     /**
+     * Get all files uploaded, organize and group by date of capture.
+     *
      * @param array $files
      * @return array
      */
@@ -96,6 +111,8 @@ class CaptureController extends Controller
     }
 
     /**
+     * Sanitize file uploaded and get the most important information.
+     *
      * @param UploadedFile $file
      * @param Capture $capture
      * @return File
@@ -122,6 +139,8 @@ class CaptureController extends Controller
     }
 
     /**
+     * Get date of the capture from the filename.
+     *
      * @param string $filename
      * @return DateTimeImmutable
      */
