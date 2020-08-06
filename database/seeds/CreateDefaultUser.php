@@ -25,13 +25,10 @@ class CreateDefaultUser extends Seeder
         $user->email = 'admin+' . rand() . '@bramonmeteor.org';
         $user->password = $user->generatePassword();
         $user->api_token = $user->generateApiToken();
+        $user->city = 'City';
+        $user->state = 'State';
         $user->role = \App\Models\User::ROLE_ADMIN;
         $user->save();
-
-        dump([
-            'EMAIl'         => $user->email,
-            'USER_TOKEN'    => $user->api_token,
-        ]);
     }
 
     private function createDefaultOperatorUser()
@@ -42,13 +39,10 @@ class CreateDefaultUser extends Seeder
         $user->email = 'operator+' . rand() . '@bramonmeteor.org';
         $user->password = $user->generatePassword();
         $user->api_token = $user->generateApiToken();
+        $user->city = 'City';
+        $user->state = 'State';
         $user->role = \App\Models\User::ROLE_OPERATOR;
         $user->save();
-
-        dump([
-            'EMAIl'         => $user->email,
-            'USER_TOKEN'    => $user->api_token,
-        ]);
     }
 
     private function createDefaultEditorUser()
@@ -59,12 +53,9 @@ class CreateDefaultUser extends Seeder
         $user->email = 'editor+' . rand() . '@bramonmeteor.org';
         $user->password = $user->generatePassword();
         $user->api_token = $user->generateApiToken();
+        $user->city = 'City';
+        $user->state = 'State';
         $user->role = \App\Models\User::ROLE_EDITOR;
         $user->save();
-
-        dump([
-            'EMAIl'         => $user->email,
-            'USER_TOKEN'    => $user->api_token,
-        ]);
     }
 }
