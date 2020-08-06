@@ -43,7 +43,7 @@ abstract class TestCase extends BaseTestCase
         $app = require __DIR__ . '/../../bootstrap/app.php';
 
         config([
-            'database.default' => 'sqlite',
+            'database.default' => 'testing',
             'filesystem.default' => 'local',
             'filesystem.cloud' => 'local',
         ]);
