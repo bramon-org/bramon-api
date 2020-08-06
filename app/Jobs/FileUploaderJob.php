@@ -7,7 +7,6 @@ use App\Models\Capture;
 use App\Models\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileUploaderJob extends Job
 {
