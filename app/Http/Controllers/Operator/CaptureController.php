@@ -80,7 +80,8 @@ class CaptureController extends Controller
 
             foreach ($captureFiles as $file) {
                 $captureFile = $this->sanitizeFile($file, $capture);
-                $capture->captured_at = $captureFile->date;
+
+                $capture->captured_at = $captureFile->captured_at;
                 $capture->save();
             }
 
