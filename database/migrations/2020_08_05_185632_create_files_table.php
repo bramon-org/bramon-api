@@ -22,7 +22,7 @@ class CreateFilesTable extends Migration
             $table->string('extension');
             $table->string('url')->nullable();
 
-            $table->timestamp('date');
+            $table->timestamp('captured_at');
             $table->timestamps();
 
             $table->primary('id');

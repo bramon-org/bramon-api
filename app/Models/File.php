@@ -33,7 +33,7 @@ class File extends Model
         'type',
         'extension',
         'url',
-        'date',
+        'captured_at',
     ];
 
     /**
@@ -73,8 +73,8 @@ class File extends Model
     {
         parent::boot();
 
-        static::addGlobalScope('date', function (Builder $builder) {
-            $builder->orderBy('date', 'desc');
+        static::addGlobalScope('captured_at', function (Builder $builder) {
+            $builder->orderBy('captured_at', 'desc');
         });
     }
 

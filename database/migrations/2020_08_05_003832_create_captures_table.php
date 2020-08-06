@@ -37,7 +37,7 @@ class CreateCapturesTable extends Migration
 
             $table->boolean('analyzed')->default(false);
 
-            $table->timestamp('date');
+            $table->timestamp('captured_at');
             $table->timestamps();
 
             $table->primary('id');

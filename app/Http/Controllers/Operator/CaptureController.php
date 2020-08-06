@@ -75,12 +75,12 @@ class CaptureController extends Controller
             $capture = new Capture();
             $capture->station_id = $request->get('station_id');
             $capture->user_id = $request->user()->id;
-            $capture->date = new DateTimeImmutable();
+            $capture->captured_at = new DateTimeImmutable();
             $capture->save();
 
             foreach ($captureFiles as $file) {
                 $captureFile = $this->sanitizeFile($file, $capture);
-                $capture->date = $captureFile->date;
+                $capture->captured_at = $captureFile->date;
                 $capture->save();
             }
 
@@ -132,7 +132,7 @@ class CaptureController extends Controller
         $captureFile->url = $originalName;
         $captureFile->type = $fileType;
         $captureFile->extension = $originalExtension;
-        $captureFile->date = $originalDateTime;
+        $captureFile->captured_at = $originalDateTime;
         $captureFile->capture_id = $capture->id;
         $captureFile->save();
 

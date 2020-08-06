@@ -46,6 +46,7 @@ class Capture extends Model
         'h2',
         'dist1',
         'dist2',
+        'captured_at',
     ];
 
     /**
@@ -89,8 +90,8 @@ class Capture extends Model
     {
         parent::boot();
 
-        static::addGlobalScope('created_at', function (Builder $builder) {
-            $builder->orderBy('created_at', 'desc');
+        static::addGlobalScope('captured_at', function (Builder $builder) {
+            $builder->orderBy('captured_at', 'desc');
         });
     }
 
