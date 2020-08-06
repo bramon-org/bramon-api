@@ -40,13 +40,15 @@ class FileUploaderJob extends Job
             $inputFile = storage_path() . '/sync/' . $file->filename;
 
             if (!file_exists($inputFile)) {
-                info('not exists');
+                Log::error('WARNING: File ' .  $inputFile . ' not exists.');
+
                 continue;
             }
 
             if ($this->isAnalyzed($file)) {
                 $captureData = $this->readCaptureData($file);
 
+                $capture->fill($captureData);
                 $capture->analyzed = sizeof($captureData) !== 0;
                 $capture->save();
             }
@@ -68,7 +70,7 @@ class FileUploaderJob extends Job
     /**
      * Check if file is an analyze file.
      *
-     * @param UploadedFile $file
+     * @param File $file
      * @return bool
      */
     private function isAnalyzed(File $file): bool
@@ -77,6 +79,8 @@ class FileUploaderJob extends Job
     }
 
     /**
+     * Read the analyze file and fill the file with the details.
+     *
      * @param File $file
      * @return array
      */

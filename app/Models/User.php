@@ -6,6 +6,7 @@ use App\Traits\AssignUuid;
 use App\Traits\Encryptable;
 use Exception;
 use Illuminate\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Lumen\Auth\Authorizable;
 use Illuminate\Database\Eloquent\Model;
@@ -74,6 +75,22 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $encryptable = [];
+
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Order by name ASC
+        static::addGlobalScope('created_at', function (Builder $builder) {
+            $builder->orderBy('created_at', 'desc')
+                    ->orderBy('name', 'asc');
+        });
+    }
 
     /**
      * Generate an user password.

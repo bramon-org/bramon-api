@@ -29,11 +29,6 @@ class CreateDefaultUser extends Seeder
         $user->state = 'State';
         $user->role = \App\Models\User::ROLE_ADMIN;
         $user->save();
-
-        dump([
-            'EMAIl'         => $user->email,
-            'USER_TOKEN'    => $user->api_token,
-        ]);
     }
 
     private function createDefaultOperatorUser()
@@ -48,11 +43,6 @@ class CreateDefaultUser extends Seeder
         $user->state = 'State';
         $user->role = \App\Models\User::ROLE_OPERATOR;
         $user->save();
-
-        dump([
-            'EMAIl'         => $user->email,
-            'USER_TOKEN'    => $user->api_token,
-        ]);
     }
 
     private function createDefaultEditorUser()
@@ -67,10 +57,5 @@ class CreateDefaultUser extends Seeder
         $user->state = 'State';
         $user->role = \App\Models\User::ROLE_EDITOR;
         $user->save();
-
-        dump([
-            'EMAIl'         => $user->email,
-            'USER_TOKEN'    => $user->api_token,
-        ]);
     }
 }

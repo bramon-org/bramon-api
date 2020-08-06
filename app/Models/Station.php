@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\AssignUuid;
 use App\Traits\Encryptable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -66,6 +67,22 @@ class Station extends Model
      * @var array
      */
     protected $encryptable = [];
+
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Order by name ASC
+        static::addGlobalScope('created_at', function (Builder $builder) {
+            $builder->orderBy('created_at', 'desc')
+                    ->orderBy('name', 'asc');
+        });
+    }
 
     /**
      * @return BelongsTo

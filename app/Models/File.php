@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\AssignUuid;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -64,6 +65,23 @@ class File extends Model
     ];
 
     /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Order by name ASC
+        static::addGlobalScope('date', function (Builder $builder) {
+            $builder->orderBy('date', 'desc');
+        });
+    }
+
+    /**
+     * Get the capture related.
+     *
      * @return BelongsTo
      */
     public function capture(): BelongsTo
@@ -71,7 +89,13 @@ class File extends Model
         return $this->belongsTo(Capture::class);
     }
 
-    public function getUrlAttribute($value)
+    /**
+     * Cast to url attribute.
+     *
+     * @param $value
+     * @return string
+     */
+    public function getUrlAttribute($value): string
     {
         return env('STORAGE_URL') . $value;
     }
