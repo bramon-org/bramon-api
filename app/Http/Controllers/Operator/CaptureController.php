@@ -46,7 +46,7 @@ class CaptureController extends Controller
     {
         $this->validate($request, [
             'station_id'    => 'required|uuid|exists:stations,id',
-            'files'         => 'required|array',
+            'files'         => 'required|array|between:1,20',
         ]);
 
         $capturesRegistered = $this->createCaptures($request);

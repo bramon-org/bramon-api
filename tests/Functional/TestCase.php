@@ -6,6 +6,7 @@ use App\Models\Station;
 use App\Models\User;
 use Exception;
 use Faker\Generator;
+use Illuminate\Contracts\Console\Kernel;
 use Laravel\Lumen\Application;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\DatabaseTransactions;
@@ -39,7 +40,15 @@ abstract class TestCase extends BaseTestCase
     {
         $this->faker = \Faker\Factory::create();
 
-        return require __DIR__ . '/../../bootstrap/app.php';
+        $app = require __DIR__ . '/../../bootstrap/app.php';
+
+        config([
+            'database.default' => 'sqlite',
+            'filesystem.default' => 'local',
+            'filesystem.cloud' => 'local',
+        ]);
+
+        return $app;
     }
 
     /**

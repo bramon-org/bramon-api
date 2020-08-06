@@ -86,6 +86,10 @@ class FileUploaderJob extends Job
      */
     private function readCaptureData(File $file)
     {
+        if (!file_exists($file->filename) || !is_readable($file->filename)) {
+            return [];
+        }
+
         $inputFile = storage_path() . '/sync/' . $file->filename;
         $xml = simplexml_load_file($inputFile);
         $itemList = $xml->ua2_objects->ua2_object;
