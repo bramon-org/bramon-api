@@ -73,7 +73,6 @@ class File extends Model
     {
         parent::boot();
 
-        // Order by name ASC
         static::addGlobalScope('date', function (Builder $builder) {
             $builder->orderBy('date', 'desc');
         });

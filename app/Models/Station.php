@@ -77,7 +77,6 @@ class Station extends Model
     {
         parent::boot();
 
-        // Order by name ASC
         static::addGlobalScope('created_at', function (Builder $builder) {
             $builder->orderBy('created_at', 'desc')
                     ->orderBy('name', 'asc');

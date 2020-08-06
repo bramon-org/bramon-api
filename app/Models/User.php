@@ -85,7 +85,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         parent::boot();
 
-        // Order by name ASC
         static::addGlobalScope('created_at', function (Builder $builder) {
             $builder->orderBy('created_at', 'desc')
                     ->orderBy('name', 'asc');
