@@ -31,7 +31,7 @@ class StationController extends Controller
     public function index(Request $request): JsonResponse
     {
         $operator = $request->user();
-        $stations = $operator->stations()->paginate(15);
+        $stations = $operator->stations()->paginate();
 
         return response()->json($stations);
     }

@@ -30,7 +30,7 @@ class StationController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $stations = Station::where('active', true)->paginate(15);
+        $stations = Station::where('active', true)->paginate();
 
         return response()->json($stations);
     }
@@ -152,7 +152,7 @@ class StationController extends Controller
 
         try {
             $operator = User::where('id', $id)->firstOrFail();
-            $stations = $operator->stations()->paginate(15);
+            $stations = $operator->stations()->paginate();
 
             return response()->json(['stations' => $stations], 200);
         } catch (ModelNotFoundException $exception) {

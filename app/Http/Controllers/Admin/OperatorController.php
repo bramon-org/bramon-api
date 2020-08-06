@@ -27,7 +27,7 @@ class OperatorController extends Controller
      */
     public function index(): JsonResponse
     {
-        $operators = User::paginate(15);
+        $operators = User::paginate();
 
         return response()->json($operators);
     }

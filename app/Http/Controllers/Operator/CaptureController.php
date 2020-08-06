@@ -32,7 +32,9 @@ class CaptureController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $captures = Capture::where('user_id', $request->user()->id)->paginate(15);
+        $captures = Capture
+            ::where('user_id', $request->user()->id)
+            ->paginate();
 
         return response()->json($captures);
     }
@@ -45,7 +47,7 @@ class CaptureController extends Controller
     public function create(Request $request): JsonResponse
     {
         $this->validate($request, [
-            'station_id'    => 'required|uuid|exists:stations,id',
+            'station_id'    => 'required|uuid',
             'files'         => 'required|array|between:1,20',
         ]);
 
@@ -54,7 +56,7 @@ class CaptureController extends Controller
         $captures = Capture
             ::where('user_id', $request->user()->id)
             ->whereIn('id', $capturesRegistered)
-            ->paginate(15);
+            ->paginate();
 
         return response()->json(['capture' => $captures], 201);
     }

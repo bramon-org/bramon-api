@@ -67,7 +67,7 @@ return [
 
         // Deployment succeeded.
         'success' => [
-            //
+//            'artisan:queue:restart',
         ],
 
         // Deployment failed.
