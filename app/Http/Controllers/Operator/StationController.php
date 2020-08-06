@@ -58,6 +58,7 @@ class StationController extends Controller
             'camera_model'      => 'required|string|max:255',
             'camera_lens'       => 'required|string|max:255',
             'camera_capture'    => 'required|string|max:255',
+            'source'            => 'required|string|in:' . implode(',', Station::AVAILABLE_SOURCES),
         ]);
 
         try {
@@ -98,6 +99,7 @@ class StationController extends Controller
             'camera_model'      => 'required|string|max:255',
             'camera_lens'       => 'required|string|max:255',
             'camera_capture'    => 'required|string|max:255',
+            'source'            => 'required|string|in:' . implode(',', Station::AVAILABLE_SOURCES),
             'active'            => 'required|boolean',
         ]);
 

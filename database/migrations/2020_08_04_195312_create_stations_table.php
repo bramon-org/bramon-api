@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Station;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -16,6 +17,9 @@ class CreateStationsTable extends Migration
         Schema::create('stations', function (Blueprint $table) {
             $table->uuid('id');
             $table->uuid('user_id');
+
+            $table->enum('source', Station::AVAILABLE_SOURCES)->default(Station::SOURCE_BRAMON);
+
             $table->string('name')->unique();
             $table->string('latitude');
             $table->string('longitude');
