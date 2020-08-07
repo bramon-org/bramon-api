@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Operator;
 
 use App\Http\Controllers\Controller;
+use App\Models\Capture;
 use App\Models\Station;
 use App\Models\User;
+use EloquentBuilder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -30,8 +32,10 @@ class StationController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $operator = $request->user();
-        $stations = $operator->stations()->paginate();
+        $stations = EloquentBuilder
+            ::to(Station::class, $request->all())
+            ->where('user_id', $request->user()->id)
+            ->paginate();
 
         return response()->json($stations);
     }

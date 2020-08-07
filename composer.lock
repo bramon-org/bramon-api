@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "050312595a26eb3ee0d6dd77bd4470cf",
+    "content-hash": "ca64b8827e7d246cafb639548c5ffdb8",
     "packages": [
         {
             "name": "bringyourownideas/laravel-backblaze",
@@ -2270,6 +2270,68 @@
             "description": "Virtual file system to mock the real file system in unit tests.",
             "homepage": "http://vfs.bovigo.org/",
             "time": "2019-10-30T15:31:00+00:00"
+        },
+        {
+            "name": "mohammad-fouladgar/eloquent-builder",
+            "version": "v2.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mohammad-fouladgar/eloquent-builder.git",
+                "reference": "bffcebaae88997d379f1946e728076d769ad145b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mohammad-fouladgar/eloquent-builder/zipball/bffcebaae88997d379f1946e728076d769ad145b",
+                "reference": "bffcebaae88997d379f1946e728076d769ad145b",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0",
+                "illuminate/support": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0",
+                "php": "^7.1"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.0.0",
+                "orchestra/testbench": "~3.5.0|~3.6.0|~3.7.0|~3.8.0|^4.0",
+                "php-coveralls/php-coveralls": "^2.1",
+                "phpunit/phpunit": "^7.1|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Fouladgar\\EloquentBuilder\\ServiceProvider"
+                    ],
+                    "aliases": {
+                        "EloquentBuilder": "Fouladgar\\EloquentBuilder\\Facade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Fouladgar\\EloquentBuilder\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mohammad Fouladgar",
+                    "email": "mohammadfouladgarphp@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "keywords": [
+                "eloquent",
+                "eloquent-builder",
+                "filter",
+                "laravel",
+                "lumen",
+                "search"
+            ],
+            "time": "2020-07-13T12:50:29+00:00"
         },
         {
             "name": "monolog/monolog",

@@ -2,9 +2,7 @@
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-(new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
-    dirname(__DIR__)
-))->bootstrap();
+(new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(dirname(__DIR__)))->bootstrap();
 
 /*
 |--------------------------------------------------------------------------
@@ -16,11 +14,7 @@ require_once __DIR__.'/../vendor/autoload.php';
 | application as an "IoC" container and router for this framework.
 |
 */
-
-$app = new Laravel\Lumen\Application(
-    dirname(__DIR__)
-);
-
+$app = new Laravel\Lumen\Application(dirname(__DIR__));
 $app->withFacades();
 $app->withEloquent();
 
@@ -34,7 +28,6 @@ $app->withEloquent();
 | your own bindings here if you like or you can make another file.
 |
 */
-
 $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
     App\Exceptions\Handler::class
@@ -55,22 +48,10 @@ $app->singleton(
 | route or middleware that'll be assigned to some specific routes.
 |
 */
-
-$app->routeMiddleware([
-    'auth' => App\Http\Middleware\Authenticate::class,
-]);
-
-$app->routeMiddleware([
-    'admin' => App\Http\Middleware\Admin::class,
-]);
-
-$app->routeMiddleware([
-    'operator' => App\Http\Middleware\Operator::class,
-]);
-
-$app->routeMiddleware([
-    'editor' => App\Http\Middleware\Editor::class,
-]);
+$app->routeMiddleware(['auth' => App\Http\Middleware\Authenticate::class]);
+$app->routeMiddleware(['admin' => App\Http\Middleware\Admin::class]);
+$app->routeMiddleware(['operator' => App\Http\Middleware\Operator::class]);
+$app->routeMiddleware(['editor' => App\Http\Middleware\Editor::class]);
 
 /*
 |--------------------------------------------------------------------------
@@ -82,18 +63,23 @@ $app->routeMiddleware([
 | totally optional, so you are not required to uncomment this line.
 |
 */
-
 $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(App\Providers\EventServiceProvider::class);
 $app->register(Lorisleiva\LaravelDeployer\LaravelDeployerServiceProvider::class);
 $app->register(bringyourownideas\Backblaze\BackblazeServiceProvider::class);
 $app->register(Illuminate\Redis\RedisServiceProvider::class);
+$app->register(Fouladgar\EloquentBuilder\LumenServiceProvider::class);
 
 /**
- * Configuring database to use Redis correctly if needed.
+ * Configuring database.
  */
 $app->configure('database');
+
+/**
+ * Configure the Eloquent Builder.
+ */
+$app->configure('eloquent-builder');
 
 /*
 |--------------------------------------------------------------------------
@@ -105,10 +91,7 @@ $app->configure('database');
 | can respond to, as well as the controllers that may handle them.
 |
 */
-
-$app->router->group([
-    'namespace' => 'App\Http\Controllers',
-], function ($router) {
+$app->router->group(['namespace' => 'App\Http\Controllers'], function ($router) {
     require __DIR__.'/../routes/web.php';
     require __DIR__.'/../routes/admin.php';
     require __DIR__.'/../routes/operator.php';

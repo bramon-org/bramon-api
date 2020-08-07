@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Capture;
 use App\Models\File;
 use DateTimeImmutable;
+use EloquentBuilder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -25,15 +26,16 @@ class CaptureController extends Controller
     }
 
     /**
-     * List all operators
+     * List all captures
      *
      * @param Request $request
      * @return JsonResponse
      */
     public function index(Request $request): JsonResponse
     {
-        $captures = Capture
-            ::where('user_id', $request->user()->id)
+        $captures = EloquentBuilder
+            ::to(Capture::class, $request->all())
+            ->where('user_id', $request->user()->id)
             ->paginate();
 
         return response()->json($captures);

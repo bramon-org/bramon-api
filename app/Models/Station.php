@@ -71,6 +71,15 @@ class Station extends Model
     ];
 
     /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'analyzed' => 'bool'
+    ];
+
+    /**
      * The attributes that encrypted on the database.
      * @var array
      */

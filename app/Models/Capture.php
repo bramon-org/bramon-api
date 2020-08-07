@@ -55,7 +55,6 @@ class Capture extends Model
      * @var array
      */
     protected $with = [
-        'user',
         'station',
         'files',
     ];
