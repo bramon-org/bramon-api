@@ -47,6 +47,7 @@ class Capture extends Model
         'dist1',
         'dist2',
         'captured_at',
+        'analyzed',
     ];
 
     /**

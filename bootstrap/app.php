@@ -72,14 +72,13 @@ $app->register(Illuminate\Redis\RedisServiceProvider::class);
 $app->register(Fouladgar\EloquentBuilder\LumenServiceProvider::class);
 
 /**
- * Configuring database.
+ * Loading config files.
  */
 $app->configure('database');
-
-/**
- * Configure the Eloquent Builder.
- */
+$app->configure('cache');
 $app->configure('eloquent-builder');
+$app->configure('filesystems');
+$app->configure('queue');
 
 /*
 |--------------------------------------------------------------------------
