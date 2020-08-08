@@ -30,6 +30,7 @@ class CreateStationsTable extends Migration
             $table->string('camera_lens');
             $table->string('camera_capture');
             $table->boolean('active')->default(true);
+            $table->boolean('visible')->default(true);
             $table->timestamps();
 
             $table->primary('id');
