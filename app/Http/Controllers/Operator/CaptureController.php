@@ -34,7 +34,7 @@ class CaptureController extends Controller
     public function index(Request $request): JsonResponse
     {
         $captures = EloquentBuilder
-            ::to(Capture::class, $request->all())
+            ::to(Capture::class, $request->get('filter'))
             ->where('user_id', $request->user()->id)
             ->paginate();
 

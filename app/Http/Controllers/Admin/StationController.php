@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Station;
 use App\Models\User;
+use EloquentBuilder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -30,7 +31,9 @@ class StationController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $stations = Station::where('active', true)->paginate();
+        $stations = EloquentBuilder
+            ::to(Station::class, $request->get('filter'))
+            ->paginate();
 
         return response()->json($stations);
     }

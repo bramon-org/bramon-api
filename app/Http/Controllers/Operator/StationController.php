@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Operator;
 
 use App\Http\Controllers\Controller;
-use App\Models\Capture;
 use App\Models\Station;
 use App\Models\User;
 use EloquentBuilder;
@@ -33,7 +32,7 @@ class StationController extends Controller
     public function index(Request $request): JsonResponse
     {
         $stations = EloquentBuilder
-            ::to(Station::class, $request->all())
+            ::to(Station::class, $request->get('filter'))
             ->where('user_id', $request->user()->id)
             ->paginate();
 

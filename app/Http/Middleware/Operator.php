@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Models\User;
 use Closure;
+use Illuminate\Support\Facades\Log;
 
 class Operator
 {
@@ -21,5 +22,10 @@ class Operator
         }
 
         return $next($request);
+    }
+
+    public function terminate($request, $response)
+    {
+        Log::info('=== asdfsff dsaf ========');
     }
 }

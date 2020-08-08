@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use EloquentBuilder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -23,11 +24,14 @@ class OperatorController extends Controller
     /**
      * List all operators
      *
+     * @param Request $request
      * @return JsonResponse
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $operators = User::paginate();
+        $operators = EloquentBuilder
+            ::to(User::class, $request->get('filter'))
+            ->paginate();
 
         return response()->json($operators);
     }
