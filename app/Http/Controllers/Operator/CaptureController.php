@@ -87,6 +87,8 @@ class CaptureController extends Controller
 
                 $capture->captured_at = $captureFile->captured_at;
                 $capture->save();
+
+                $file->move(storage_path() . '/sync', $file->getClientOriginalName());
             }
 
             $capturesRegistered[] = $capture->id;
@@ -130,7 +132,13 @@ class CaptureController extends Controller
         $originalDateTime = $this->getFileDate($originalName);
         $fileType = $file->getMimeType();
 
-        $file->move(storage_path() . '/sync', $originalName);
+        if ($this->isAnalyzed($file)) {
+            $captureData = $this->readCaptureData($file);
+
+            $capture->fill($captureData);
+            $capture->analyzed = sizeof($captureData) !== 0;
+            $capture->save();
+        }
 
         $captureFile = new File();
         $captureFile->filename = $originalName;
@@ -158,5 +166,37 @@ class CaptureController extends Controller
         $fileDateTime = $fileDate . '_' . $fileTime;
 
         return DateTimeImmutable::createFromFormat('Ymd_His', $fileDateTime);
+    }
+
+    /**
+     * Check if file is an analyze file.
+     *
+     * @param UploadedFile $file
+     * @return bool
+     */
+    private function isAnalyzed(UploadedFile $file): bool
+    {
+        return preg_match("/A.XML$/i", $file->getClientOriginalName());
+    }
+
+    /**
+     * Read the analyze file and fill the file with the details.
+     *
+     * @param UploadedFile $file
+     * @return array
+     */
+    private function readCaptureData(UploadedFile $file)
+    {
+        $inputFile = $file->getRealPath();
+        $xml = simplexml_load_file($inputFile);
+        $itemList = $xml->ua2_objects->ua2_object;
+
+        $data = [];
+
+        foreach ($itemList->attributes() as $attributeKey => $attributeValue) {
+            $data[ (string) $attributeKey ] = (string) $attributeValue;
+        };
+
+        return $data;
     }
 }

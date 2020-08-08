@@ -44,14 +44,6 @@ class FileUploaderJob extends Job
                 continue;
             }
 
-            if ($this->isAnalyzed($file)) {
-                $captureData = $this->readCaptureData($file);
-
-                $capture->fill($captureData);
-                $capture->analyzed = sizeof($captureData) !== 0;
-                $capture->save();
-            }
-
             Storage::disk(config('filesystems.cloud'))
                 ->put(
                     $file->filename,
@@ -64,41 +56,5 @@ class FileUploaderJob extends Job
         Log::info('=== FileUploaderJob end ========');
 
         return true;
-    }
-
-    /**
-     * Check if file is an analyze file.
-     *
-     * @param File $file
-     * @return bool
-     */
-    private function isAnalyzed(File $file): bool
-    {
-        return preg_match("/A.XML$/i", $file->filename);
-    }
-
-    /**
-     * Read the analyze file and fill the file with the details.
-     *
-     * @param File $file
-     * @return array
-     */
-    private function readCaptureData(File $file)
-    {
-        if (!file_exists($file->filename) || !is_readable($file->filename)) {
-            return [];
-        }
-
-        $inputFile = storage_path() . '/sync/' . $file->filename;
-        $xml = simplexml_load_file($inputFile);
-        $itemList = $xml->ua2_objects->ua2_object;
-
-        $data = [];
-
-        foreach ($itemList->attributes() as $attributeKey => $attributeValue) {
-            $data[ (string) $attributeKey ] = (string) $attributeValue;
-        };
-
-        return $data;
     }
 }
