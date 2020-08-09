@@ -2,7 +2,7 @@
 
 /*
 |--------------------------------------------------------------------------
-| Admin Routes
+| Public Routes
 |--------------------------------------------------------------------------
 |
 | Here is where you can register all of the routes for an application.
@@ -17,10 +17,13 @@ Route::group(['prefix' => 'v1/public', 'namespace' => 'Open'], function () {
 
     # Operators
     Route::get('operators', 'OperatorController@index');
+    Route::get('operators/{id}', 'OperatorController@show');
 
     # Stations
     Route::get('stations', 'StationController@index');
+    Route::get('stations/{id}', 'StationController@show');
 
     # Captures
     Route::get('captures', 'CaptureController@index');
+    Route::get('captures/{id}', 'CaptureController@show');
 });
