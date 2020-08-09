@@ -48,7 +48,7 @@ class CaptureController extends Controller
     public function create(Request $request): JsonResponse
     {
         $this->validate($request, [
-            'station_id'    => 'required|uuid',
+            'station_id'    => 'required|uuid|exists:stations,id',
             'files'         => 'required|array|between:1,20',
         ]);
 
