@@ -29,6 +29,7 @@ class File extends Model
      * @var array
      */
     protected $fillable = [
+        'capture_id',
         'filename',
         'type',
         'extension',

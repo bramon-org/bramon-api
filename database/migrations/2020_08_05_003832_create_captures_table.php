@@ -43,6 +43,8 @@ class CreateCapturesTable extends Migration
             $table->index('user_id');
             $table->index('station_id');
 
+            $table->unique(['user_id', 'station_id', 'captured_at']);
+
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('station_id')->references('id')->on('stations');
         });

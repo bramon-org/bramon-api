@@ -25,11 +25,13 @@ trait UploadApi
         $capturesRegistered = [];
 
         foreach ($uploadedFiles as $captureDate => $captureFiles) {
-            $capture = new Capture();
-            $capture->station_id = $request->get('station_id');
-            $capture->user_id = $request->get('user_id');
-            $capture->captured_at = DateTimeImmutable::createFromFormat('Ymd_His', $captureDate);
-            $capture->save();
+            $capture = Capture::firstOrCreate(
+                [
+                    'station_id' => $request->get('station_id'),
+                    'user_id' => $request->get('user_id'),
+                    'captured_at' => DateTimeImmutable::createFromFormat('Ymd_His', $captureDate),
+                ]
+            );
 
             $this->storeUploadedFiles($capture, $captureFiles);
 
@@ -93,16 +95,14 @@ trait UploadApi
         $originalDateTime = $this->getFileDate($originalName);
         $fileType = $file->getMimeType();
 
-        $captureFile = new File();
-        $captureFile->filename = $originalName;
-        $captureFile->url = $originalName;
-        $captureFile->type = $fileType;
-        $captureFile->extension = $originalExtension;
-        $captureFile->captured_at = $originalDateTime;
-        $captureFile->capture_id = $capture->id;
-        $captureFile->save();
-
-        return $captureFile;
+        return File::firstOrCreate([
+            'capture_id' => $capture->id,
+            'filename' => $originalName,
+            'url' => $originalName,
+            'type' => $fileType,
+            'extension' => $originalExtension,
+            'captured_at' => $originalDateTime,
+        ]);
     }
 
     /**
