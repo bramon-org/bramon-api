@@ -113,6 +113,7 @@ class CaptureControllerTest extends TestCase
      */
     public function uploadMultipleCapturesFromRMS()
     {
+        $this->markTestIncomplete();
         $this->authenticate(User::ROLE_OPERATOR);
 
         $this->station->source = Station::SOURCE_RMS;
