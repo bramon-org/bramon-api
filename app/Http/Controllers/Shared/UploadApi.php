@@ -27,7 +27,7 @@ trait UploadApi
         foreach ($uploadedFiles as $captureDate => $captureFiles) {
             $capture = new Capture();
             $capture->station_id = $request->get('station_id');
-            $capture->user_id = $request->user()->id;
+            $capture->user_id = $request->get('user_id');
             $capture->captured_at = DateTimeImmutable::createFromFormat('Ymd_His', $captureDate);
             $capture->save();
 

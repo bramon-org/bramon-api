@@ -52,6 +52,7 @@ class CaptureController extends Controller
             'files'         => 'required|array|between:1,20',
         ]);
 
+        $request['user_id'] = $request->user()->id;
         $capturesRegistered = $this->createCaptures($request);
 
         $captures = Capture
