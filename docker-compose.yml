@@ -15,14 +15,8 @@ services:
       - .:/var/www/html
     depends_on:
       - mysqldb
-      - redis
     links:
       - mysqldb
-      - redis
-
-  redis:
-    container_name: bramon_api_queue
-    image: redis
 
   mysqldb:
     container_name: bramon_api_database

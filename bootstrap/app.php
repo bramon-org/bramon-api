@@ -66,10 +66,8 @@ $app->routeMiddleware(['editor' => App\Http\Middleware\Editor::class]);
 $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(App\Providers\EventServiceProvider::class);
-$app->register(Lorisleiva\LaravelDeployer\LaravelDeployerServiceProvider::class);
-$app->register(bringyourownideas\Backblaze\BackblazeServiceProvider::class);
-$app->register(Illuminate\Redis\RedisServiceProvider::class);
 $app->register(Fouladgar\EloquentBuilder\LumenServiceProvider::class);
+$app->register(Lorisleiva\LaravelDeployer\LaravelDeployerServiceProvider::class);
 
 /**
  * Loading config files.
