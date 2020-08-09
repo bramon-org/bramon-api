@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Operator;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Shared\UploadApi;
@@ -50,16 +50,15 @@ class CaptureController extends Controller
     public function create(Request $request): JsonResponse
     {
         $this->validate($request, [
+            'user_id'    => 'required|uuid|exists:users,id',
             'station_id'    => 'required|uuid|exists:stations,id',
             'files'         => 'required|array|between:1,20',
         ]);
 
-        $request['user_id'] = $request->user()->id;
         $capturesRegistered = $this->createCaptures($request);
 
         $captures = Capture
-            ::where('user_id', $request->user()->id)
-            ->whereIn('id', $capturesRegistered)
+            ::whereIn('id', $capturesRegistered)
             ->paginate();
 
         return response()->json(['capture' => $captures], 201);
