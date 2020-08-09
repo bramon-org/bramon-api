@@ -76,7 +76,7 @@ class Station extends Model
      * @var array
      */
     protected $casts = [
-        'analyzed' => 'bool'
+        'active' => 'bool'
     ];
 
     /**

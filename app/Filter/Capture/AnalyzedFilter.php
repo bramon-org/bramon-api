@@ -17,6 +17,12 @@ class AnalyzedFilter extends Filter
      */
     public function apply(Builder $builder, $value): Builder
     {
-        return $builder->where('analyzed', '=', $value);
+        $getAnalyzeds = $value === 'true';
+
+        if ($getAnalyzeds) {
+            return $builder->whereRaw("class <> ''");
+        }
+
+        return $builder->whereNull('class');
     }
 }

@@ -47,7 +47,6 @@ class Capture extends Model
         'dist1',
         'dist2',
         'captured_at',
-        'analyzed',
     ];
 
     /**
@@ -77,9 +76,7 @@ class Capture extends Model
      *
      * @var array
      */
-    protected $casts = [
-        'analyzed' => 'bool'
-    ];
+    protected $casts = [];
 
     /**
      * The "booting" method of the model.

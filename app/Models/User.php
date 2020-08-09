@@ -74,7 +74,19 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * The attributes that encrypted on the database.
      * @var array
      */
-    protected $encryptable = [];
+    protected $encryptable = [
+        'password',
+        'mobile_phone',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'active' => 'bool'
+    ];
 
     /**
      * The "booting" method of the model.
