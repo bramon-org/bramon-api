@@ -12,11 +12,11 @@ class Station extends Model
 {
     use AssignUuid, Encryptable;
 
-    const SOURCE_BRAMON = 'BRAMON';
+    const SOURCE_UFO = 'UFO';
     const SOURCE_RMS = 'RMS';
 
     const AVAILABLE_SOURCES = [
-        self::SOURCE_BRAMON,
+        self::SOURCE_UFO,
         self::SOURCE_RMS,
     ];
 

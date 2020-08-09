@@ -18,7 +18,7 @@ class CreateStationsTable extends Migration
             $table->uuid('id');
             $table->uuid('user_id');
 
-            $table->enum('source', Station::AVAILABLE_SOURCES)->default(Station::SOURCE_BRAMON);
+            $table->enum('source', Station::AVAILABLE_SOURCES)->default(Station::SOURCE_UFO);
 
             $table->string('name')->unique();
             $table->string('latitude');
