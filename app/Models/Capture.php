@@ -30,6 +30,8 @@ class Capture extends Model
      * @var array
      */
     protected $fillable = [
+        'user_id',
+        'station_id',
         'class',
         'mag',
         'sec',
