@@ -20,7 +20,7 @@ class AnalyzedFilter extends Filter
         $getAnalyzeds = $value === 'true';
 
         if ($getAnalyzeds) {
-            return $builder->whereRaw("class <> ''");
+            return $builder->whereNotNull('class');
         }
 
         return $builder->whereNull('class');
