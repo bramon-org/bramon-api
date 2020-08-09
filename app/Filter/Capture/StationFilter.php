@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 class StationFilter extends Filter
 {
     /**
-     * Apply the captured_at condition to the query.
+     * Apply the station condition to the query.
      *
      * @param Builder $builder
      * @param mixed   $value
