@@ -34,7 +34,6 @@ class CaptureController extends Controller
     {
         $captures = EloquentBuilder
             ::to(Capture::class, $request->get('filter'))
-            ->where('user_id', $request->user()->id)
             ->paginate();
 
         return response()->json($captures);
