@@ -3,7 +3,7 @@
 #### Detalhes
 
 ```http request
-GET https://api.bramonmeteor.org/v1/operator/me
+GET https://api.bramonmeteor.org/v1/operator/
 Content-Type: application/json
 Authorization: Bearer XOXOXOXOXOXOXOXO
 ```
@@ -11,7 +11,7 @@ Authorization: Bearer XOXOXOXOXOXOXOXO
 #### Atualização
 
 ```http request
-PUT https://api.bramonmeteor.org/v1/operator/me
+PUT https://api.bramonmeteor.org/v1/operator/
 Content-Type: application/json
 Authorization: Bearer XOXOXOXOXOXOXOXO
 

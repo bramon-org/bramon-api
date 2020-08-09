@@ -21,6 +21,7 @@ services:
       - redis
 
   redis:
+    container_name: bramon_api_queue
     image: redis
 
   mysqldb:

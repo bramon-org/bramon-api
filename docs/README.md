@@ -4,7 +4,8 @@ API da BRAMON.
 
 ## Autenticação
 
-Todos os requests deverão conter no mínimo os cabeçalhos mencionados abaixo:
+Todos os requests (com excessão do namespace **public**) deverão conter o cabeçalho de autorização e seu token de
+operador como valor.
 
 ```
 Authorization: Bearer XOXOXOXOXOXOXOXO

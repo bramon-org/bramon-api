@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Station;
-use App\Models\User;
 use EloquentBuilder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -134,32 +133,6 @@ class StationController extends Controller
             return response()->json(['station' => $station], 200);
         } catch (ModelNotFoundException $exception) {
             return response()->json(['error' => 'Station not found'], 404);
-        } catch (\Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 400);
-        }
-    }
-
-    /**
-     * List the stations from an user
-     *
-     * @param Request $request
-     * @param string $id
-     * @return JsonResponse
-     * @throws ValidationException
-     */
-    public function fromUser(Request $request, string $id): JsonResponse
-    {
-        $request['id'] = $id;
-
-        $this->validate($request, ['id' => 'required|uuid|exists:users,id']);
-
-        try {
-            $operator = User::where('id', $id)->firstOrFail();
-            $stations = $operator->stations()->paginate();
-
-            return response()->json(['stations' => $stations], 200);
-        } catch (ModelNotFoundException $exception) {
-            return response()->json(['error' => 'Operator not found'], 404);
         } catch (\Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 400);
         }

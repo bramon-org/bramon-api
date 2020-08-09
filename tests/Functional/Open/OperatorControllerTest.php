@@ -1,8 +1,7 @@
 <?php
 
-namespace Tests\Functional\Operator;
+namespace Tests\Functional\Open;
 
-use App\Models\User;
 use Tests\Functional\TestCase;
 
 class OperatorControllerTest extends TestCase
@@ -12,34 +11,11 @@ class OperatorControllerTest extends TestCase
      * @return void
      * @throws \Exception
      */
-    public function getCurrentOperatorDetail()
+    public function getOperators()
     {
-        $this->authenticate(User::ROLE_OPERATOR);
-
-        $this->get('/v1/operator/me', ['Authorization' => 'Bearer ' . $this->user->api_token]);
+        $this->get('/v1/public/operators');
 
         $this->assertNotEmpty($this->response->getContent());
         $this->assertResponseStatus(200);
-    }
-
-    /**
-     * @test
-     * @return void
-     * @throws \Exception
-     */
-    public function updateOperator()
-    {
-        $this->authenticate(User::ROLE_OPERATOR);
-
-        $data = [
-            'name' => $this->faker->name,
-            'mobile_phone' => $this->faker->phoneNumber,
-            'city' => $this->faker->city,
-            'state' => $this->faker->state,
-        ];
-
-        $this->put('/v1/operator/me', $data, ['Authorization' => 'Bearer ' . $this->user->api_token]);
-
-        $this->assertResponseStatus(204);
     }
 }

@@ -6,7 +6,6 @@ use App\Models\Station;
 use App\Models\User;
 use Exception;
 use Faker\Generator;
-use Illuminate\Contracts\Console\Kernel;
 use Laravel\Lumen\Application;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\DatabaseTransactions;

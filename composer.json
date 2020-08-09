@@ -8,6 +8,7 @@
         "php": ">=7.4",
         "ext-json": "*",
         "ext-simplexml": "*",
+        "ext-libxml": "*",
         "bringyourownideas/laravel-backblaze": "^1.0",
         "fzaninotto/faker": "^1.4",
         "illuminate/redis": "5.8.*",

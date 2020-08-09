@@ -55,11 +55,3 @@ GET https://api.bramonmeteor.org/v1/operator/stations
 Accept: application/json
 Authorization: Bearer XOXOXOXOXOXOXOXO
 ```
-
-##### Listagem por operador
-
-```http request
-GET https://api.bramonmeteor.org/v1/operator/stations/bcacad8c-7707-48ed-8d65-2579ac2db24b/list
-Accept: application/json
-Authorization: Bearer XOXOXOXOXOXOXOXO
-```
