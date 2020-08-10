@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Lumen\Auth\Authorizable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -16,7 +17,7 @@ use Ramsey\Uuid\Uuid;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract
 {
-    use Authenticatable, Authorizable, AssignUuid, Encryptable;
+    use Authenticatable, Authorizable, AssignUuid, Encryptable, SoftDeletes;
 
     const ROLE_ADMIN = 'admin';
     const ROLE_OPERATOR = 'operator';

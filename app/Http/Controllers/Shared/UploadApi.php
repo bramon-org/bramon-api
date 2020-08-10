@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Shared;
 
+use App\Drivers\SourceDriverInterface;
 use App\Events\FileUploadEvent;
 use App\Models\Capture;
 use App\Models\File;
+use App\Models\Station;
 use DateTimeImmutable;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 trait UploadApi
@@ -21,7 +24,8 @@ trait UploadApi
     private function createCaptures(Request $request): array
     {
         $filesFromRequest   = $request->file('files');
-        $uploadedFiles      = $this->organizeUploads($filesFromRequest);
+        $station            = Station::find($request->get('station_id'));
+        $uploadedFiles      = $this->organizeUploads($filesFromRequest, $station);
         $capturesRegistered = [];
 
         foreach ($uploadedFiles as $captureDate => $captureFiles) {
@@ -33,7 +37,7 @@ trait UploadApi
                 ]
             );
 
-            $this->storeUploadedFiles($capture, $captureFiles);
+            $this->storeUploadedFiles($station, $capture, $captureFiles);
 
             $capturesRegistered[] = $capture->id;
 
@@ -47,14 +51,16 @@ trait UploadApi
      * Get all files uploaded, organize and group by date of capture.
      *
      * @param array $files
+     * @param Station $station
      * @return array
      */
-    private function organizeUploads(array $files = []): array
+    private function organizeUploads(array $files, Station $station): array
     {
         $captures = [];
+        $driver = $this->driver($station);
 
         foreach ($files as $file) {
-            $fileDate = $this->getFileDate($file->getClientOriginalName());
+            $fileDate = $driver::getFileDate($file->getClientOriginalName());
 
             $captures[ $fileDate->format('Ymd_His') ][] = $file;
         }
@@ -63,16 +69,28 @@ trait UploadApi
     }
 
     /**
+     * Get the station source driver
+     *
+     * @param Station $station
+     * @return string
+     */
+    private function driver(Station $station): string
+    {
+        return '\\App\\Drivers\\' . Str::camel($station->source) . 'Driver';
+    }
+
+    /**
      * Organize and store uploaded files of capture.
      *
+     * @param Station $station
      * @param Capture $capture
      * @param array $files
      * @return bool
      */
-    private function storeUploadedFiles(Capture $capture, array $files = []): bool
+    private function storeUploadedFiles(Station $station, Capture $capture, array $files = []): bool
     {
         foreach ($files as $file) {
-            $this->sanitizeFile($file, $capture);
+            $this->sanitizeFile($station, $capture, $file);
             $this->readAnalyzeData($file, $capture);
 
             $file->move(storage_path() . '/sync', $file->getClientOriginalName());
@@ -84,41 +102,30 @@ trait UploadApi
     /**
      * Sanitize file uploaded and get the most important information.
      *
-     * @param UploadedFile $file
+     * @param Station $station
      * @param Capture $capture
+     * @param UploadedFile $file
      * @return File
      */
-    private function sanitizeFile(UploadedFile $file, Capture $capture): File
+    private function sanitizeFile(Station $station, Capture $capture, UploadedFile $file): File
     {
+        $driver = $this->driver($station);
+
         $originalName = $file->getClientOriginalName();
         $originalExtension = $file->getClientOriginalExtension();
-        $originalDateTime = $this->getFileDate($originalName);
+        $originalDateTime = $driver::getFileDate($file->getClientOriginalName());
         $fileType = $file->getMimeType();
 
         return File::firstOrCreate([
             'capture_id' => $capture->id,
+            'user_id' => $capture->user_id,
+            'station_id' => $station->id,
             'filename' => $originalName,
             'url' => $originalName,
             'type' => $fileType,
             'extension' => $originalExtension,
             'captured_at' => $originalDateTime,
         ]);
-    }
-
-    /**
-     * Get date of the capture from the filename.
-     *
-     * @param string $filename
-     * @return DateTimeImmutable
-     */
-    private function getFileDate(string $filename): DateTimeImmutable
-    {
-        $fileExploded = explode('_', $filename);
-        $fileDate = substr($fileExploded[0],1);
-        $fileTime = $fileExploded[1];
-        $fileDateTime = $fileDate . '_' . $fileTime;
-
-        return DateTimeImmutable::createFromFormat('Ymd_His', $fileDateTime);
     }
 
     /**

@@ -7,10 +7,11 @@
     "require": {
         "php": ">=7.4",
         "ext-json": "*",
-        "ext-simplexml": "*",
         "ext-libxml": "*",
+        "ext-simplexml": "*",
         "fzaninotto/faker": "^1.4",
         "laravel/lumen-framework": "5.8.*",
+        "league/flysystem": "^1.1",
         "lorisleiva/laravel-deployer": "^0.3.2",
         "mohammad-fouladgar/eloquent-builder": "^2.2",
         "ramsey/uuid": "^3.9"

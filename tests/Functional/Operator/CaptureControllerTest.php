@@ -105,7 +105,6 @@ class CaptureControllerTest extends TestCase
         $this->assertResponseStatus(201);
     }
 
-
     /**
      * @test
      * @return void
@@ -159,5 +158,32 @@ class CaptureControllerTest extends TestCase
         );
 
         $this->assertResponseStatus(201);
+    }
+
+    /**
+     * @test
+     * @return void
+     * @throws Exception
+     */
+    public function deleteCaptures()
+    {
+        $this->authenticate(User::ROLE_OPERATOR);
+
+        $data = [
+            'station_id' => $this->station->id,
+            'files' => [
+                'M20200608_005550_TLP_5.avi',
+                'M20200608_005550_TLP_5.txt',
+                'M20200608_005550_TLP_5.xml',
+                'M20200608_005550_TLP_5A.XML',
+                'M20200608_005550_TLP_5M.bmp',
+                'M20200608_005550_TLP_5P.jpg',
+                'M20200608_005550_TLP_5T.jpg',
+            ]
+        ];
+
+        $this->delete('/v1/operator/captures', $data, ['Authorization' => 'Bearer ' . $this->user->api_token]);
+
+        $this->assertResponseStatus(204);
     }
 }

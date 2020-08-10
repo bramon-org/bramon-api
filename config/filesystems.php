@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'cloud' => env('FILESYSTEM_CLOUD', 's3'),
+    'cloud' => env('FILESYSTEM_CLOUD', 'local'),
 
     /*
     |--------------------------------------------------------------------------
@@ -62,13 +62,6 @@ return [
             'region' => env('AWS_DEFAULT_REGION'),
             'bucket' => env('AWS_BUCKET'),
             'url' => env('AWS_URL'),
-        ],
-
-        'b2' => [
-            'driver'         => 'b2',
-            'accountId'      => env('B2_KEY_ID'),
-            'applicationKey' => env('B2_APPLICATION_KEY'),
-            'bucketName'     => env('B2_BUCKET'),
         ],
 
     ],

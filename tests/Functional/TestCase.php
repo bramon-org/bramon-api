@@ -41,11 +41,7 @@ abstract class TestCase extends BaseTestCase
 
         $app = require __DIR__ . '/../../bootstrap/app.php';
 
-        config([
-            'database.default' => 'testing',
-            'filesystem.default' => 'local',
-            'filesystem.cloud' => 'local',
-        ]);
+        config(['database.default' => 'testing']);
 
         return $app;
     }
@@ -102,6 +98,7 @@ abstract class TestCase extends BaseTestCase
         $this->station->camera_model = $this->faker->company;
         $this->station->camera_lens = $this->faker->company;
         $this->station->camera_capture = $this->faker->company;
+        $this->station->source = Station::SOURCE_UFO;
         $this->station->save();
 
         return $this->station;

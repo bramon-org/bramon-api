@@ -2,12 +2,14 @@
 
 namespace Tests\Unit;
 
+use Faker\Factory;
+use Faker\Generator;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
     /**
-     * @var \Faker\Generator
+     * @var Generator
      */
     protected $faker;
 
@@ -18,6 +20,6 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        $this->faker = \Faker\Factory::create();
+        $this->faker = Factory::create();
     }
 }

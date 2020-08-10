@@ -30,4 +30,5 @@ Route::group(['prefix' => 'v1/admin', 'namespace' => 'Admin', 'middleware' => ['
     # Captures
     Route::get('captures', 'CaptureController@index');
     Route::post('captures', 'CaptureController@create');
+    Route::delete('captures', 'CaptureController@exclude');
 });

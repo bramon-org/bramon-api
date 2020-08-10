@@ -7,10 +7,11 @@ use App\Traits\Encryptable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Station extends Model
 {
-    use AssignUuid, Encryptable;
+    use AssignUuid, Encryptable, SoftDeletes;
 
     const SOURCE_UFO = 'UFO';
     const SOURCE_RMS = 'RMS';
@@ -39,6 +40,7 @@ class Station extends Model
      */
     protected $fillable = [
         'name',
+        'user_id',
         'latitude',
         'longitude',
         'azimuth',
@@ -56,6 +58,7 @@ class Station extends Model
      * @var array
      */
     protected $hidden = [
+        'user_id',
         'created_at',
         'updated_at',
         'user_id',

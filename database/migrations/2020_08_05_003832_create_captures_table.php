@@ -47,6 +47,8 @@ class CreateCapturesTable extends Migration
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('station_id')->references('id')->on('stations');
+
+            $table->softDeletes();
         });
     }
 

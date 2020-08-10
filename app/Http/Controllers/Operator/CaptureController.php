@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Operator;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Shared\UploadApi;
 use App\Models\Capture;
+use App\Models\File;
 use EloquentBuilder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -63,5 +64,30 @@ class CaptureController extends Controller
             ->paginate();
 
         return response()->json(['capture' => $captures], 201);
+    }
+
+    /**
+     * Exclude captures files
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function exclude(Request $request): JsonResponse
+    {
+        $this->validate($request, [
+            'station_id'    => 'required|uuid|exists:stations,id',
+            'files'         => 'required|array|between:1,20',
+        ]);
+
+        $request['user_id'] = $request->user()->id;
+
+        File
+            ::where('user_id', $request->user()->id)
+            ->where('station_id', $request->get('station_id'))
+            ->whereIn('filename', $request->get('files'))
+            ->delete();
+
+        return response()->json([], 204);
     }
 }

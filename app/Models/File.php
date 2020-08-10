@@ -6,10 +6,11 @@ use App\Traits\AssignUuid;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class File extends Model
 {
-    use AssignUuid;
+    use AssignUuid, SoftDeletes;
 
     /**
      * @var string
@@ -30,6 +31,8 @@ class File extends Model
      */
     protected $fillable = [
         'capture_id',
+        'user_id',
+        'station_id',
         'filename',
         'type',
         'extension',
@@ -51,6 +54,8 @@ class File extends Model
      */
     protected $hidden = [
         'id',
+        'user_id',
+        'station_id',
         'capture_id',
         'created_at',
         'updated_at'
