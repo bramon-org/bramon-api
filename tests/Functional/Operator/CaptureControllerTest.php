@@ -112,7 +112,6 @@ class CaptureControllerTest extends TestCase
      */
     public function uploadMultipleCapturesFromRMS()
     {
-        $this->markTestIncomplete();
         $this->authenticate(User::ROLE_OPERATOR);
 
         $this->station->source = Station::SOURCE_RMS;
@@ -125,20 +124,9 @@ class CaptureControllerTest extends TestCase
 
         $files = [
             'files' => [
-                UploadedFile::fake()->create('BR0004_20200302_220730_468533/BR0004_20200302_220730_468533.csv', 5*1000),
-                UploadedFile::fake()->create('BR0004_20200302_220730_468533/BR0004_20200302_220730_468533_CAPTURED_thumbs.jpg', 5*10),
-                UploadedFile::fake()->create('BR0004_20200302_220730_468533/BR0004_20200302_220730_468533_DETECTED_thumbs.jpg', 5*10),
-                UploadedFile::fake()->create('BR0004_20200302_220730_468533/BR0004_20200302_220730_468533_fieldsums.png', 5*10),
-                UploadedFile::fake()->create('BR0004_20200302_220730_468533/BR0004_20200302_220730_468533_fieldsums_noavg.png', 5*100),
-                UploadedFile::fake()->create('BR0004_20200302_220730_468533/CALSTARS_BR0004_20200302_220730_468533.txt', 5*1000),
-                UploadedFile::fake()->create('BR0004_20200302_220730_468533/FF_BR0004_20200303_080136_096_0960768.fits', 5*1000),
-                UploadedFile::fake()->create('BR0004_20200302_220730_468533/FR_BR0004_20200303_073658_187_0921088.bin', 5*1000),
-                UploadedFile::fake()->create('BR0004_20200302_220730_468533/FS_BR0004_20200302_220730_468533_fieldsums.tar.bz2', 5*1000),
-                UploadedFile::fake()->create('BR0004_20200302_220730_468533/FTPdetectinfo_BR0004_20200302_220730_468533.txt', 5*1000),
-                UploadedFile::fake()->create('BR0004_20200302_220730_468533/FTPdetectinfo_BR0004_20200302_220730_468533_uncalibrated.txt', 5*1000),
-                UploadedFile::fake()->create('BR0004_20200302_220730_468533/mask.bmp', 5*1000),
-                UploadedFile::fake()->create('BR0004_20200302_220730_468533/platepar_cmn2010.cal', 5*1000),
-                UploadedFile::fake()->create('BR0004_20200302_220730_468533/platepars_all_recalibrated.json', 5*1000),
+                UploadedFile::fake()->create('BR0004_20200623_205351_612441_detected.tar.bz2', 5*1000),
+                UploadedFile::fake()->create('BR0004_20200615_205213_315369_detected.tar.bz2', 5*1000),
+                UploadedFile::fake()->create('BR0004_20200130_223427_830080_detected.tar.bz2', 5*1000),
             ]
         ];
 
