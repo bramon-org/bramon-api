@@ -7,6 +7,7 @@ use App\Events\FileUploadEvent;
 use App\Models\Capture;
 use App\Models\File;
 use App\Models\Station;
+use DateTime;
 use DateTimeImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -14,6 +15,44 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 trait UploadApi
 {
+    /**
+     * Get the station source driver
+     *
+     * @param Station $station
+     * @return SourceDriverInterface
+     */
+    private function driver(Station $station): SourceDriverInterface
+    {
+        $driverClass = '\\App\\Drivers\\' . Str::camel($station->source) . 'Driver';
+
+        return new $driverClass;
+    }
+
+    /**
+     * @param Request $request
+     * @return void
+     */
+    private function validateUploadFiles(Request $request): void
+    {
+        $station = Station::find($request->get('station_id'));
+
+        switch ($station->source) {
+            case Station::SOURCE_RMS:
+                $this->validate($request, [
+                    'files.*' => 'mimes:bz2',
+                ]);
+                break;
+
+            case Station::SOURCE_UFO:
+                $this->validate($request, [
+                    'files.*' => 'mimes:avi,txt,xml,bmp,jpg,mp4',
+                ]);
+                break;
+
+            default:
+                abort(422, 'Station source not configured.');
+        }
+    }
 
     /**
      * Get all files from request and save into database classified by capture date.
@@ -24,18 +63,21 @@ trait UploadApi
     private function createCaptures(Request $request): array
     {
         $filesFromRequest   = $request->file('files');
-        $station            = Station::find($request->get('station_id'));
+        $userId             = $request->get('user_id');
+        $stationId          = $request->get('station_id');
+        $station            = Station::find($stationId);
         $uploadedFiles      = $this->organizeUploads($filesFromRequest, $station);
         $capturesRegistered = [];
 
         foreach ($uploadedFiles as $captureDate => $captureFiles) {
-            $capture = Capture::firstOrCreate(
-                [
-                    'station_id' => $request->get('station_id'),
-                    'user_id' => $request->get('user_id'),
-                    'captured_at' => DateTimeImmutable::createFromFormat('Ymd_His', $captureDate),
-                ]
-            );
+            $capturedAt     = DateTime::createFromFormat('Ymd_His', $captureDate);
+            $captureHash    = md5($stationId . $captureDate);
+
+            $capture = Capture::firstOrNew([
+                'station_id'    => $stationId,
+                'user_id'       => $userId,
+                'capture_hash'  => $captureHash,
+            ]);
 
             $this->storeUploadedFiles($station, $capture, $captureFiles);
 
@@ -60,23 +102,16 @@ trait UploadApi
         $driver = $this->driver($station);
 
         foreach ($files as $file) {
-            $fileDate = $driver::getFileDate($file->getClientOriginalName());
+            try {
+                $fileDate = $driver->getFileDate($file->getClientOriginalName());
 
-            $captures[ $fileDate->format('Ymd_His') ][] = $file;
+                $captures[ $fileDate->format('Ymd_His') ][] = $file;
+            } catch (\InvalidArgumentException $invalidArgumentException) {
+                continue;
+            }
         }
 
         return $captures;
-    }
-
-    /**
-     * Get the station source driver
-     *
-     * @param Station $station
-     * @return string
-     */
-    private function driver(Station $station): string
-    {
-        return '\\App\\Drivers\\' . Str::camel($station->source) . 'Driver';
     }
 
     /**
@@ -89,9 +124,11 @@ trait UploadApi
      */
     private function storeUploadedFiles(Station $station, Capture $capture, array $files = []): bool
     {
+        $driver = $this->driver($station);
+
         foreach ($files as $file) {
             $this->sanitizeFile($station, $capture, $file);
-            $this->readAnalyzeData($file, $capture);
+            $driver->readAnalyzeData($file, $capture);
 
             $file->move(storage_path() . '/sync', $file->getClientOriginalName());
         }
@@ -109,12 +146,13 @@ trait UploadApi
      */
     private function sanitizeFile(Station $station, Capture $capture, UploadedFile $file): File
     {
-        $driver = $this->driver($station);
-
         $originalName = $file->getClientOriginalName();
         $originalExtension = $file->getClientOriginalExtension();
-        $originalDateTime = $driver::getFileDate($file->getClientOriginalName());
+        $originalDateTime = $this->driver($station)->getFileDate($file->getClientOriginalName());
         $fileType = $file->getMimeType();
+
+        $capture->captured_at = $originalDateTime;
+        $capture->save();
 
         return File::firstOrCreate([
             'capture_id' => $capture->id,
@@ -126,61 +164,5 @@ trait UploadApi
             'extension' => $originalExtension,
             'captured_at' => $originalDateTime,
         ]);
-    }
-
-    /**
-     * Check if file is an analyze file.
-     *
-     * @param UploadedFile $file
-     * @return bool
-     */
-    private function isAnalyzed(UploadedFile $file): bool
-    {
-        return preg_match("/A.XML$/i", $file->getClientOriginalName())
-            && file_exists($file->getRealPath());
-    }
-
-    /**
-     * Read the analyze file and fill the file with the details.
-     *
-     * @param UploadedFile $file
-     * @return array
-     */
-    private function readCaptureData(UploadedFile $file)
-    {
-        try {
-            $inputFile = $file->getRealPath();
-            $xml = simplexml_load_file($inputFile);
-            $itemList = $xml->ua2_objects->ua2_object;
-
-            $data = [];
-
-            foreach ($itemList->attributes() as $attributeKey => $attributeValue) {
-                $data[ (string) $attributeKey ] = (string) $attributeValue;
-            };
-
-            return $data;
-        } catch (\ErrorException $errorException) {
-            return [];
-        }
-    }
-
-    /**
-     * @param UploadedFile $file
-     * @param Capture $capture
-     * @return Capture|null
-     */
-    private function readAnalyzeData(UploadedFile $file, Capture $capture): ?Capture
-    {
-        if (!$this->isAnalyzed($file)) {
-            return null;
-        }
-
-        $captureData = $this->readCaptureData($file);
-
-        $capture->fill($captureData);
-        $capture->save();
-
-        return $capture;
     }
 }

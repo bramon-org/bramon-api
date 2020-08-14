@@ -52,8 +52,10 @@ class CaptureController extends Controller
     {
         $this->validate($request, [
             'station_id'    => 'required|uuid|exists:stations,id',
-            'files'         => 'required|array|between:1,20',
+            'files'         => 'required|array',
         ]);
+
+        // $this->validateUploadFiles($request);
 
         $request['user_id'] = $request->user()->id;
         $capturesRegistered = $this->createCaptures($request);
@@ -61,9 +63,9 @@ class CaptureController extends Controller
         $captures = Capture
             ::where('user_id', $request->user()->id)
             ->whereIn('id', $capturesRegistered)
-            ->paginate();
+            ->get();
 
-        return response()->json(['capture' => $captures], 201);
+        return response()->json(['captures' => $captures], 201);
     }
 
     /**

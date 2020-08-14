@@ -19,25 +19,29 @@ class CreateDefaultStation extends Seeder
         $users = User::get();
 
         foreach ($users as $user) {
-            $station = new Station();
-            $station->user_id = $user->id;
-            $station->name = $faker->name;
-            $station->latitude = $faker->latitude;
-            $station->longitude = $faker->longitude;
-            $station->azimuth = $faker->numberBetween(0, 360);
-            $station->elevation = $faker->numberBetween(0, 90);
-            $station->fov = $faker->numberBetween(0, 360);
-            $station->camera_model = $faker->company;
-            $station->camera_lens = $faker->company;
-            $station->camera_capture = $faker->company;
-            $station->save();
+            foreach (Station::AVAILABLE_SOURCES as $source) {
+                $station = new Station();
+                $station->user_id = $user->id;
+                $station->name = $faker->name;
+                $station->latitude = $faker->latitude;
+                $station->longitude = $faker->longitude;
+                $station->azimuth = $faker->numberBetween(0, 360);
+                $station->elevation = $faker->numberBetween(0, 90);
+                $station->fov = $faker->numberBetween(0, 360);
+                $station->camera_model = $faker->company;
+                $station->camera_lens = $faker->company;
+                $station->camera_capture = $faker->company;
+                $station->source = $source;
+                $station->save();
 
-            dump([
-                'user' => $user->id,
-                'email' => $user->email,
-                'api_token' => $user->api_token,
-                'station' => $station->id,
-            ]);
+                dump([
+                    'user' => $user->id,
+                    'email' => $user->email,
+                    'api_token' => $user->api_token,
+                    'station' => $station->id,
+                    'source' => $station->source,
+                ]);
+            }
         }
     }
 }

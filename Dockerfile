@@ -34,6 +34,8 @@ RUN docker-php-ext-enable mcrypt \
     && docker-php-ext-install intl \
     && docker-php-ext-install pcntl
 
+COPY php.ini-development.txt $PHP_INI_DIR/php.ini
+
 RUN curl -sS https://getcomposer.org/installer | \
     php -- --install-dir=/usr/bin/ --filename=composer
 
@@ -49,7 +51,9 @@ RUN pecl install redis-5.1.1 \
     && docker-php-ext-enable redis
 
 RUN a2enmod headers
+RUN rm $PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini
 
+COPY php.ini-production.txt $PHP_INI_DIR/php.ini
 COPY . .
 
 ENTRYPOINT [ "./docker-entrypoint.sh"]

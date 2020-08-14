@@ -10,7 +10,7 @@ abstract class SourceDriverAbstract implements SourceDriverInterface
      * @param $filename
      * @return bool
      */
-    public static function validate($filename): bool
+    public function validate($filename): bool
     {
         return preg_match(static::FILENAME_EXPRESSION, $filename);
     }

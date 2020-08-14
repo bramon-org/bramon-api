@@ -16,7 +16,7 @@ class UfoDriverTest extends TestCase
      */
     public function getFileDateMustReturnDateTimeImmutableObject($filename)
     {
-        $result = UfoDriver::getFileDate($filename);
+        $result = (new UfoDriver)->getFileDate($filename);
 
         $this->assertInstanceOf(\DateTimeImmutable::class, $result);
     }
@@ -57,12 +57,12 @@ class UfoDriverTest extends TestCase
      * @dataProvider invalidFilenames()
      *
      * @param string
+     *
+     * @expectedException \InvalidArgumentException
      */
     public function getFileDateMustReturnFalseWhenInvalidFilename($filename)
     {
-        $result = UfoDriver::getFileDate($filename);
-
-        $this->assertNull($result);
+        (new UfoDriver)->getFileDate($filename);
     }
 
     public function invalidFilenames()

@@ -50,6 +50,7 @@ class Station extends Model
         'camera_lens',
         'camera_capture',
         'active',
+        'source',
     ];
 
     /**
@@ -61,6 +62,7 @@ class Station extends Model
         'user_id',
         'created_at',
         'updated_at',
+        'deleted_at',
         'user_id',
     ];
 

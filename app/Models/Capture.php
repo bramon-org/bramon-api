@@ -50,6 +50,7 @@ class Capture extends Model
         'dist1',
         'dist2',
         'captured_at',
+        'capture_hash',
     ];
 
     /**
@@ -71,7 +72,9 @@ class Capture extends Model
         'station_id',
         'user_id',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'deleted_at',
+        'capture_hash',
     ];
 
     /**

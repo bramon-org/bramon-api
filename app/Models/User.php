@@ -69,6 +69,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'role',
         'created_at',
         'updated_at',
+        'deleted_at',
     ];
 
     /**

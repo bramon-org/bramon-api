@@ -8,7 +8,7 @@ Content-Type: application/json
 Authorization: Bearer XOXOXOXOXOXOXOXO
 
 {
-  "name": "Test User",
+  "name": "Test Station",
   "latitude": -27.938473,
   "longitude": -48.838273,
   "azimuth": 160,
@@ -28,7 +28,7 @@ Content-Type: application/json
 Authorization: Bearer XOXOXOXOXOXOXOXO
 
 {
-  "name": "Test User",
+  "name": "Test Station",
   "latitude": -27.938473,
   "longitude": -48.838273,
   "azimuth": 160,

@@ -16,9 +16,7 @@ class RmsDriverTest extends TestCase
      */
     public function getFileDateMustReturnDateTimeImmutableObject($filename)
     {
-        $this->markTestIncomplete();
-
-        $result = RmsDriver::getFileDate($filename);
+        $result = (new RmsDriver)->getFileDate($filename);
 
         $this->assertInstanceOf(\DateTimeImmutable::class, $result);
     }
@@ -27,46 +25,7 @@ class RmsDriverTest extends TestCase
     {
         return [
             [
-                'BR0004_20200302_220730_468533.csv',
-            ],
-            [
-                'BR0004_20200302_220730_468533_CAPTURED_thumbs.jpg',
-            ],
-            [
-                'BR0004_20200302_220730_468533_DETECTED_thumbs.jpg',
-            ],
-            [
-                'BR0004_20200302_220730_468533_fieldsums.png',
-            ],
-            [
-                'BR0004_20200302_220730_468533_fieldsums_noavg.png',
-            ],
-            [
-                'CALSTARS_BR0004_20200302_220730_468533.txt',
-            ],
-            [
-                'FF_BR0004_20200303_080136_096_0960768.fits',
-            ],
-            [
-                'FR_BR0004_20200303_073658_187_0921088.bin',
-            ],
-            [
-                'FS_BR0004_20200302_220730_468533_fieldsums.tar.bz2',
-            ],
-            [
-                'FTPdetectinfo_BR0004_20200302_220730_468533.txt',
-            ],
-            [
-                'FTPdetectinfo_BR0004_20200302_220730_468533_uncalibrated.txt',
-            ],
-            [
-                'mask.bmp',
-            ],
-            [
-                'platepar_cmn2010.cal',
-            ],
-            [
-                'platepars_all_recalibrated.json',
+                'BR0005_20200811_211456_509757_detected.tar.bz2',
             ],
         ];
     }
@@ -77,12 +36,12 @@ class RmsDriverTest extends TestCase
      * @dataProvider invalidFilenames()
      *
      * @param string
+     *
+     * @expectedException \InvalidArgumentException
      */
     public function getFileDateMustReturnFalseWhenInvalidFilename($filename)
     {
-        $result = RmsDriver::getFileDate($filename);
-
-        $this->assertNull($result);
+        (new RmsDriver)->getFileDate($filename);
     }
 
     /**
