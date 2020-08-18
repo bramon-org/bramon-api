@@ -1,5 +1,7 @@
 # BRAMON - API
 
+![tests](https://github.com/bramon-org/bramon-api/workflows/tests/badge.svg)
+
 API da BRAMON.
 
 ## Instalação Local
