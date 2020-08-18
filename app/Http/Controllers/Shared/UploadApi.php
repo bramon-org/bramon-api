@@ -70,8 +70,7 @@ trait UploadApi
         $capturesRegistered = [];
 
         foreach ($uploadedFiles as $captureDate => $captureFiles) {
-            $capturedAt     = DateTime::createFromFormat('Ymd_His', $captureDate);
-            $captureHash    = md5($stationId . $captureDate);
+            $captureHash = md5($stationId . $captureDate);
 
             $capture = Capture::firstOrNew([
                 'station_id'    => $stationId,

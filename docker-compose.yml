@@ -13,6 +13,7 @@ services:
       - '80:80'
     volumes:
       - .:/var/www/html
+      - /Volumes/external/BRAMON/estacoes/!data:/data
     depends_on:
       - mysqldb
     links:

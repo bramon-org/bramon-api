@@ -10,7 +10,6 @@
         "ext-json": "*",
         "ext-libxml": "*",
         "ext-simplexml": "*",
-        "aalfiann/parallel-request-php": "^1.4",
         "fzaninotto/faker": "^1.4",
         "laravel/lumen-framework": "5.8.*",
         "league/flysystem": "^1.1",
