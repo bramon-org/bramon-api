@@ -38,6 +38,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          cp .env.example .env
           composer update --prefer-dist --no-interaction --no-progress
 
       - name: Execute tests
