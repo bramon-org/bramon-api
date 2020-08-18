@@ -41,7 +41,7 @@ abstract class TestCase extends BaseTestCase
 
         $app = require __DIR__ . '/../../bootstrap/app.php';
 
-        config(['database.default' => 'testing']);
+        config(['database.default' => 'testing', 'app.env' => 'testing']);
 
         return $app;
     }
