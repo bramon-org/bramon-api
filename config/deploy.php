@@ -67,7 +67,7 @@ return [
 
         // Deployment succeeded.
         'success' => [
-//            'artisan:queue:restart',
+            'artisan:queue:restart',
         ],
 
         // Deployment failed.
@@ -97,7 +97,6 @@ return [
         'repository'    => 'git@github.com:bramon-org/bramon-api.git',
         'http_user'     => env('DEPLOY_HTTP_USER', 'bramon_api'),
         'writable_mode' => 'chmod',
-        'bin/php'       => '/usr/local/php74/bin/php',
     ],
 
     /*
@@ -113,12 +112,24 @@ return [
 
     'hosts' => [
         'api.bramonmeteor.org' => [
-            'deploy_path' => env('DEPLOY_PATH', '/home/bramon_api/api.bramonmeteor.org'),
-            'user' => env('DEPLOY_HTTP_USER', 'bramon_api'),
-            'forwardAgent' => true,
-            'multiplexing' => true,
-            'sshOptions'   => [
-                'UserKnownHostsFile' => '/dev/null',
+            'deploy_path'   => '/home/bramon_api/api.bramonmeteor.org',
+            'user'          => 'bramon_api',
+            'forwardAgent'  => true,
+            'multiplexing'  => true,
+            'bin/php'       => '/usr/local/php74/bin/php',
+            'sshOptions'    => [
+                'UserKnownHostsFile'    => '/dev/null',
+                'StrictHostKeyChecking' => 'no',
+            ],
+        ],
+        'ec2-18-222-127-184.us-east-2.compute.amazonaws.com' => [
+            'deploy_path'   => '/var/www/html',
+            'user'          => 'ec2-user',
+            'forwardAgent'  => true,
+            'multiplexing'  => true,
+            'identityFile'  => '~/.ssh/thiago_bramon.pem',
+            'sshOptions'    => [
+                'UserKnownHostsFile'    => '/dev/null',
                 'StrictHostKeyChecking' => 'no',
             ],
         ],

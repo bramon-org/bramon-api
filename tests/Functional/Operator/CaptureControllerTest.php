@@ -68,6 +68,8 @@ class CaptureControllerTest extends TestCase
      */
     public function uploadMultipleCaptures()
     {
+        $this->markTestSkipped();
+
         $this->authenticate(User::ROLE_OPERATOR);
 
         $headers = [
@@ -112,6 +114,8 @@ class CaptureControllerTest extends TestCase
      */
     public function uploadMultipleCapturesFromRMS()
     {
+        $this->markTestSkipped();
+
         $this->authenticate(User::ROLE_OPERATOR);
 
         $this->station->source = Station::SOURCE_RMS;
