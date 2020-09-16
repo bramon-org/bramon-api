@@ -21,14 +21,12 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('mobile_phone')->nullable();
-            $table->string('city');
-            $table->string('state');
             $table->string('api_token');
             $table->string('last_request_ip', 15)->nullable();
 
             $table->enum('role', User::AVAILABLE_ROLES)->default(User::ROLE_OPERATOR);
 
-            $table->boolean('public')->default(true);
+            $table->boolean('visible')->default(true);
             $table->boolean('active')->default(true);
 
             $table->timestamps();

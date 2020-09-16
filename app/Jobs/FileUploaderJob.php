@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Events\FileUploadEvent;
 use App\Models\Capture;
-use App\Models\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 

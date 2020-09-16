@@ -41,7 +41,11 @@ class StationControllerTest extends TestCase
             'fov' => $this->faker->numberBetween(0, 360),
             'camera_model' => $this->faker->company,
             'camera_lens' => $this->faker->company,
-            'camera_capture' => $this->faker->company
+            'camera_capture' => $this->faker->company,
+            'capture_model' => $this->faker->word,
+            'city' => $this->faker->city,
+            'state' => $this->faker->state,
+            'country' => $this->faker->country,
         ];
 
         $this->post('/v1/admin/stations', $data, ['Authorization' => 'Bearer ' . $this->user->api_token]);
@@ -68,7 +72,11 @@ class StationControllerTest extends TestCase
             'fov' => $this->faker->numberBetween(0, 360),
             'camera_model' => $this->faker->company,
             'camera_lens' => $this->faker->company,
-            'camera_capture' => $this->faker->company
+            'camera_capture' => $this->faker->company,
+            'capture_model' => $this->faker->word,
+            'city' => $this->faker->city,
+            'state' => $this->faker->state,
+            'country' => $this->faker->country,
         ];
 
         $this->post('/v1/admin/stations', $data, ['Authorization' => 'Bearer ' . $this->user->api_token]);
@@ -86,6 +94,10 @@ class StationControllerTest extends TestCase
             'camera_lens' => $this->faker->company,
             'camera_capture' => $this->faker->company,
             'active' => true,
+            'capture_model' => $this->faker->word,
+            'city' => $this->faker->city,
+            'state' => $this->faker->state,
+            'country' => $this->faker->country,
         ];
 
         $this->put('/v1/admin/stations/' . $station['station']['id'], $newData, ['Authorization' => 'Bearer ' . $this->user->api_token]);
@@ -112,7 +124,11 @@ class StationControllerTest extends TestCase
             'fov' => $this->faker->numberBetween(0, 360),
             'camera_model' => $this->faker->company,
             'camera_lens' => $this->faker->company,
-            'camera_capture' => $this->faker->company
+            'camera_capture' => $this->faker->company,
+            'capture_model' => $this->faker->word,
+            'city' => $this->faker->city,
+            'state' => $this->faker->state,
+            'country' => $this->faker->country,
         ];
 
         $this->post('/v1/admin/stations', $data, ['Authorization' => 'Bearer ' . $this->user->api_token]);

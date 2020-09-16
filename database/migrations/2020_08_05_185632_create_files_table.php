@@ -16,8 +16,6 @@ class CreateFilesTable extends Migration
         Schema::create('files', function (Blueprint $table) {
             $table->uuid('id');
             $table->uuid('capture_id');
-            $table->uuid('station_id');
-            $table->uuid('user_id');
 
             $table->string('filename');
             $table->string('type');
@@ -30,15 +28,11 @@ class CreateFilesTable extends Migration
             $table->primary('id');
 
             $table->index('capture_id');
-            $table->index('station_id');
-            $table->index('user_id');
             $table->index('filename');
 
-            $table->unique(['capture_id', 'station_id', 'user_id', 'filename', 'captured_at']);
+            $table->unique(['capture_id', 'filename', 'captured_at']);
 
             $table->foreign('capture_id')->references('id')->on('captures');
-            $table->foreign('station_id')->references('id')->on('stations');
-            $table->foreign('user_id')->references('id')->on('users');
 
             $table->softDeletes();
         });

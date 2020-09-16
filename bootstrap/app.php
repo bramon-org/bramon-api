@@ -77,6 +77,7 @@ $app->configure('cache');
 $app->configure('eloquent-builder');
 $app->configure('filesystems');
 $app->configure('queue');
+$app->configure('logging');
 
 /*
 |--------------------------------------------------------------------------

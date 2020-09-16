@@ -31,7 +31,6 @@ class Capture extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id',
         'station_id',
         'class',
         'mag',
@@ -70,7 +69,6 @@ class Capture extends Model
      */
     protected $hidden = [
         'station_id',
-        'user_id',
         'created_at',
         'updated_at',
         'deleted_at',

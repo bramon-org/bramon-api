@@ -15,7 +15,6 @@ class CreateCapturesTable extends Migration
     {
         Schema::create('captures', function (Blueprint $table) {
             $table->uuid('id');
-            $table->uuid('user_id');
             $table->uuid('station_id');
 
             $table->string('capture_hash')->unique();
@@ -42,10 +41,8 @@ class CreateCapturesTable extends Migration
 
             $table->primary('id');
 
-            $table->index('user_id');
             $table->index('station_id');
 
-            $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('station_id')->references('id')->on('stations');
 
             $table->softDeletes();

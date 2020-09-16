@@ -72,8 +72,6 @@ abstract class TestCase extends BaseTestCase
         $this->user->email = $this->faker->email;
         $this->user->name = $this->faker->name;
         $this->user->mobile_phone = $this->faker->phoneNumber;
-        $this->user->city = $this->faker->city;
-        $this->user->state = $this->faker->state;
         $this->user->password = $this->user->generatePassword();
         $this->user->api_token = $this->user->generateApiToken();
         $this->user->role = $role;
@@ -99,6 +97,10 @@ abstract class TestCase extends BaseTestCase
         $this->station->camera_lens = $this->faker->company;
         $this->station->camera_capture = $this->faker->company;
         $this->station->source = Station::SOURCE_UFO;
+        $this->station->city = $this->faker->city;
+        $this->station->state = $this->faker->state;
+        $this->station->country = $this->faker->country;
+        $this->station->capture_model = $this->faker->word();
         $this->station->save();
 
         return $this->station;

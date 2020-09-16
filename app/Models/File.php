@@ -31,8 +31,6 @@ class File extends Model
      */
     protected $fillable = [
         'capture_id',
-        'user_id',
-        'station_id',
         'filename',
         'type',
         'extension',
@@ -54,8 +52,6 @@ class File extends Model
      */
     protected $hidden = [
         'id',
-        'user_id',
-        'station_id',
         'capture_id',
         'created_at',
         'updated_at',

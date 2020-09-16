@@ -40,16 +40,28 @@ class Station extends Model
      */
     protected $fillable = [
         'name',
+
         'user_id',
+
         'latitude',
         'longitude',
         'azimuth',
         'elevation',
         'fov',
+
+        'city',
+        'state',
+        'country',
+
         'camera_model',
         'camera_lens',
         'camera_capture',
+
+        'capture_model',
+
         'active',
+        'visible',
+
         'source',
     ];
 
@@ -71,9 +83,7 @@ class Station extends Model
      *
      * @var array
      */
-    protected $with = [
-        'user',
-    ];
+    protected $with = [];
 
     /**
      * The attributes that should be cast to native types.
@@ -81,7 +91,8 @@ class Station extends Model
      * @var array
      */
     protected $casts = [
-        'active' => 'bool'
+        'active' => 'bool',
+        'visible' => 'bool',
     ];
 
     /**

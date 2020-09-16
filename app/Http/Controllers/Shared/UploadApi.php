@@ -74,7 +74,6 @@ trait UploadApi
 
             $capture = Capture::firstOrNew([
                 'station_id'    => $stationId,
-                'user_id'       => $userId,
                 'capture_hash'  => $captureHash,
             ]);
 
@@ -155,8 +154,6 @@ trait UploadApi
 
         return File::firstOrCreate([
             'capture_id' => $capture->id,
-            'user_id' => $capture->user_id,
-            'station_id' => $station->id,
             'filename' => $originalName,
             'url' => $originalName,
             'type' => $fileType,

@@ -21,14 +21,23 @@ class CreateStationsTable extends Migration
             $table->enum('source', Station::AVAILABLE_SOURCES)->default(Station::SOURCE_UFO);
 
             $table->string('name')->unique();
+
+            $table->string('city');
+            $table->string('state');
+            $table->string('country');
+
             $table->string('latitude');
             $table->string('longitude');
             $table->string('azimuth');
             $table->string('elevation');
             $table->string('fov');
+
             $table->string('camera_model');
             $table->string('camera_lens');
             $table->string('camera_capture');
+
+            $table->string('capture_model');
+
             $table->boolean('active')->default(true);
             $table->boolean('visible')->default(true);
             $table->timestamps();

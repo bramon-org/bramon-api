@@ -49,8 +49,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $fillable = [
         'name',
         'mobile_phone',
-        'city',
-        'state',
     ];
 
     /**

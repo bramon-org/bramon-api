@@ -15,7 +15,8 @@
         "league/flysystem": "^1.1",
         "lorisleiva/laravel-deployer": "^0.3.2",
         "mohammad-fouladgar/eloquent-builder": "^2.2",
-        "ramsey/uuid": "^3.9"
+        "ramsey/uuid": "^3.9",
+        "league/csv": "^9.6"
     },
     "require-dev": {
         "mockery/mockery": "^1.0",
