@@ -45,8 +45,6 @@ class ImportOperatorsCommand extends Command
             $user->password = (new User)->generatePassword();
             $user->api_token = (new User)->generateApiToken();
             $user->email = $record['user_email'];
-            $user->city = 'BR';
-            $user->state = 'BR';
             $user->created_at = $record['user_registered'];
             $user->save();
 
@@ -79,6 +77,9 @@ class ImportOperatorsCommand extends Command
                 $station->camera_capture = $record['placa_de_captura_estacao_' . $cameraIndex];
                 $station->user_id = $user->id;
                 $station->fov = $record['estacoes_0_cameras_' . $cameraIndex . '__field_of_view'];
+                $station->city = $record['estacoes_0_uf'];
+                $station->state = $record['estacoes_0_uf'];
+                $station->country = 'BR';
                 $station->save();
 
                 $this->info("{$user->name} - {$station->name}");
