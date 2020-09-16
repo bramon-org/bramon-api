@@ -57,8 +57,6 @@ class Station extends Model
         'camera_lens',
         'camera_capture',
 
-        'capture_model',
-
         'active',
         'visible',
 

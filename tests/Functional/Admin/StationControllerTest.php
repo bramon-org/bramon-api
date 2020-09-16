@@ -125,7 +125,6 @@ class StationControllerTest extends TestCase
             'camera_model' => $this->faker->company,
             'camera_lens' => $this->faker->company,
             'camera_capture' => $this->faker->company,
-            'capture_model' => $this->faker->word,
             'city' => $this->faker->city,
             'state' => $this->faker->state,
             'country' => $this->faker->country,

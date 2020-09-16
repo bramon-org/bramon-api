@@ -100,7 +100,6 @@ abstract class TestCase extends BaseTestCase
         $this->station->city = $this->faker->city;
         $this->station->state = $this->faker->state;
         $this->station->country = $this->faker->country;
-        $this->station->capture_model = $this->faker->word();
         $this->station->save();
 
         return $this->station;
