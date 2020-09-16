@@ -32,7 +32,7 @@ class StationController extends Controller
     {
         $stations = EloquentBuilder
             ::to(Station::class, $request->get('filter'))
-            ->paginate();
+            ->paginate($request->get('limit', 15));
 
         return response()->json($stations);
     }

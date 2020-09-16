@@ -33,7 +33,7 @@ class CaptureController extends Controller
         $captures = EloquentBuilder
             ::to(Capture::class, $request->get('filter'))
             ->where('class', '!=', '')
-            ->paginate();
+            ->paginate($request->get('limit', 15));
 
         return response()->json($captures);
     }

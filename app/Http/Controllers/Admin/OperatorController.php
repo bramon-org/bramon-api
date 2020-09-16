@@ -31,7 +31,7 @@ class OperatorController extends Controller
     {
         $operators = EloquentBuilder
             ::to(User::class, $request->get('filter'))
-            ->paginate();
+            ->paginate($request->get('limit', 15));
 
         return response()->json($operators);
     }
