@@ -67,7 +67,7 @@ return [
 
         // Deployment succeeded.
         'success' => [
-            'artisan:queue:restart',
+            //
         ],
 
         // Deployment failed.
@@ -93,7 +93,7 @@ return [
     */
 
     'options' => [
-        'application'   => env('APP_NAME', 'Laravel'),
+        'application'   => env('APP_NAME', 'bramon-api'),
         'repository'    => 'git@github.com:bramon-org/bramon-api.git',
         'http_user'     => env('DEPLOY_HTTP_USER', 'bramon_api'),
         'writable_mode' => 'chmod',

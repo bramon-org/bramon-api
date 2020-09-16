@@ -7,7 +7,6 @@ use App\Events\FileUploadEvent;
 use App\Models\Capture;
 use App\Models\File;
 use App\Models\Station;
-use DateTime;
 use DateTimeImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -128,7 +127,20 @@ trait UploadApi
             $this->sanitizeFile($station, $capture, $file);
             $driver->readAnalyzeData($file, $capture);
 
-            $file->move(storage_path() . '/sync', $file->getClientOriginalName());
+            /* @var $date DateTimeImmutable */
+            $date = $capture->captured_at;
+
+            $capture_path = sprintf(
+                '%s/%s/%s/%s/%s/%s',
+                storage_path(),
+                'captures',
+                $station->name,
+                $date->format('Y'),
+                $date->format('Ym'),
+                $date->format('Ymd'),
+            );
+
+            $file->move($capture_path, $file->getClientOriginalName());
         }
 
         return true;

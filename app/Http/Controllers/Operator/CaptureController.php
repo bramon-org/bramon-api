@@ -60,10 +60,7 @@ class CaptureController extends Controller
         $request['user_id'] = $request->user()->id;
         $capturesRegistered = $this->createCaptures($request);
 
-        $captures = Capture
-            ::where('user_id', $request->user()->id)
-            ->whereIn('id', $capturesRegistered)
-            ->get();
+        $captures = Capture::whereIn('id', $capturesRegistered)->get();
 
         return response()->json(['captures' => $captures], 201);
     }

@@ -3,9 +3,7 @@
 namespace App\Jobs;
 
 use App\Events\FileUploadEvent;
-use App\Models\Capture;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class FileUploaderJob extends Job
 {
@@ -29,28 +27,6 @@ class FileUploaderJob extends Job
     public function handle()
     {
         Log::info('=== FileUploaderJob start ========');
-
-        $event = $this->event;
-        $capture = Capture::find($event->capture);
-        $files = $capture->files;
-
-        foreach ($files as $file) {
-            $inputFile = storage_path() . '/sync/' . $file->filename;
-
-            if (!file_exists($inputFile)) {
-                Log::error('WARNING: File ' .  $inputFile . ' not exists.');
-
-                continue;
-            }
-
-            Storage::disk(config('filesystems.cloud'))
-                ->put(
-                    $file->filename,
-                    fopen($inputFile, 'r')
-                );
-
-            unlink($inputFile);
-        }
 
         Log::info('=== FileUploaderJob end ========');
 
