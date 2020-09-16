@@ -61,10 +61,6 @@ class ImportOperatorsCommand extends Command
                     continue;
                 }
 
-                $user->city = $record['estacoes_0_uf'];
-                $user->state = $record['estacoes_0_uf'];
-                $user->save();
-
                 $station = new Station;
                 $station->visible = $record['mostrar_na_lista_estacao_' . $cameraIndex] === 'Sim';
                 $station->name = $record['nome_da_estacao_' . $cameraIndex];
