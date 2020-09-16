@@ -35,7 +35,6 @@ class CaptureController extends Controller
     {
         $captures = EloquentBuilder
             ::to(Capture::class, $request->get('filter'))
-            ->where('user_id', $request->user()->id)
             ->paginate($request->get('limit', 15));
 
         return response()->json($captures);
@@ -82,8 +81,7 @@ class CaptureController extends Controller
         $request['user_id'] = $request->user()->id;
 
         File
-            ::where('user_id', $request->user()->id)
-            ->where('station_id', $request->get('station_id'))
+            ::where('station_id', $request->get('station_id'))
             ->whereIn('filename', $request->get('files'))
             ->delete();
 

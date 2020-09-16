@@ -30,6 +30,7 @@ class File extends Model
      * @var array
      */
     protected $fillable = [
+        'file_hash',
         'capture_id',
         'filename',
         'type',
@@ -52,6 +53,7 @@ class File extends Model
      */
     protected $hidden = [
         'id',
+        'file_hash',
         'capture_id',
         'created_at',
         'updated_at',

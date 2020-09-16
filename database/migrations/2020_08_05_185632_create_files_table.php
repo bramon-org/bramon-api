@@ -17,6 +17,8 @@ class CreateFilesTable extends Migration
             $table->uuid('id');
             $table->uuid('capture_id');
 
+            $table->string('file_hash')->unique();
+
             $table->string('filename');
             $table->string('type');
             $table->string('extension');

@@ -127,17 +127,11 @@ trait UploadApi
             $this->sanitizeFile($station, $capture, $file);
             $driver->readAnalyzeData($file, $capture);
 
-            /* @var $date DateTimeImmutable */
-            $date = $capture->captured_at;
-
             $capture_path = sprintf(
-                '%s/%s/%s/%s/%s/%s',
+                "%s/%s/%s",
                 storage_path(),
                 'captures',
-                $station->name,
-                $date->format('Y'),
-                $date->format('Ym'),
-                $date->format('Ymd'),
+                $this->captureStoragePath($capture, $station)
             );
 
             $file->move($capture_path, $file->getClientOriginalName());
@@ -164,13 +158,43 @@ trait UploadApi
         $capture->captured_at = $originalDateTime;
         $capture->save();
 
-        return File::firstOrCreate([
+        $pathPrefix = $this->captureStoragePath($capture, $station);
+
+        $hash = md5($capture->id . $originalName);
+
+        $captureFile = File::firstOrNew([
+            'file_hash'  => $hash,
             'capture_id' => $capture->id,
+        ]);
+
+        $captureFile->fill([
             'filename' => $originalName,
-            'url' => $originalName,
+            'url' => "{$pathPrefix}/{$originalName}",
             'type' => $fileType,
             'extension' => $originalExtension,
             'captured_at' => $originalDateTime,
         ]);
+        $captureFile->save();
+
+        return $captureFile;
+    }
+
+    /**
+     * @param Capture $capture
+     * @param Station $station
+     * @return string
+     */
+    private function captureStoragePath(Capture $capture, Station $station): string
+    {
+        /* @var $date DateTimeImmutable */
+        $date = $capture->captured_at;
+
+        return sprintf(
+            '%s/%s/%s/%s',
+            $station->name,
+            $date->format('Y'),
+            $date->format('Ym'),
+            $date->format('Ymd'),
+        );
     }
 }
