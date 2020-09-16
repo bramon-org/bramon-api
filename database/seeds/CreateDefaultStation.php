@@ -32,6 +32,9 @@ class CreateDefaultStation extends Seeder
                 $station->camera_lens = $faker->company;
                 $station->camera_capture = $faker->company;
                 $station->source = $source;
+                $station->city = $faker->city;
+                $station->state = $faker->state;
+                $station->country = $faker->country;
                 $station->save();
 
                 dump([
