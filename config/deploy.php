@@ -62,12 +62,12 @@ return [
 
         // Deployment is done and live
         'done' => [
-            //
+             '@php -r "symlink(storage_path() . \'/captures\', base_path() . \'/public/captures\');"'
         ],
 
         // Deployment succeeded.
         'success' => [
-             '@php -r "symlink(storage_path() . \'/captures\', base_path() . \'/public/captures\');"'
+            //
         ],
 
         // Deployment failed.
