@@ -184,7 +184,7 @@ trait UploadApi
      * @param Station $station
      * @return string
      */
-    private function captureStoragePath(Capture $capture, Station $station): string
+    public function captureStoragePath(Capture $capture, Station $station): string
     {
         /* @var $date DateTimeImmutable */
         $date = $capture->captured_at;

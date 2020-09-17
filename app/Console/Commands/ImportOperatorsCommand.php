@@ -15,7 +15,7 @@ class ImportOperatorsCommand extends Command
      *
      * @var string
      */
-    protected $signature = "import:local:operators {file}";
+    protected $signature = "import:operators {file}";
 
     /**
      * The description of the command.

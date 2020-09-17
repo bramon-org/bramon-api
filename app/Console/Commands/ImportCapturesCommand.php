@@ -4,10 +4,10 @@ namespace App\Console\Commands;
 
 use App\Drivers\SourceDriverInterface;
 use App\Drivers\UfoDriver;
+use App\Http\Controllers\Shared\UploadApi;
 use App\Models\Capture;
 use App\Models\File;
 use App\Models\Station;
-use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use FilesystemIterator;
@@ -17,12 +17,14 @@ use SplFileInfo;
 
 class ImportCapturesCommand extends Command
 {
+    use UploadApi;
+
     /**
      * The signature of the command.
      *
      * @var string
      */
-    protected $signature = "import:local:captures {directory}";
+    protected $signature = "import:captures {directory}";
 
     /**
      * The description of the command.
@@ -75,7 +77,6 @@ class ImportCapturesCommand extends Command
      */
     private function organizeFiles(RecursiveIteratorIterator $objects): array
     {
-        // $queue = new ArrayObject([], ArrayObject::ARRAY_AS_PROPS);
         $queue = [];
 
         /* @var $file SplFileInfo */
@@ -100,8 +101,8 @@ class ImportCapturesCommand extends Command
     /**
      * Upload the captures to API.
      *
-     * @param ArrayObject $captures
-     * @return
+     * @param array $captures
+     * @return void
      */
     private function createCaptures(array $captures)
     {
@@ -117,7 +118,6 @@ class ImportCapturesCommand extends Command
 
                 $capture = Capture::firstOrNew([
                     'station_id'    => $stationObj->id,
-                    'user_id'       => $stationObj->user_id,
                     'capture_hash'  => $captureHash,
                 ]);
                 $capture->captured_at = \DateTimeImmutable::createFromFormat('Ymd_His', $captureDate);
@@ -129,12 +129,15 @@ class ImportCapturesCommand extends Command
                     $originalExtension = $captureFile->getExtension();
                     $fileType = $captureFile->getType();
 
+                    $pathPrefix = $this->captureStoragePath($capture, $stationObj);
+
+                    $hash = md5($capture->id . $originalName);
+
                     File::firstOrCreate([
+                        'file_hash'  => $hash,
                         'capture_id' => $capture->id,
-                        'user_id' => $capture->user_id,
-                        'station_id' => $stationObj->id,
                         'filename' => $originalName,
-                        'url' => $originalName,
+                        'url' => "{$pathPrefix}/{$originalName}",
                         'type' => $fileType,
                         'extension' => $originalExtension,
                         'captured_at' => $capture->captured_at,
@@ -142,6 +145,8 @@ class ImportCapturesCommand extends Command
                 }
             }
         }
+
+        return true;
     }
 
     /**

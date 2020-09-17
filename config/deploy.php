@@ -67,7 +67,7 @@ return [
 
         // Deployment succeeded.
         'success' => [
-            //
+            symlink(storage_path() . '/captures', public_path() . '/captures')
         ],
 
         // Deployment failed.

@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Console\Commands\ImportCapturesCommand;
 use App\Console\Commands\ImportOperatorsCommand;
+use App\Console\Commands\SendOperatorsCredentialsCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
 
@@ -17,6 +18,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         ImportOperatorsCommand::class,
         ImportCapturesCommand::class,
+        SendOperatorsCredentialsCommand::class,
     ];
 
     /**
