@@ -67,7 +67,7 @@ return [
 
         // Deployment succeeded.
         'success' => [
-            "symlink(storage_path() . '/captures', base_path() . '/public/captures')"
+             '@php -r "symlink(storage_path() . \'/captures\', base_path() . \'/public/captures\');"'
         ],
 
         // Deployment failed.
