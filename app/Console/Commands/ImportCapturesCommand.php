@@ -129,19 +129,26 @@ class ImportCapturesCommand extends Command
                     $originalExtension = $captureFile->getExtension();
                     $fileType = $captureFile->getType();
 
+                    $this->driver->readAnalyzeData($captureFile, $capture);
+
                     $pathPrefix = $this->captureStoragePath($capture, $stationObj);
 
                     $hash = md5($capture->id . $originalName);
 
-                    File::firstOrCreate([
+                    $captureFile = File::firstOrNew([
                         'file_hash'  => $hash,
                         'capture_id' => $capture->id,
+                    ]);
+
+                    $captureFile->fill([
                         'filename' => $originalName,
                         'url' => "{$pathPrefix}/{$originalName}",
                         'type' => $fileType,
                         'extension' => $originalExtension,
                         'captured_at' => $capture->captured_at,
                     ]);
+
+                    $captureFile->save();
                 }
             }
         }
