@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Shared\UploadApi;
 use App\Models\Capture;
 use App\Models\File;
+use App\Models\Station;
 use EloquentBuilder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 
 class CaptureController extends Controller
@@ -35,6 +37,7 @@ class CaptureController extends Controller
     {
         $captures = EloquentBuilder
             ::to(Capture::class, $request->get('filter'))
+            ->whereIn('station_id', $this->stationsFromUser($request))
             ->paginate($request->get('limit', 15));
 
         return response()->json($captures);
@@ -50,7 +53,7 @@ class CaptureController extends Controller
     public function create(Request $request): JsonResponse
     {
         $this->validate($request, [
-            'station_id'    => 'required|uuid|exists:stations,id',
+            'station_id'    => 'required|uuid|in:' . join(',', $this->stationsFromUser($request)),
             'files'         => 'required|array',
         ]);
 
@@ -86,5 +89,16 @@ class CaptureController extends Controller
             ->delete();
 
         return response()->json([], 204);
+    }
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    public function stationsFromUser(Request $request): array
+    {
+        $stations = Station::select('id')->where('user_id', $request->user()->id)->get()->toArray();
+
+        return Arr::pluck($stations, 'id');
     }
 }
