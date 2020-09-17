@@ -27,7 +27,12 @@ class MakeStoragePublicCommand extends Command
      */
     public function handle(): void
     {
-        symlink(storage_path() . "/captures", base_path() . "/public/captures");
+        $orig = storage_path() . "/captures";
+        $dest = base_path() . "/public/captures";
+
+        if (!file_exists($dest)) {
+            symlink($orig, $dest);
+        }
 
         $this->info('Done.');
     }
