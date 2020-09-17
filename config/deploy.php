@@ -62,7 +62,7 @@ return [
 
         // Deployment is done and live
         'done' => [
-             'symlink(storage_path() . "/captures", base_path() . "/public/captures");'
+             'artisan:make:symlink',
         ],
 
         // Deployment succeeded.
