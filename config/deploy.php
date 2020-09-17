@@ -62,12 +62,12 @@ return [
 
         // Deployment is done and live
         'done' => [
-            'artisan:make:symlink',
         ],
 
         // Deployment succeeded.
         'success' => [
             //
+            'artisan:make:symlink',
         ],
 
         // Deployment failed.
