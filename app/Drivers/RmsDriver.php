@@ -5,7 +5,7 @@ namespace App\Drivers;
 use App\Models\Capture;
 use DateTimeImmutable;
 use InvalidArgumentException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use SplFileInfo;
 
 final class RmsDriver extends SourceDriverAbstract
 {
@@ -32,10 +32,10 @@ final class RmsDriver extends SourceDriverAbstract
     /**
      * Check if file is an analyze file.
      *
-     * @param UploadedFile $file
+     * @param SplFileInfo $file
      * @return bool
      */
-    private function isAnalyzed(UploadedFile $file): bool
+    private function isAnalyzed(SplFileInfo $file): bool
     {
         return false;
     }
@@ -43,20 +43,20 @@ final class RmsDriver extends SourceDriverAbstract
     /**
      * Read the analyze file and fill the file with the details.
      *
-     * @param UploadedFile $file
+     * @param SplFileInfo $file
      * @return array
      */
-    private function readCaptureData(UploadedFile $file)
+    private function readCaptureData(SplFileInfo $file)
     {
         return [];
     }
 
     /**
-     * @param UploadedFile $file
+     * @param SplFileInfo $file
      * @param Capture $capture
      * @return Capture|null
      */
-    public function readAnalyzeData(UploadedFile $file, Capture $capture): ?Capture
+    public function readAnalyzeData(SplFileInfo $file, Capture $capture): ?Capture
     {
         if (!$this->isAnalyzed($file)) {
             return null;

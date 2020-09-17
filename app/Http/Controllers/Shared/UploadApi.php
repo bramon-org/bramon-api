@@ -10,7 +10,7 @@ use App\Models\Station;
 use DateTimeImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use SplFileInfo;
 
 trait UploadApi
 {
@@ -145,10 +145,10 @@ trait UploadApi
      *
      * @param Station $station
      * @param Capture $capture
-     * @param UploadedFile $file
+     * @param SplFileInfo $file
      * @return File
      */
-    private function sanitizeFile(Station $station, Capture $capture, UploadedFile $file): File
+    private function sanitizeFile(Station $station, Capture $capture, SplFileInfo $file): File
     {
         $originalName = $file->getClientOriginalName();
         $originalExtension = $file->getClientOriginalExtension();

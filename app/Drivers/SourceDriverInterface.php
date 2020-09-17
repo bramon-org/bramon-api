@@ -5,7 +5,7 @@ namespace App\Drivers;
 use App\Models\Capture;
 use DateTimeImmutable;
 use InvalidArgumentException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use SplFileInfo;
 
 interface SourceDriverInterface
 {
@@ -21,9 +21,9 @@ interface SourceDriverInterface
     /**
      * Read the analyze data and save to capture.
      *
-     * @param UploadedFile $file
+     * @param SplFileInfo $file
      * @param Capture $capture
      * @return Capture|null
      */
-    public function readAnalyzeData(UploadedFile $file, Capture $capture): ?Capture;
+    public function readAnalyzeData(SplFileInfo $file, Capture $capture): ?Capture;
 }

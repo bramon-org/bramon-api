@@ -149,6 +149,17 @@ class ImportCapturesCommand extends Command
                     ]);
 
                     $captureFile->save();
+
+                    /*
+                    $capture_path = sprintf(
+                        "%s/%s/%s",
+                        storage_path(),
+                        'captures',
+                        $this->captureStoragePath($capture, $stationObj)
+                    );
+
+                    copy($capture_path, $originalName);
+                    */
                 }
             }
         }
