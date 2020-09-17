@@ -62,12 +62,12 @@ return [
 
         // Deployment is done and live
         'done' => [
+            //
         ],
 
         // Deployment succeeded.
         'success' => [
             //
-            'artisan:make:symlink',
         ],
 
         // Deployment failed.
@@ -122,17 +122,6 @@ return [
                 'StrictHostKeyChecking' => 'no',
             ],
         ],
-        'ec2-18-222-127-184.us-east-2.compute.amazonaws.com' => [
-            'deploy_path'   => '/var/www/html',
-            'user'          => 'ec2-user',
-            'forwardAgent'  => true,
-            'multiplexing'  => true,
-            'identityFile'  => '~/.ssh/thiago_bramon.pem',
-            'sshOptions'    => [
-                'UserKnownHostsFile'    => '/dev/null',
-                'StrictHostKeyChecking' => 'no',
-            ],
-        ],
     ],
 
     /*
@@ -177,5 +166,4 @@ return [
     */
 
     'custom_deployer_file' => false,
-
 ];
