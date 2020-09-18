@@ -9,9 +9,16 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Cache;
 
+/**
+ * Class OperatorController
+ * @package App\Http\Controllers\Open
+ */
 class OperatorController extends Controller
 {
+    const DEFAULT_CACHE_TIME = 900;
+
     /**
      * Create a new controller instance.
      *
@@ -30,10 +37,13 @@ class OperatorController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $operators = EloquentBuilder
-            ::to(User::class, $request->get('filter'))
-            ->where('public', true)
-            ->paginate($request->get('limit', 15));
+        $query = md5($request->getQueryString() || '');
+
+        $operators = Cache::remember('operators_' . $query, self::DEFAULT_CACHE_TIME, function() use ($request) {
+            return EloquentBuilder::to(User::class, $request->get('filter'))
+                ->where('public', true)
+                ->paginate($request->get('limit', static::DEFAULT_PAGINATION_SIZE));
+        });
 
         return response()->json($operators);
     }
@@ -53,7 +63,9 @@ class OperatorController extends Controller
         $this->validate($request, ['id' => 'required|uuid']);
 
         try {
-            $station = User::where('id', $id)->where('public', true)->firstOrFail();
+            $station = Cache::remember('operator_' . $id, self::DEFAULT_CACHE_TIME, function() use($id) {
+                return User::where('id', $id)->where('public', true)->firstOrFail();
+            });
 
             return response()->json(['station' => $station], 200);
         } catch (ModelNotFoundException $exception) {

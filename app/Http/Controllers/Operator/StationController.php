@@ -11,6 +11,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
+/**
+ * Class StationController
+ * @package App\Http\Controllers\Operator
+ */
 class StationController extends Controller
 {
     /**
@@ -34,7 +38,7 @@ class StationController extends Controller
         $stations = EloquentBuilder
             ::to(Station::class, $request->get('filter'))
             ->where('user_id', $request->user()->id)
-            ->paginate($request->get('limit', 15));
+            ->paginate($request->get('limit', static::DEFAULT_PAGINATION_SIZE));
 
         return response()->json($stations);
     }

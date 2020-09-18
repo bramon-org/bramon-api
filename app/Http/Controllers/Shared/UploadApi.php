@@ -11,6 +11,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
+/**
+ * Trait UploadApi
+ * @package App\Http\Controllers\Shared
+ */
 trait UploadApi
 {
     /**

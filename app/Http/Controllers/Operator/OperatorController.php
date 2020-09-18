@@ -7,6 +7,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
+/**
+ * Class OperatorController
+ * @package App\Http\Controllers\Operator
+ */
 class OperatorController extends Controller
 {
     /**

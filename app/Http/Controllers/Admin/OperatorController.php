@@ -9,6 +9,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
+/**
+ * Class OperatorController
+ * @package App\Http\Controllers\Admin
+ */
 class OperatorController extends Controller
 {
     /**
@@ -31,7 +35,7 @@ class OperatorController extends Controller
     {
         $operators = EloquentBuilder
             ::to(User::class, $request->get('filter'))
-            ->paginate($request->get('limit', 15));
+            ->paginate($request->get('limit', static::DEFAULT_PAGINATION_SIZE));
 
         return response()->json($operators);
     }

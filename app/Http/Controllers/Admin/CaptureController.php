@@ -11,6 +11,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
+/**
+ * Class CaptureController
+ * @package App\Http\Controllers\Admin
+ */
 class CaptureController extends Controller
 {
     use UploadApi;
@@ -35,7 +39,7 @@ class CaptureController extends Controller
     {
         $captures = EloquentBuilder
             ::to(Capture::class, $request->get('filter'))
-            ->paginate($request->get('limit', 15));
+            ->paginate($request->get('limit', static::DEFAULT_PAGINATION_SIZE));
 
         return response()->json($captures);
     }
