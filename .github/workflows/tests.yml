@@ -40,8 +40,9 @@ jobs:
         run: |
           cp .env.example .env
           composer update --no-interaction --no-progress
-          mkdir -p storage/captures
-          chmod 777 storage/captures
+
+      - name: Execute Unit tests
+        run: vendor/bin/phpunit --verbose --testsuite Unit
 
       - name: Execute tests
-        run: vendor/bin/phpunit --verbose
+        run: vendor/bin/phpunit --verbose --testsuite Functional
