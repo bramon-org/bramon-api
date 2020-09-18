@@ -22,7 +22,6 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('mobile_phone')->nullable();
             $table->string('api_token');
-            $table->string('last_request_ip', 15)->nullable();
 
             $table->enum('role', User::AVAILABLE_ROLES)->default(User::ROLE_OPERATOR);
 

@@ -58,7 +58,6 @@ class OperatorController extends Controller
         $operator->fill($request->all());
         $operator->email = $request->get('email');
         $operator->password = $operator->generatePassword();
-        $operator->last_request_ip = $request->ip();
         $operator->api_token = $operator->generateApiToken();
         $operator->save();
 
@@ -88,7 +87,6 @@ class OperatorController extends Controller
 
         $operator = User::where('id', $id)->firstOrFail();
         $operator->fill($request->all());
-        $operator->last_request_ip = $request->ip();
         $operator->save();
 
         return response()->json(['operator' => $operator], 204);

@@ -61,8 +61,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'password',
         'mobile_phone',
         'api_token',
-        'last_request_ip',
-        'last_request_at',
         'active',
         'role',
         'created_at',

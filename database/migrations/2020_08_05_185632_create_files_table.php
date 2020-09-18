@@ -32,8 +32,6 @@ class CreateFilesTable extends Migration
             $table->index('capture_id');
             $table->index('filename');
 
-            $table->unique(['capture_id', 'filename', 'captured_at']);
-
             $table->foreign('capture_id')->references('id')->on('captures');
 
             $table->softDeletes();

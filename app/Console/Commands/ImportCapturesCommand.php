@@ -115,13 +115,14 @@ class ImportCapturesCommand extends Command
 
             foreach ($date as $captureDate => $captureFiles) {
                 $captureHash = md5($stationObj->id . $captureDate);
+                $captureDate = \DateTimeImmutable::createFromFormat('Ymd_His', $captureDate);
 
                 $capture = Capture::firstOrNew([
                     'station_id'    => $stationObj->id,
                     'capture_hash'  => $captureHash,
                 ]);
-                $capture->captured_at = \DateTimeImmutable::createFromFormat('Ymd_His', $captureDate);
-                $capture->created_at = \DateTimeImmutable::createFromFormat('Ymd_His', $captureDate);
+                $capture->captured_at = $captureDate;
+                $capture->created_at = $captureDate;
                 $capture->save();
 
                 foreach ($captureFiles as $captureFile) {
@@ -145,9 +146,8 @@ class ImportCapturesCommand extends Command
                         'url' => "{$pathPrefix}/{$originalName}",
                         'type' => $fileType,
                         'extension' => $originalExtension,
-                        'captured_at' => $capture->captured_at,
+                        'captured_at' => $captureDate,
                     ]);
-
                     $captureFile->save();
 
                     /*

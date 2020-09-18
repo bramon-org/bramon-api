@@ -53,7 +53,6 @@ class OperatorController extends Controller
         try {
             $operator->name = $request->get('name') ?? $operator->name;
             $operator->mobile_phone = $request->get('mobile_phone') ?? $operator->mobile_phone;
-            $operator->last_request_ip = $request->ip();
             $operator->save();
 
             return response()->json(['operator' => $operator], 204);

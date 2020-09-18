@@ -32,14 +32,33 @@ class Capture extends Model
      */
     protected $fillable = [
         'station_id',
+
+        'capture_hash',
+
         'class',
-        'mag',
+
+        'fs',
+        'fe',
         'sec',
+        'av',
+        'mag',
+
+        'cdeg',
+        'cdegmax',
+
+        'av1',
+        'azm',
+        'evm',
+
+        'ra1',
+        'ra2',
         'lat1',
         'lat2',
         'lng1',
         'lng2',
+
         'Vo',
+
         'az1',
         'az2',
         'ev1',
@@ -48,8 +67,8 @@ class Capture extends Model
         'h2',
         'dist1',
         'dist2',
+
         'captured_at',
-        'capture_hash',
     ];
 
     /**
@@ -102,14 +121,6 @@ class Capture extends Model
     public function station(): BelongsTo
     {
         return $this->belongsTo(Station::class);
-    }
-
-    /**
-     * @return BelongsTo
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
     }
 
     /**

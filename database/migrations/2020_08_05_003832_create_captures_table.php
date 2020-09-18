@@ -20,13 +20,29 @@ class CreateCapturesTable extends Migration
             $table->string('capture_hash')->unique();
 
             $table->string('class')->nullable();
-            $table->string('mag')->nullable();
+
+            $table->string('fs')->nullable();
+            $table->string('fe')->nullable();
             $table->string('sec')->nullable();
+            $table->string('av')->nullable();
+            $table->string('mag')->nullable();
+
+            $table->string('cdeg')->nullable();
+            $table->string('cdegmax')->nullable();
+
+            $table->string('av1')->nullable();
+            $table->string('azm')->nullable();
+            $table->string('evm')->nullable();
+
+            $table->string('ra1')->nullable();
+            $table->string('ra2')->nullable();
             $table->string('lat1')->nullable();
             $table->string('lat2')->nullable();
             $table->string('lng1')->nullable();
             $table->string('lng2')->nullable();
+
             $table->string('Vo')->nullable();
+
             $table->string('az1')->nullable();
             $table->string('az2')->nullable();
             $table->string('ev1')->nullable();
@@ -41,7 +57,7 @@ class CreateCapturesTable extends Migration
 
             $table->primary('id');
 
-            $table->index('station_id');
+            $table->index(['station_id', 'class']);
 
             $table->foreign('station_id')->references('id')->on('stations');
 
