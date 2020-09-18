@@ -24,6 +24,7 @@ Onde `XOXOXOXOXOXOXOXO` é a chave de API do usuário.
 
 A API possui alguns filtros que podem ser utilizados em sua requisição GET, para
 utilizar algum filtro, você adicionar na url: `filter[nome-do-filtro]=valor`.
+Exemplo: `https://api.bramonmeteor.org/v1/public/stations?filter[state]=SC&filter[city]=Florianópolis`
 
 Os filtros disponíveis estão separados por namespace/recurso:
 
