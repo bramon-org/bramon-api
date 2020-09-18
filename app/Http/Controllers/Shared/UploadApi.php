@@ -25,7 +25,8 @@ trait UploadApi
      */
     private function driver(Station $station): DriverAbstract
     {
-        $driverClass = '\\App\\Drivers\\' . Str::ucfirst(Str::lower($station->source)) . 'Driver';
+        $stationSource = Str::lower((string) $station->source);
+        $driverClass = '\\App\\Drivers\\' . Str::ucfirst($stationSource) . 'Driver';
 
         return new $driverClass;
     }
