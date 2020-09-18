@@ -119,10 +119,7 @@ class ImportCapturesCommand extends Command
                 $captureHash = md5($stationObj->id . $captureDate);
                 $captureDate = \DateTimeImmutable::createFromFormat('Ymd_His', $captureDate);
 
-                $capture = Capture::firstOrNew([
-                    'station_id'    => $stationObj->id,
-                    'capture_hash'  => $captureHash,
-                ]);
+                $capture = Capture::firstOrNew(['station_id' => $stationObj->id, 'capture_hash' => $captureHash]);
                 $capture->captured_at = $captureDate;
                 $capture->created_at = $captureDate;
                 $capture->save();
@@ -138,11 +135,7 @@ class ImportCapturesCommand extends Command
 
                     $hash = md5($capture->id . $originalName);
 
-                    $captureFile = File::firstOrNew([
-                        'file_hash'  => $hash,
-                        'capture_id' => $capture->id,
-                    ]);
-
+                    $captureFile = File::firstOrNew(['file_hash' => $hash, 'capture_id' => $capture->id]);
                     $captureFile->fill([
                         'filename' => $originalName,
                         'url' => "{$pathPrefix}/{$originalName}",
@@ -163,10 +156,6 @@ class ImportCapturesCommand extends Command
                     copy($capture_path, $originalName);
                     */
                 }
-
-                $capture->captured_at = $captureDate;
-                $capture->created_at = $captureDate;
-                $capture->save();
             }
         }
 
