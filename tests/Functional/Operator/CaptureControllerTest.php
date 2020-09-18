@@ -68,7 +68,7 @@ class CaptureControllerTest extends TestCase
      */
     public function uploadMultipleCaptures()
     {
-        $this->markTestSkipped();
+        // $this->markTestSkipped();
 
         $this->authenticate(User::ROLE_OPERATOR);
 
@@ -114,7 +114,7 @@ class CaptureControllerTest extends TestCase
      */
     public function uploadMultipleCapturesFromRMS()
     {
-        $this->markTestSkipped();
+        // $this->markTestSkipped();
 
         $this->authenticate(User::ROLE_OPERATOR);
 

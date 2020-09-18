@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\Shared;
 
-use App\Drivers\SourceDriverInterface;
-use App\Events\FileUploadEvent;
+use App\Drivers\DriverAbstract;
 use App\Models\Capture;
 use App\Models\File;
 use App\Models\Station;
 use DateTimeImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use SplFileInfo;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 trait UploadApi
 {
@@ -18,9 +17,9 @@ trait UploadApi
      * Get the station source driver
      *
      * @param Station $station
-     * @return SourceDriverInterface
+     * @return DriverAbstract
      */
-    private function driver(Station $station): SourceDriverInterface
+    private function driver(Station $station): DriverAbstract
     {
         $driverClass = '\\App\\Drivers\\' . Str::camel($station->source) . 'Driver';
 
@@ -80,8 +79,9 @@ trait UploadApi
 
             $capturesRegistered[] = $capture->id;
 
-            event(new FileUploadEvent($capture->id));
         }
+
+        // event(new FileUploadEvent($capture->id));
 
         return $capturesRegistered;
     }
@@ -125,14 +125,10 @@ trait UploadApi
 
         foreach ($files as $file) {
             $this->sanitizeFile($station, $capture, $file);
+
             $driver->readAnalyzeData($file, $capture);
 
-            $capture_path = sprintf(
-                "%s/%s/%s",
-                storage_path(),
-                'captures',
-                $this->captureStoragePath($capture, $station)
-            );
+            $capture_path = $this->captureFullPath($capture, $station);
 
             $file->move($capture_path, $file->getClientOriginalName());
         }
@@ -145,10 +141,10 @@ trait UploadApi
      *
      * @param Station $station
      * @param Capture $capture
-     * @param SplFileInfo $file
+     * @param UploadedFile $file
      * @return File
      */
-    private function sanitizeFile(Station $station, Capture $capture, SplFileInfo $file): File
+    private function sanitizeFile(Station $station, Capture $capture, UploadedFile $file): File
     {
         $originalName = $file->getClientOriginalName();
         $originalExtension = $file->getClientOriginalExtension();
@@ -158,7 +154,7 @@ trait UploadApi
         $capture->captured_at = $originalDateTime;
         $capture->save();
 
-        $pathPrefix = $this->captureStoragePath($capture, $station);
+        $pathPrefix = $this->capturePrefixPath($capture, $station);
 
         $hash = md5($capture->id . $originalName);
 
@@ -184,7 +180,7 @@ trait UploadApi
      * @param Station $station
      * @return string
      */
-    public function captureStoragePath(Capture $capture, Station $station): string
+    public function capturePrefixPath(Capture $capture, Station $station): string
     {
         /* @var $date DateTimeImmutable */
         $date = $capture->captured_at;
@@ -195,6 +191,21 @@ trait UploadApi
             $date->format('Y'),
             $date->format('Ym'),
             $date->format('Ymd'),
+        );
+    }
+
+    /**
+     * @param Capture $capture
+     * @param Station $station
+     * @return string
+     */
+    public function captureFullPath(Capture $capture, Station $station): string
+    {
+        return sprintf(
+            "%s/%s/%s",
+            storage_path(),
+            'captures',
+            $this->capturePrefixPath($capture, $station)
         );
     }
 }

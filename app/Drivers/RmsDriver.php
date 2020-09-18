@@ -5,11 +5,10 @@ namespace App\Drivers;
 use App\Models\Capture;
 use DateTimeImmutable;
 use InvalidArgumentException;
-use SplFileInfo;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-final class RmsDriver extends SourceDriverAbstract
+final class RmsDriver extends DriverAbstract
 {
-    // BR0005_20200811_211456_509757_detected.tar.bz2
     const FILENAME_EXPRESSION = '/^([[:alpha:]]{2})([[:digit:]]{4})_([[:digit:]]{8})_([[:digit:]]{6})_([[:digit:]]{6})_(detected\.tar\.bz2)$/i';
 
     /**
@@ -32,10 +31,10 @@ final class RmsDriver extends SourceDriverAbstract
     /**
      * Check if file is an analyze file.
      *
-     * @param SplFileInfo $file
+     * @param UploadedFile $file
      * @return bool
      */
-    private function isAnalyzed(SplFileInfo $file): bool
+    private function isAnalyzed(UploadedFile $file): bool
     {
         return false;
     }
@@ -43,20 +42,20 @@ final class RmsDriver extends SourceDriverAbstract
     /**
      * Read the analyze file and fill the file with the details.
      *
-     * @param SplFileInfo $file
+     * @param UploadedFile $file
      * @return array
      */
-    private function readCaptureData(SplFileInfo $file)
+    private function readCaptureData(UploadedFile $file)
     {
         return [];
     }
 
     /**
-     * @param SplFileInfo $file
+     * @param UploadedFile $file
      * @param Capture $capture
      * @return Capture|null
      */
-    public function readAnalyzeData(SplFileInfo $file, Capture $capture): ?Capture
+    public function readAnalyzeData(UploadedFile $file, Capture $capture): ?Capture
     {
         if (!$this->isAnalyzed($file)) {
             return null;

@@ -5,9 +5,9 @@ namespace App\Drivers;
 use App\Models\Capture;
 use DateTimeImmutable;
 use InvalidArgumentException;
-use SplFileInfo;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-final class UfoDriver extends SourceDriverAbstract
+final class UfoDriver extends DriverAbstract
 {
     const FILENAME_EXPRESSION = '/^M([[:digit:]]{8})_([[:digit:]]{6})_([[:alpha:]]{3,5})_(.+)\.([[:alnum:]]{3})$/i';
 
@@ -31,22 +31,22 @@ final class UfoDriver extends SourceDriverAbstract
     /**
      * Check if file is an analyze file.
      *
-     * @param SplFileInfo $file
+     * @param UploadedFile $file
      * @return bool
      */
-    private function isAnalyzed(SplFileInfo $file): bool
+    private function isAnalyzed(UploadedFile $file): bool
     {
-        return preg_match("/A.XML$/i", $file->getBasename())
+        return preg_match("/A.XML$/i", $file->getClientOriginalName())
             && file_exists($file->getRealPath());
     }
 
     /**
      * Read the analyze file and fill the file with the details.
      *
-     * @param SplFileInfo $file
+     * @param UploadedFile $file
      * @return array
      */
-    private function readCaptureData(SplFileInfo $file)
+    private function readCaptureData(UploadedFile $file)
     {
         try {
             $inputFile = $file->getRealPath();
@@ -66,11 +66,11 @@ final class UfoDriver extends SourceDriverAbstract
     }
 
     /**
-     * @param SplFileInfo $file
+     * @param UploadedFile $file
      * @param Capture $capture
      * @return Capture|null
      */
-    public function readAnalyzeData(SplFileInfo $file, Capture $capture): ?Capture
+    public function readAnalyzeData(UploadedFile $file, Capture $capture): ?Capture
     {
         if (!$this->isAnalyzed($file)) {
             return null;

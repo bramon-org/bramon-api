@@ -70,7 +70,7 @@ class CaptureControllerTest extends TestCase
      */
     public function uploadMultipleCaptures()
     {
-        $this->markTestSkipped();
+        // $this->markTestSkipped();
 
         $this->authenticate(User::ROLE_ADMIN);
 

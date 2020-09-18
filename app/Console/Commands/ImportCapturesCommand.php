@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Drivers\SourceDriverInterface;
 use App\Drivers\UfoDriver;
 use App\Http\Controllers\Shared\UploadApi;
 use App\Models\Capture;
@@ -11,12 +10,15 @@ use App\Models\Station;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use FilesystemIterator;
+use Illuminate\Http\UploadedFile;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
 
 class ImportCapturesCommand extends Command
 {
+    const FILENAME_EXPRESSION = '/^M([[:digit:]]{8})_([[:digit:]]{6})_([[:alpha:]]{3,5})_(.+)\.([[:alnum:]]{3})$/i';
+
     use UploadApi;
 
     /**
@@ -34,9 +36,9 @@ class ImportCapturesCommand extends Command
     protected $description = "Import captures from a local directory.";
 
     /**
-     * @var SourceDriverInterface
+     * @var UfoDriver
      */
-    private $driver;
+    private UfoDriver $driver;
 
     /**
      * Execute the console command.
@@ -130,9 +132,9 @@ class ImportCapturesCommand extends Command
                     $originalExtension = $captureFile->getExtension();
                     $fileType = $captureFile->getType();
 
-                    $this->driver->readAnalyzeData($captureFile, $capture);
+                    $this->driver->readAnalyzeData(new UploadedFile($captureFile, $originalName), $capture);
 
-                    $pathPrefix = $this->captureStoragePath($capture, $stationObj);
+                    $pathPrefix = $this->capturePrefixPath($capture, $stationObj);
 
                     $hash = md5($capture->id . $originalName);
 
@@ -161,6 +163,10 @@ class ImportCapturesCommand extends Command
                     copy($capture_path, $originalName);
                     */
                 }
+
+                $capture->captured_at = $captureDate;
+                $capture->created_at = $captureDate;
+                $capture->save();
             }
         }
 
