@@ -17,5 +17,5 @@ Onde `XOXOXOXOXOXOXOXO` é a chave de API do usuário.
 ## Namespaces
 
 - [Admin](admin/README.md)
-- [Operadores](operators/README.md)
+- [Operador](operator/README.md)
 - [Pública](public/README.md)
