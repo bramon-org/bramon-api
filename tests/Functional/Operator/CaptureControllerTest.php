@@ -40,7 +40,7 @@ class CaptureControllerTest extends TestCase
         ];
 
         $files = [
-            'files' => UploadedFile::fake()->create('TLP5/2020/202006/20200607/M20200608_005550_TLP_5.avi', 5*1000)
+            'files' => UploadedFile::fake()->create('TLP5/2020/202006/20200607/M20200608_005550_TLP_5.avi', 5*100)
         ];
 
         $servers = [];
@@ -79,13 +79,13 @@ class CaptureControllerTest extends TestCase
 
         $files = [
             'files' => [
-                UploadedFile::fake()->create('TLP5/2020/202006/20200607/M20200608_005550_TLP_5.avi', 5*1000),
+                UploadedFile::fake()->create('TLP5/2020/202006/20200607/M20200608_005550_TLP_5.avi', 5*100),
                 UploadedFile::fake()->create('TLP5/2020/202006/20200607/M20200608_005550_TLP_5.txt', 5*10),
                 UploadedFile::fake()->create('TLP5/2020/202006/20200607/M20200608_005550_TLP_5.xml', 5*10),
                 UploadedFile::fake()->create('TLP5/2020/202006/20200607/M20200608_005550_TLP_5A.XML', 5*10),
                 UploadedFile::fake()->create('TLP5/2020/202006/20200607/M20200608_005550_TLP_5M.bmp', 5*100),
-                UploadedFile::fake()->create('TLP5/2020/202006/20200607/M20200608_005550_TLP_5P.jpg', 5*1000),
-                UploadedFile::fake()->create('TLP5/2020/202006/20200607/M20200608_005550_TLP_5T.jpg', 5*1000),
+                UploadedFile::fake()->create('TLP5/2020/202006/20200607/M20200608_005550_TLP_5P.jpg', 5*100),
+                UploadedFile::fake()->create('TLP5/2020/202006/20200607/M20200608_005550_TLP_5T.jpg', 5*100),
             ]
         ];
 
@@ -128,9 +128,9 @@ class CaptureControllerTest extends TestCase
 
         $files = [
             'files' => [
-                UploadedFile::fake()->create('BR0004_20200623_205351_612441_detected.tar.bz2', 5*1000),
-                UploadedFile::fake()->create('BR0004_20200615_205213_315369_detected.tar.bz2', 5*1000),
-                UploadedFile::fake()->create('BR0004_20200130_223427_830080_detected.tar.bz2', 5*1000),
+                UploadedFile::fake()->create('BR0004_20200623_205351_612441_detected.tar.bz2', 5*100),
+                UploadedFile::fake()->create('BR0004_20200615_205213_315369_detected.tar.bz2', 5*100),
+                UploadedFile::fake()->create('BR0004_20200130_223427_830080_detected.tar.bz2', 5*100),
             ]
         ];
 
