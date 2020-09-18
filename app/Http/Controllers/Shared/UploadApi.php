@@ -25,7 +25,7 @@ trait UploadApi
      */
     private function driver(Station $station): DriverAbstract
     {
-        $driverClass = '\\App\\Drivers\\' . Str::camel(Str::lower($station->source)) . 'Driver';
+        $driverClass = '\\App\\Drivers\\' . Str::ucfirst(Str::lower($station->source)) . 'Driver';
 
         return new $driverClass;
     }
