@@ -41,7 +41,7 @@ class OperatorController extends Controller
 
         $operators = Cache::remember('operators_' . $query, self::DEFAULT_CACHE_TIME, function() use ($request) {
             return EloquentBuilder::to(User::class, $request->get('filter'))
-                ->where('public', true)
+                ->where('visible', true)
                 ->paginate($request->get('limit', static::DEFAULT_PAGINATION_SIZE));
         });
 
@@ -64,7 +64,7 @@ class OperatorController extends Controller
 
         try {
             $station = Cache::remember('operator_' . $id, self::DEFAULT_CACHE_TIME, function() use($id) {
-                return User::where('id', $id)->where('public', true)->firstOrFail();
+                return User::where('id', $id)->where('visible', true)->firstOrFail();
             });
 
             return response()->json(['station' => $station], 200);
