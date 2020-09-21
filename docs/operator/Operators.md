@@ -3,7 +3,7 @@
 #### Detalhes
 
 ```http request
-GET https://api.bramonmeteor.org/v1/operator/
+GET https://api.bramonmeteor.org/v1/operator/operators
 Content-Type: application/json
 Authorization: Bearer XOXOXOXOXOXOXOXO
 ```
@@ -11,7 +11,7 @@ Authorization: Bearer XOXOXOXOXOXOXOXO
 #### Atualização
 
 ```http request
-PUT https://api.bramonmeteor.org/v1/operator/
+PUT https://api.bramonmeteor.org/v1/operator/operators
 Content-Type: application/json
 Authorization: Bearer XOXOXOXOXOXOXOXO
 
@@ -21,4 +21,12 @@ Authorization: Bearer XOXOXOXOXOXOXOXO
   "city": "City",
   "state": "State"
 }
+```
+
+#### Visualizar detalhes
+
+```http request
+GET https://api.bramonmeteor.org/v1/operator/operators/bcacad8c-7707-48ed-8d65-2579ac2db24b
+Accept: application/json
+Authorization: Bearer XOXOXOXOXOXOXOXO
 ```

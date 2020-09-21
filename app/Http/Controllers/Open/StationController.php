@@ -65,8 +65,10 @@ class StationController extends Controller
 
         try {
             $station = Cache::remember('station_' . $id, self::DEFAULT_CACHE_TIME, function() use($id){
-                return Station::where('id', $id)
+                return Station
+                    ::where('id', $id)
                     ->where('visible', true)
+                    ->where('active', true)
                     ->firstOrFail();
             });
 

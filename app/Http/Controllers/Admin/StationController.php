@@ -8,6 +8,7 @@ use EloquentBuilder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -16,6 +17,8 @@ use Illuminate\Validation\ValidationException;
  */
 class StationController extends Controller
 {
+    const DEFAULT_CACHE_TIME = 60;
+
     /**
      * Create a new controller instance.
      *
@@ -34,9 +37,13 @@ class StationController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $stations = EloquentBuilder
-            ::to(Station::class, $request->get('filter'))
-            ->paginate($request->get('limit', static::DEFAULT_PAGINATION_SIZE));
+        $query = md5($request->getQueryString() || '');
+
+        $stations = Cache::remember('stations_' . $query, self::DEFAULT_CACHE_TIME, function() use($request) {
+            return EloquentBuilder
+                ::to(Station::class, $request->get('filter'))
+                ->paginate($request->get('limit', static::DEFAULT_PAGINATION_SIZE));
+        });
 
         return response()->json($stations);
     }
@@ -132,7 +139,11 @@ class StationController extends Controller
         $this->validate($request, ['id' => 'required|uuid']);
 
         try {
-            $station = Station::where('id', $id)->firstOrFail();
+            $station = Cache::remember('station_' . $id, self::DEFAULT_CACHE_TIME, function() use($id){
+                return Station
+                    ::where('id', $id)
+                    ->firstOrFail();
+            });
 
             return response()->json(['station' => $station], 200);
         } catch (ModelNotFoundException $exception) {

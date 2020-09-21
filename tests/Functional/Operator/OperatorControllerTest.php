@@ -16,7 +16,7 @@ class OperatorControllerTest extends TestCase
     {
         $this->authenticate(User::ROLE_OPERATOR);
 
-        $this->get('/v1/operator/', ['Authorization' => 'Bearer ' . $this->user->api_token]);
+        $this->get('/v1/operator/operators', ['Authorization' => 'Bearer ' . $this->user->api_token]);
 
         $this->assertNotEmpty($this->response->getContent());
         $this->assertResponseStatus(200);
@@ -38,7 +38,7 @@ class OperatorControllerTest extends TestCase
             'state' => $this->faker->state,
         ];
 
-        $this->put('/v1/operator/', $data, ['Authorization' => 'Bearer ' . $this->user->api_token]);
+        $this->put('/v1/operator/operators', $data, ['Authorization' => 'Bearer ' . $this->user->api_token]);
 
         $this->assertResponseStatus(204);
     }

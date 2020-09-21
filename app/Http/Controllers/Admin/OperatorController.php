@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use EloquentBuilder;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -15,6 +17,8 @@ use Illuminate\Validation\ValidationException;
  */
 class OperatorController extends Controller
 {
+    const DEFAULT_CACHE_TIME = 60;
+
     /**
      * Create a new controller instance.
      *
@@ -33,9 +37,13 @@ class OperatorController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $operators = EloquentBuilder
-            ::to(User::class, $request->get('filter'))
-            ->paginate($request->get('limit', static::DEFAULT_PAGINATION_SIZE));
+        $query = md5($request->getQueryString() || '');
+
+        $operators = Cache::remember('operators_' . $query, self::DEFAULT_CACHE_TIME, function() use ($request) {
+            return EloquentBuilder
+                ::to(User::class, $request->get('filter'))
+                ->paginate($request->get('limit', static::DEFAULT_PAGINATION_SIZE));
+        });
 
         return response()->json($operators);
     }
@@ -97,7 +105,7 @@ class OperatorController extends Controller
     }
 
     /**
-     * Show an operator
+     * View an operator
      *
      * @param Request $request
      * @param string $id
@@ -110,8 +118,18 @@ class OperatorController extends Controller
 
         $this->validate($request, ['id' => 'required|uuid']);
 
-        $operator = User::where('id', $id)->firstOrFail();
+        try {
+            $station = Cache::remember('operator_' . $id, self::DEFAULT_CACHE_TIME, function() use($id) {
+                return User
+                    ::where('id', $id)
+                    ->firstOrFail();
+            });
 
-        return response()->json(['operator' => $operator], 200);
+            return response()->json(['station' => $station], 200);
+        } catch (ModelNotFoundException $exception) {
+            return response()->json(['error' => 'Operator not found'], 404);
+        } catch (\Exception $exception) {
+            return response()->json(['error' => $exception->getMessage()], 400);
+        }
     }
 }

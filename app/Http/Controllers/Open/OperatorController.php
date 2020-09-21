@@ -40,7 +40,9 @@ class OperatorController extends Controller
         $query = md5($request->getQueryString() || '');
 
         $operators = Cache::remember('operators_' . $query, self::DEFAULT_CACHE_TIME, function() use ($request) {
-            return EloquentBuilder::to(User::class, $request->get('filter'))
+            return EloquentBuilder
+                ::to(User::class, $request->get('filter'))
+                ->where('active', true)
                 ->where('visible', true)
                 ->paginate($request->get('limit', static::DEFAULT_PAGINATION_SIZE));
         });
@@ -64,7 +66,11 @@ class OperatorController extends Controller
 
         try {
             $station = Cache::remember('operator_' . $id, self::DEFAULT_CACHE_TIME, function() use($id) {
-                return User::where('id', $id)->where('visible', true)->firstOrFail();
+                return User
+                    ::where('id', $id)
+                    ->where('visible', true)
+                    ->where('active', true)
+                    ->firstOrFail();
             });
 
             return response()->json(['station' => $station], 200);

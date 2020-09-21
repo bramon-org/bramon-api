@@ -40,7 +40,8 @@ class CaptureController extends Controller
         $query = md5($request->getQueryString() || '');
 
         $captures = Cache::remember('captures_' . $query, self::DEFAULT_CACHE_TIME, function() use ($request) {
-            return EloquentBuilder::to(Capture::class, $request->get('filter'))
+            return EloquentBuilder
+                ::to(Capture::class, $request->get('filter'))
                 ->where('class', '!=', '')
                 ->paginate($request->get('limit', static::DEFAULT_PAGINATION_SIZE));
         });

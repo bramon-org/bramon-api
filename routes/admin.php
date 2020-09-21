@@ -17,18 +17,19 @@ Route::group(['prefix' => 'v1/admin', 'namespace' => 'Admin', 'middleware' => ['
 
     # Operators
     Route::get('operators', 'OperatorController@index');
-    Route::post('operators', 'OperatorController@create');
     Route::get('operators/{id}', 'OperatorController@show');
+    Route::post('operators', 'OperatorController@create');
     Route::put('operators/{id}', 'OperatorController@update');
 
     # Stations
     Route::get('stations', 'StationController@index');
-    Route::post('stations', 'StationController@create');
     Route::get('stations/{id}', 'StationController@show');
+    Route::post('stations', 'StationController@create');
     Route::put('stations/{id}', 'StationController@update');
 
     # Captures
     Route::get('captures', 'CaptureController@index');
+    Route::get('captures/{id}', 'CaptureController@show');
     Route::post('captures', 'CaptureController@create');
     Route::delete('captures', 'CaptureController@exclude');
 });
