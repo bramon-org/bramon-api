@@ -43,6 +43,7 @@ class StationController extends Controller
             return EloquentBuilder
                 ::to(Station::class, $request->get('filter'))
                 ->where('visible', true)
+                ->where('active', true)
                 ->paginate($request->get('limit', static::DEFAULT_PAGINATION_SIZE));
         });
 

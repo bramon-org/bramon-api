@@ -146,7 +146,8 @@ class CaptureControllerTest extends TestCase
      */
     public function viewCapture()
     {
-        self::markTestIncomplete();
+        self::markTestSkipped();
+
         $this->authenticate(User::ROLE_ADMIN);
 
         $headers = [

@@ -43,7 +43,8 @@ class StationController extends Controller
         $stations = Cache::remember('stations_' . $query, self::DEFAULT_CACHE_TIME, function() use($request) {
             return EloquentBuilder
                 ::to(Station::class, $request->get('filter'))
-                ->where('user_id', $request->user()->id)
+                ->where('active', true)
+                ->where('visible', true)
                 ->paginate($request->get('limit', static::DEFAULT_PAGINATION_SIZE));
         });
 
@@ -80,6 +81,7 @@ class StationController extends Controller
             $station->fill($request->all());
             $station->user_id = $operator->id;
             $station->active = true;
+            $station->visible = true;
             $station->save();
 
             return response()->json(['station' => $station], 201);
@@ -115,6 +117,7 @@ class StationController extends Controller
             'camera_capture'    => 'required|string|max:255',
             'source'            => 'nullable|string|in:' . implode(',', Station::AVAILABLE_SOURCES),
             'active'            => 'nullable|boolean',
+            'visible'           => 'nullable|boolean',
         ]);
 
         try {
