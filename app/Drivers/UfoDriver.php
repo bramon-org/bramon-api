@@ -6,6 +6,7 @@ use App\Models\Capture;
 use DateTimeImmutable;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use ErrorException;
 
 final class UfoDriver extends DriverAbstract
 {
@@ -60,7 +61,7 @@ final class UfoDriver extends DriverAbstract
             };
 
             return $data;
-        } catch (\ErrorException $errorException) {
+        } catch (ErrorException $errorException) {
             return [];
         }
     }
