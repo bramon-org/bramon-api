@@ -138,4 +138,49 @@ class CaptureControllerTest extends TestCase
 
         $this->assertResponseStatus(204);
     }
+
+    /**
+     * @test
+     * @return void
+     * @throws Exception
+     */
+    public function viewCapture()
+    {
+        self::markTestIncomplete();
+        $this->authenticate(User::ROLE_ADMIN);
+
+        $headers = [
+            'Content-Type' => 'multipart/form-data',
+            'Authorization' => 'Bearer ' . $this->user->api_token,
+        ];
+
+        $files = [
+            'files[]' => UploadedFile::fake()->create('TLP5/2020/202006/20200607/M20200608_005550_TLP_5.avi', 5*1000)
+        ];
+
+        $servers = [];
+
+        foreach ($headers as $k => $header) {
+            $servers["HTTP_" . $k] = $header;
+        }
+
+        $this->call(
+            'POST',
+            '/v1/admin/captures',
+            [
+                'station_id' => $this->station->id,
+                'user_id' => $this->user->id,
+            ],
+            [],
+            $files,
+            $servers
+        );
+
+        $capture = json_decode($this->response->getContent(), true);
+
+        $this->get('/v1/admin/captures/' . $capture['captures'][0]['id'], ['Authorization' => 'Bearer ' . $this->user->api_token]);
+
+        $this->assertNotEmpty($this->response->getContent());
+        $this->assertResponseStatus(200);
+    }
 }
