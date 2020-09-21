@@ -2,6 +2,7 @@
 
 namespace Tests\Functional\Operator;
 
+use App\Models\Capture;
 use App\Models\User;
 use Exception;
 use Tests\Functional\TestCase;
@@ -26,6 +27,25 @@ class CaptureControllerTest extends TestCase
 
     /**
      * @test
+     * @return void
+     * @throws Exception
+     */
+    public function viewCapture()
+    {
+        $this->authenticate(User::ROLE_OPERATOR);
+
+        $capture = Capture::firstOrNew(['station_id' => $this->station->id, 'capture_hash' => md5(uniqid())]);
+        $capture->captured_at = new \DateTimeImmutable();
+        $capture->save();
+
+        $this->get('/v1/operator/captures/' . $capture->id, ['Authorization' => 'Bearer ' . $this->user->api_token]);
+
+        $this->assertNotEmpty($this->response->getContent());
+        $this->assertResponseStatus(200);
+    }
+
+    /**
+     * @test
      * @dataProvider validCapturesDataProvider
      * @param array $captureFiles
      * @return void
@@ -33,8 +53,6 @@ class CaptureControllerTest extends TestCase
      */
     public function uploadCaptures(array $captureFiles)
     {
-        $this->markTestSkipped();
-
         $this->authenticate(User::ROLE_OPERATOR);
 
         $headers = [

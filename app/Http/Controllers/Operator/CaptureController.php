@@ -51,7 +51,6 @@ class CaptureController extends Controller
                 ->join('stations', 'stations.id', '=', 'captures.station_id')
                 ->where('stations.active', true)
                 ->where('stations.visible', true)
-                ->whereIn('station_id', $this->stationsFromUser($request))
                 ->paginate($request->get('limit', static::DEFAULT_PAGINATION_SIZE));
         });
 

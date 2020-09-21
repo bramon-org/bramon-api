@@ -74,6 +74,8 @@ abstract class TestCase extends BaseTestCase
         $this->user->mobile_phone = $this->faker->phoneNumber;
         $this->user->password = $this->user->generatePassword();
         $this->user->api_token = $this->user->generateApiToken();
+        $this->user->visible = true;
+        $this->user->active = true;
         $this->user->role = $role;
         $this->user->save();
 
@@ -100,6 +102,8 @@ abstract class TestCase extends BaseTestCase
         $this->station->city = $this->faker->city;
         $this->station->state = $this->faker->state;
         $this->station->country = $this->faker->country;
+        $this->station->visible = true;
+        $this->station->active = true;
         $this->station->save();
 
         return $this->station;

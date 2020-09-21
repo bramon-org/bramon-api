@@ -2,6 +2,7 @@
 
 namespace Tests\Functional\Admin;
 
+use App\Models\Capture;
 use App\Models\User;
 use Exception;
 use Tests\Functional\TestCase;
@@ -33,8 +34,6 @@ class CaptureControllerTest extends TestCase
      */
     public function uploadCaptures(array $captureFiles)
     {
-        $this->markTestSkipped();
-
         $this->authenticate(User::ROLE_ADMIN);
 
         $headers = [
@@ -51,7 +50,10 @@ class CaptureControllerTest extends TestCase
         $this->call(
             'POST',
             '/v1/admin/captures',
-            ['station_id' => $this->station->id],
+            [
+                'station_id' => $this->station->id,
+                'user_id' => $this->user->id,
+            ],
             [],
             ['files' => $captureFiles],
             $servers
@@ -94,42 +96,13 @@ class CaptureControllerTest extends TestCase
      */
     public function viewCapture()
     {
-        self::markTestSkipped();
-
         $this->authenticate(User::ROLE_ADMIN);
 
-        $headers = [
-            'Content-Type' => 'multipart/form-data',
-            'Authorization' => 'Bearer ' . $this->user->api_token,
-        ];
+        $capture = Capture::firstOrNew(['station_id' => $this->station->id, 'capture_hash' => md5(uniqid())]);
+        $capture->captured_at = new \DateTimeImmutable();
+        $capture->save();
 
-        $files = [
-            'files' => [
-                UploadedFile::fake()->create('TLP5/2020/202006/20200607/M20200608_005550_TLP_5.avi', 5*1000),
-            ],
-        ];
-
-        $servers = [];
-
-        foreach ($headers as $k => $header) {
-            $servers["HTTP_" . $k] = $header;
-        }
-
-        $this->call(
-            'POST',
-            '/v1/admin/captures',
-            [
-                'station_id' => $this->station->id,
-                'user_id' => $this->user->id,
-            ],
-            [],
-            $files,
-            $servers
-        );
-
-        $capture = json_decode($this->response->getContent(), true);
-
-        $this->get('/v1/admin/captures/' . $capture['captures'][0]['id'], ['Authorization' => 'Bearer ' . $this->user->api_token]);
+        $this->get('/v1/admin/captures/' . $capture->id, ['Authorization' => 'Bearer ' . $this->user->api_token]);
 
         $this->assertNotEmpty($this->response->getContent());
         $this->assertResponseStatus(200);
