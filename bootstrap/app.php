@@ -72,12 +72,12 @@ $app->register(Lorisleiva\LaravelDeployer\LaravelDeployerServiceProvider::class)
 /**
  * Loading config files.
  */
-$app->configure('database');
 $app->configure('cache');
+$app->configure('database');
 $app->configure('eloquent-builder');
 $app->configure('filesystems');
-$app->configure('queue');
 $app->configure('logging');
+$app->configure('queue');
 
 /*
 |--------------------------------------------------------------------------
