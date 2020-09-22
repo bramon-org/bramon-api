@@ -49,7 +49,6 @@ class CaptureController extends Controller
             return EloquentBuilder
                 ::to(Capture::class, $request->get('filter'))
                 ->join('stations', 'stations.id', '=', 'captures.station_id')
-                ->join('files', 'captures.id', '=', 'files.capture_id')
                 ->where('stations.active', true)
                 ->where('stations.visible', true)
                 ->paginate($request->get('limit', static::DEFAULT_PAGINATION_SIZE));
