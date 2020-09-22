@@ -46,6 +46,7 @@ class CaptureController extends Controller
         $captures = Cache::remember('captures_' . $query, self::DEFAULT_CACHE_TIME, function() use ($request) {
             return EloquentBuilder
                 ::to(Capture::class, $request->get('filter'))
+                ->join('files', 'captures.id', '=', 'files.capture_id')
                 ->paginate($request->get('limit', static::DEFAULT_PAGINATION_SIZE));
         });
 
