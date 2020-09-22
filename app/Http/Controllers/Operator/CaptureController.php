@@ -45,7 +45,7 @@ class CaptureController extends Controller
     {
         $query = md5(json_encode($request->all()) || '');
 
-        $captures = Cache::remember('captures_' . $query, self::DEFAULT_CACHE_TIME, function() use ($request) {
+        $captures = Cache::remember('operator_captures_' . $query, self::DEFAULT_CACHE_TIME, function() use ($request) {
             return EloquentBuilder
                 ::to(Capture::class, $request->get('filter'))
                 ->join('stations', 'stations.id', '=', 'captures.station_id')
@@ -120,7 +120,7 @@ class CaptureController extends Controller
         $this->validate($request, ['id' => 'required|uuid']);
 
         try {
-            $station = Cache::remember('capture_' . $id, self::DEFAULT_CACHE_TIME, function() use ($id) {
+            $station = Cache::remember('operator_capture_' . $id, self::DEFAULT_CACHE_TIME, function() use ($id) {
                 return Capture::where('id', $id)->firstOrFail();
             });
 
