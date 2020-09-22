@@ -96,7 +96,7 @@ return [
         'application'   => env('APP_NAME', 'bramon-api'),
         'repository'    => 'git@github.com:bramon-org/bramon-api.git',
         'http_user'     => env('DEPLOY_USER'),
-        'writable_mode' => 'chmod',
+//        'writable_mode' => 'chmod',
     ],
 
     /*
