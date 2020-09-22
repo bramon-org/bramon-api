@@ -43,7 +43,7 @@ class CaptureController extends Controller
     {
         $query = md5(json_encode($request->all()) || '');
 
-        $captures = Cache::remember('admin_captures_' . $query, self::DEFAULT_CACHE_TIME, function() use ($request) {
+        $captures = Cache::remember(('admin_captures_' . $query), self::DEFAULT_CACHE_TIME, function() use ($request) {
             return EloquentBuilder
                 ::to(Capture::class, $request->get('filter'))
                 ->paginate($request->get('limit', static::DEFAULT_PAGINATION_SIZE));
@@ -111,7 +111,7 @@ class CaptureController extends Controller
         $this->validate($request, ['id' => 'required|uuid']);
 
         try {
-            $station = Cache::remember('admin_capture_' . $id, self::DEFAULT_CACHE_TIME, function() use ($id) {
+            $station = Cache::remember(('admin_capture_' . $id), self::DEFAULT_CACHE_TIME, function() use ($id) {
                 return Capture::where('id', $id)->firstOrFail();
             });
 
