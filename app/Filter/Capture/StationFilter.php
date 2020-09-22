@@ -19,6 +19,6 @@ class StationFilter extends Filter
     {
         return $builder
             ->join('stations', 'stations.id', '=', 'captures.station_id')
-            ->where('stations.id', '=', $value);
+            ->whereIn('stations.id', $value);
     }
 }
