@@ -37,7 +37,7 @@ class CaptureController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $query = md5($request->all() || '');
+        $query = md5(json_encode($request->all()) || '');
 
         $captures = Cache::remember('captures_' . $query, self::DEFAULT_CACHE_TIME, function() use ($request) {
             return EloquentBuilder
