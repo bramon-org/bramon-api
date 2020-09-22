@@ -37,17 +37,13 @@ class CaptureController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $query = md5(json_encode($request->all()) || '');
-
-        $captures = Cache::remember(('open_captures_' . $query), self::DEFAULT_CACHE_TIME, function() use ($request) {
-            return EloquentBuilder
+        $captures = EloquentBuilder
                 ::to(Capture::class, $request->get('filter'))
                 ->join('stations', 'stations.id', '=', 'captures.station_id')
                 ->where('stations.active', true)
                 ->where('stations.visible', true)
                 ->where('captures.class', '!=', '')
                 ->paginate($request->get('limit', static::DEFAULT_PAGINATION_SIZE));
-        });
 
         return response()->json($captures);
     }

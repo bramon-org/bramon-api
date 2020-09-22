@@ -37,13 +37,9 @@ class StationController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $query = md5($request->getQueryString() || '');
-
-        $stations = Cache::remember('stations_' . $query, self::DEFAULT_CACHE_TIME, function() use($request) {
-            return EloquentBuilder
+        $stations = EloquentBuilder
                 ::to(Station::class, $request->get('filter'))
                 ->paginate($request->get('limit', static::DEFAULT_PAGINATION_SIZE));
-        });
 
         return response()->json($stations);
     }

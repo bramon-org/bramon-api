@@ -37,15 +37,11 @@ class OperatorController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $query = md5($request->getQueryString() || '');
-
-        $operators = Cache::remember('operators_' . $query, self::DEFAULT_CACHE_TIME, function() use ($request) {
-            return EloquentBuilder
+        $operators = EloquentBuilder
                 ::to(User::class, $request->get('filter'))
                 ->where('active', true)
                 ->where('visible', true)
                 ->paginate($request->get('limit', static::DEFAULT_PAGINATION_SIZE));
-        });
 
         return response()->json($operators);
     }
