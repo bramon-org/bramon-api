@@ -111,7 +111,7 @@ class Capture extends Model
         parent::boot();
 
         static::addGlobalScope('captured_at', function (Builder $builder) {
-            $builder->orderBy('captures.captured_at', 'desc');
+            $builder->orderBy('captured_at', 'desc');
         });
     }
 

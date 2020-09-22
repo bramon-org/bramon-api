@@ -39,10 +39,6 @@ class CaptureController extends Controller
     {
         $captures = EloquentBuilder
                 ::to(Capture::class, $request->get('filter'))
-                ->join('stations', 'stations.id', '=', 'captures.station_id')
-                ->where('stations.active', true)
-                ->where('stations.visible', true)
-                ->where('captures.class', '!=', '')
                 ->paginate($request->get('limit', static::DEFAULT_PAGINATION_SIZE));
 
         return response()->json($captures);
