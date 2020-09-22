@@ -39,6 +39,7 @@ class StationController extends Controller
     {
         $stations = EloquentBuilder
                 ::to(Station::class, $request->get('filter'))
+                ->orderBy('name')
                 ->paginate($request->get('limit', static::DEFAULT_PAGINATION_SIZE));
 
         return response()->json($stations);

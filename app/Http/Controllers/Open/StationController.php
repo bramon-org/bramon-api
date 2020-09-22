@@ -41,6 +41,7 @@ class StationController extends Controller
                 ::to(Station::class, $request->get('filter'))
                 ->where('visible', true)
                 ->where('active', true)
+                ->orderBy('name')
                 ->paginate($request->get('limit', static::DEFAULT_PAGINATION_SIZE));
 
         return response()->json($stations);
