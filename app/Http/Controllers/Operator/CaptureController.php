@@ -14,8 +14,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Class CaptureController
@@ -45,13 +43,9 @@ class CaptureController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        DB::enableQueryLog();
-
         $captures = EloquentBuilder
             ::to(Capture::class, $request->get('filter'))
             ->paginate($request->get('limit', static::DEFAULT_PAGINATION_SIZE));
-
-        Log::debug(DB::getQueryLog());
 
         return response()->json($captures);
     }
