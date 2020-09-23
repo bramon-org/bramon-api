@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
 
 class RefactoryStationsTable extends Migration
 {
@@ -13,6 +14,10 @@ class RefactoryStationsTable extends Migration
      */
     public function up()
     {
+        DB::getDoctrineSchemaManager()
+            ->getDatabasePlatform()
+            ->registerDoctrineTypeMapping('enum', 'string');
+
         Schema::table('stations', function (Blueprint $table) {
             $table->string('name', 50)->change();
             $table->string('city', 100)->change();
@@ -36,6 +41,10 @@ class RefactoryStationsTable extends Migration
      */
     public function down()
     {
+        DB::getDoctrineSchemaManager()
+            ->getDatabasePlatform()
+            ->registerDoctrineTypeMapping('enum', 'string');
+
         Schema::table('stations', function (Blueprint $table) {
             $table->string('name')->change();
             $table->string('city')->change();
