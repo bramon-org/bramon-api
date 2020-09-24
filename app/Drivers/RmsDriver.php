@@ -53,12 +53,12 @@ final class RmsDriver extends DriverAbstract
     /**
      * @param UploadedFile $file
      * @param Capture $capture
-     * @return Capture|null
+     * @return Capture
      */
-    public function readAnalyzeData(UploadedFile $file, Capture $capture): ?Capture
+    public function readAnalyzeData(UploadedFile $file, Capture $capture): Capture
     {
         if (!$this->isAnalyzed($file)) {
-            return null;
+            return $capture;
         }
 
         $captureData = $this->readCaptureData($file);

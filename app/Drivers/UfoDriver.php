@@ -5,6 +5,7 @@ namespace App\Drivers;
 use App\Models\Capture;
 use DateTimeImmutable;
 use InvalidArgumentException;
+use SimpleXMLElement;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use ErrorException;
 
@@ -42,45 +43,85 @@ final class UfoDriver extends DriverAbstract
     }
 
     /**
-     * Read the analyze file and fill the file with the details.
+     * Read the analyze file.
      *
      * @param UploadedFile $file
-     * @return array
+     * @return SimpleXMLElement
      */
-    private function readCaptureData(UploadedFile $file)
+    private function readAnalyzeFile(UploadedFile $file): SimpleXMLElement
     {
-        try {
-            $inputFile = $file->getRealPath();
-            $xml = simplexml_load_file($inputFile);
-            $itemList = $xml->ua2_objects->ua2_object;
+        $inputFile = $file->getRealPath();
 
-            $data = [];
-
-            foreach ($itemList->attributes() as $attributeKey => $attributeValue) {
-                $data[ (string) $attributeKey ] = (string) $attributeValue;
-            };
-
-            return $data;
-        } catch (ErrorException $errorException) {
-            return [];
-        }
+        return simplexml_load_file($inputFile);
     }
 
     /**
+     * Read the analyze file and fill the file with the details.
+     *
+     * @param SimpleXMLElement $file
+     * @return array
+     */
+    private function readCaptureData(SimpleXMLElement $file)
+    {
+        $data = [];
+        $itemList = $file->ua2_objects->ua2_object;
+
+        foreach ($itemList->attributes() as $attributeKey => $attributeValue) {
+            $data[ (string) $attributeKey ] = (string) $attributeValue;
+        };
+
+        return $data;
+    }
+
+    /**
+     * Read the station data from XML analyze.
+     *
+     * @param SimpleXMLElement $file
+     * @return array
+     */
+    private function readStationData(SimpleXMLElement $file)
+    {
+        $itemAttributes = $file->attributes();
+
+        return [
+            'latitude' => (string) $itemAttributes['lat'],
+            'longitude' => (string) $itemAttributes['lng'],
+            'azimuth' => (string) $itemAttributes['az'],
+            'elevation' => (string) $itemAttributes['ev'],
+            'fov' => (string) $itemAttributes['vx'],
+            'camera_model' => (string) $itemAttributes['cam'],
+            'camera_lens' => (string) $itemAttributes['lens'],
+            'camera_capture' => (string) $itemAttributes['cap'],
+        ];
+    }
+
+    /**
+     * Read analyze data from file.
+     *
      * @param UploadedFile $file
      * @param Capture $capture
-     * @return Capture|null
+     * @return Capture
      */
-    public function readAnalyzeData(UploadedFile $file, Capture $capture): ?Capture
+    public function readAnalyzeData(UploadedFile $file, Capture $capture): Capture
     {
         if (!$this->isAnalyzed($file)) {
-            return null;
+            return $capture;
         }
 
-        $captureData = $this->readCaptureData($file);
+        try {
+            $xml = $this->readAnalyzeFile($file);
+            $captureData = $this->readCaptureData($xml);
+            $stationData = $this->readStationData($xml);
 
-        $capture->fill($captureData);
-        $capture->save();
+            $capture->fill($captureData);
+            $capture->save();
+
+            $station = $capture->station;
+            $station->fill($stationData);
+            $station->save();
+        } catch (ErrorException $errorException) {
+            info($errorException->getMessage());
+        }
 
         return $capture;
     }
