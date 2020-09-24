@@ -23,11 +23,11 @@ class RefactoryStationsTable extends Migration
             $table->string('city', 100)->change();
             $table->string('state', 100)->change();
             $table->string('country', 100)->change();
-            $table->string('latitude', 20)->change();
-            $table->string('longitude', 20)->change();
-            $table->string('azimuth', 5)->change();
-            $table->string('elevation', 3)->change();
-            $table->string('fov', 10)->change();
+            $table->string('latitude', 50)->change();
+            $table->string('longitude', 50)->change();
+            $table->string('azimuth', 50)->change();
+            $table->string('elevation', 50)->change();
+            $table->string('fov', 50)->change();
             $table->string('camera_model', 150)->change();
             $table->string('camera_lens', 150)->change();
             $table->string('camera_capture', 150)->change();
