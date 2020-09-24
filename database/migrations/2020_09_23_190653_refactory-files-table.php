@@ -14,7 +14,7 @@ class RefactoryFilesTable extends Migration
     public function up()
     {
         Schema::table('files', function (Blueprint $table) {
-            $table->string('file_hash', 200)->change();
+            $table->string('file_hash', 255)->change();
             $table->string('filename', 255)->change();
             $table->string('type', 50)->change();
             $table->string('extension', 5)->change();
