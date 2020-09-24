@@ -16,8 +16,8 @@ class RefactoryCapturesTable extends Migration
         Schema::table('captures', function (Blueprint $table) {
             $table->string('capture_hash', 255)->change();
             $table->string('class', 10)->change();
-            $table->string('fs', 2)->change();
-            $table->string('fe', 2)->change();
+            $table->string('fs', 15)->change();
+            $table->string('fe', 15)->change();
             $table->string('sec', 15)->change();
             $table->string('av', 15)->change();
             $table->string('mag', 15)->change();
@@ -52,10 +52,10 @@ class RefactoryCapturesTable extends Migration
     public function down()
     {
         Schema::table('captures', function (Blueprint $table) {
-            $table->string('capture_hash', 200)->change();
-            $table->string('class', 10)->change();
-            $table->string('fs', 2)->change();
-            $table->string('fe', 2)->change();
+            $table->string('capture_hash')->change();
+            $table->string('class')->change();
+            $table->string('fs')->change();
+            $table->string('fe')->change();
             $table->string('sec')->change();
             $table->string('av')->change();
             $table->string('mag')->change();
