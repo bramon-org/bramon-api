@@ -43,6 +43,8 @@ final class UfoDriver extends DriverAbstract
     }
 
     /**
+     * Read the analyze file.
+     *
      * @param UploadedFile $file
      * @return SimpleXMLElement
      */
@@ -54,25 +56,6 @@ final class UfoDriver extends DriverAbstract
     }
 
     /**
-     * @param SimpleXMLElement $file
-     * @return array
-     */
-    private function readStationData(SimpleXMLElement $file)
-    {
-        try {
-            $data = [];
-
-            foreach ($file->attributes() as $attributeKey => $attributeValue) {
-                $data[ (string) $attributeKey ] = (string) $attributeValue;
-            };
-
-            return $data;
-        } catch (ErrorException $errorException) {
-            return [];
-        }
-    }
-
-    /**
      * Read the analyze file and fill the file with the details.
      *
      * @param SimpleXMLElement $file
@@ -80,34 +63,49 @@ final class UfoDriver extends DriverAbstract
      */
     private function readCaptureData(SimpleXMLElement $file)
     {
-        try {
-            $itemList = $file->ua2_objects->ua2_object;
-            $itemAttributes = $itemList->attributes();
+        $data = [];
+        $itemList = $file->ua2_objects->ua2_object;
 
-            return [
-                'latitude' => (string) $itemAttributes['lat'],
-                'longitude' => (string) $itemAttributes['lng'],
-                'azimuth' => (string) $itemAttributes['az'],
-                'elevation' => (string) $itemAttributes['ev'],
-                 'fov' => (string) $itemAttributes['vx'],
-                'camera_model' => (string) $itemAttributes['cam'],
-                'camera_lens' => (string) $itemAttributes['lens'],
-                'camera_capture' => (string) $itemAttributes['cap'],
-            ];
-        } catch (ErrorException $errorException) {
-            return [];
-        }
+        foreach ($itemList->attributes() as $attributeKey => $attributeValue) {
+            $data[ (string) $attributeKey ] = (string) $attributeValue;
+        };
+
+        return $data;
     }
 
     /**
+     * Read the station data from XML analyze.
+     *
+     * @param SimpleXMLElement $file
+     * @return array
+     */
+    private function readStationData(SimpleXMLElement $file)
+    {
+        $itemAttributes = $file->attributes();
+
+        return [
+            'latitude' => (string) $itemAttributes['lat'],
+            'longitude' => (string) $itemAttributes['lng'],
+            'azimuth' => (string) $itemAttributes['az'],
+            'elevation' => (string) $itemAttributes['ev'],
+            'fov' => (string) $itemAttributes['vx'],
+            'camera_model' => (string) $itemAttributes['cam'],
+            'camera_lens' => (string) $itemAttributes['lens'],
+            'camera_capture' => (string) $itemAttributes['cap'],
+        ];
+    }
+
+    /**
+     * Read analyze data from file.
+     *
      * @param UploadedFile $file
      * @param Capture $capture
-     * @return Capture|null
+     * @return Capture
      */
-    public function readAnalyzeData(UploadedFile $file, Capture $capture): ?Capture
+    public function readAnalyzeData(UploadedFile $file, Capture $capture): Capture
     {
         if (!$this->isAnalyzed($file)) {
-            return null;
+            return $capture;
         }
 
         try {
@@ -118,11 +116,11 @@ final class UfoDriver extends DriverAbstract
             $capture->fill($captureData);
             $capture->save();
 
-            $station = $capture->station()->getModel();
+            $station = $capture->station;
             $station->fill($stationData);
             $station->save();
         } catch (ErrorException $errorException) {
-            //
+            info($errorException->getMessage());
         }
 
         return $capture;
