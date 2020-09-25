@@ -90,10 +90,17 @@ class CaptureController extends Controller
 
         $request['user_id'] = $request->user()->id;
 
-        File
-            ::where('station_id', $request->get('station_id'))
-            ->whereIn('filename', $request->get('files'))
-            ->delete();
+        $files = File::whereIn('filename', $request->get('files'))->get();
+
+        foreach ($files as $file) {
+            $capture = $file->capture;
+            $station = $capture->station;
+
+            if ($station->user->id === $request->user()->id) {
+                $file->delete();
+                $capture->delete();
+            }
+        }
 
         return response()->json([], 204);
     }

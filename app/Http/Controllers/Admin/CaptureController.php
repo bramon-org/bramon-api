@@ -84,10 +84,14 @@ class CaptureController extends Controller
             'files'         => 'required|array|between:1,20',
         ]);
 
-        File
-            ::where('station_id', $request->get('station_id'))
-            ->whereIn('filename', $request->get('files'))
-            ->delete();
+        $files = File::whereIn('filename', $request->get('files'))->get();
+
+        foreach ($files as $file) {
+            $capture = $file->capture;
+
+            $file->delete();
+            $capture->delete();
+        }
 
         return response()->json([], 204);
     }
