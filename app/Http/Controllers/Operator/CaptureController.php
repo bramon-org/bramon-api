@@ -94,6 +94,11 @@ class CaptureController extends Controller
 
         foreach ($files as $file) {
             $capture = $file->capture;
+
+            if (!$capture) {
+                continue;
+            }
+
             $station = $capture->station;
 
             if ($station->user->id === $request->user()->id) {
