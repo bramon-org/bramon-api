@@ -206,6 +206,61 @@
                 }
             }
         },
+        "/v1/admin/stations": {
+            "get": {
+                "tags": [
+                    "Administrators"
+                ],
+                "summary": "List all stations",
+                "operationId": "/v1/admin/stations",
+                "responses": {
+                    "200": {
+                        "description": "List all stations",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/v1/admin/stations/{station}": {
+            "get": {
+                "tags": [
+                    "Administrators"
+                ],
+                "summary": "View a station",
+                "operationId": "/v1/admin/stations/000-000-0000",
+                "parameters": [
+                    {
+                        "name": "station",
+                        "in": "path",
+                        "description": "The station identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns the station details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When station not exists or not public."
+                    }
+                }
+            }
+        },
         "/v1/public/captures": {
             "get": {
                 "tags": [
@@ -547,6 +602,61 @@
                 "responses": {
                     "200": {
                         "description": "Returns the operator details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When station not exists or not public."
+                    }
+                }
+            }
+        },
+        "/v1/operator/stations": {
+            "get": {
+                "tags": [
+                    "Operators"
+                ],
+                "summary": "List all stations",
+                "operationId": "/v1/operator/stations",
+                "responses": {
+                    "200": {
+                        "description": "List all stations",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/v1/operator/stations/{station}": {
+            "get": {
+                "tags": [
+                    "Operators"
+                ],
+                "summary": "View a station",
+                "operationId": "/v1/operator/stations/000-000-0000",
+                "parameters": [
+                    {
+                        "name": "station",
+                        "in": "path",
+                        "description": "The station identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns the station details.",
                         "content": {
                             "application/json": {
                                 "schema": {}
