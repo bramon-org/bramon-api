@@ -30,6 +30,16 @@ Populando a base de testes
 docker-compose exec apache bash -c 'php artisan db:seed'
 ```
 
+Atualizando a documentação
+
+```console
+php artisan swagger-lume:generate
+```
+
 ## Mais detalhes
 
-Você pode obter mais detalhes na [documentação](docs/README.md).
+Você pode obter mais detalhes nas documentações:
+
+- [GitHub](docs/README.md)
+- [Swagger](https://api.bramonmeteor.org/api/documentation)
+

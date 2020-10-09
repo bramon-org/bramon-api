@@ -32,6 +32,21 @@ class StationController extends Controller
     /**
      * List all stations
      *
+     * @OA\Get(
+     *     path="/v1/public/stations",
+     *     operationId="/v1/public/stations",
+     *     tags={"get-public-stations"},
+     *     @OA\Response(
+     *         response="200",
+     *         description="List all stations",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     *
      * @param Request $request
      * @return JsonResponse
      */
@@ -49,6 +64,28 @@ class StationController extends Controller
 
     /**
      * View a station
+     *
+     * @OA\Get(
+     *     path="/v1/public/stations/{station}",
+     *     operationId="/v1/public/stations/000-000-0000",
+     *     tags={"get-public-stations-single"},
+     *     @OA\Parameter(
+     *         name="station",
+     *         in="path",
+     *         description="The station identifier",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns some sample category things",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Error: Not Found. When station not exists or not public.",
+     *     ),
+     * )
      *
      * @param Request $request
      * @param string $id
