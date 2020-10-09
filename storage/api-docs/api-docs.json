@@ -171,6 +171,95 @@
                         "description": "Error: Bad request. When required parameters were not supplied."
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "Administrators"
+                ],
+                "summary": "Add an operator",
+                "operationId": "/v1/admin/operators",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "The operator name",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "path",
+                        "description": "The operator email",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "city",
+                        "in": "path",
+                        "description": "The operator city",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "state",
+                        "in": "path",
+                        "description": "The operator state",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "mobile_phone",
+                        "in": "path",
+                        "description": "The operator mobile phone",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 100
+                        }
+                    },
+                    {
+                        "name": "role",
+                        "in": "path",
+                        "description": "The operator role",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "admin",
+                                "operator",
+                                "editor"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns the operator data.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When capture not exists or not public."
+                    },
+                    "422": {
+                        "description": "Error: Bad Param. When file not found or can not be deleted."
+                    }
+                }
             }
         },
         "/v1/admin/operators/{operator}": {
@@ -202,6 +291,104 @@
                     },
                     "404": {
                         "description": "Error: Not Found. When station not exists or not public."
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Administrators"
+                ],
+                "summary": "Update an operator",
+                "operationId": "/v1/admin/operators/000-0000-00000",
+                "parameters": [
+                    {
+                        "name": "operator",
+                        "in": "path",
+                        "description": "The operator identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "The operator name",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "path",
+                        "description": "The operator email",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "city",
+                        "in": "path",
+                        "description": "The operator city",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "state",
+                        "in": "path",
+                        "description": "The operator state",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "mobile_phone",
+                        "in": "path",
+                        "description": "The operator mobile phone",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 100
+                        }
+                    },
+                    {
+                        "name": "role",
+                        "in": "path",
+                        "description": "The operator role",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "admin",
+                                "operator",
+                                "editor"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns the capture data.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When capture not exists or not public."
+                    },
+                    "422": {
+                        "description": "Error: Bad Param. When file not found or can not be deleted."
                     }
                 }
             }
@@ -610,6 +797,90 @@
                     },
                     "404": {
                         "description": "Error: Not Found. When station not exists or not public."
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Operators"
+                ],
+                "summary": "Update an operator",
+                "operationId": "/v1/operator/operators/000-0000-00000",
+                "parameters": [
+                    {
+                        "name": "operator",
+                        "in": "path",
+                        "description": "The operator identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "The operator name",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "path",
+                        "description": "The operator email",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "city",
+                        "in": "path",
+                        "description": "The operator city",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "state",
+                        "in": "path",
+                        "description": "The operator state",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "mobile_phone",
+                        "in": "path",
+                        "description": "The operator mobile phone",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 100
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns the capture data.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When capture not exists or not public."
+                    },
+                    "422": {
+                        "description": "Error: Bad Param. When file not found or can not be deleted."
                     }
                 }
             }

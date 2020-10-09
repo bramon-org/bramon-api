@@ -64,6 +64,67 @@ class OperatorController extends Controller
     /**
      * Update an operator
      *
+     * @OA\Put(
+     *     path="/v1/operator/operators/{operator}",
+     *     operationId="/v1/operator/operators/000-0000-00000",
+     *     tags={"Operators"},
+     *     @OA\Parameter(
+     *         name="operator",
+     *         in="path",
+     *         description="The operator identifier",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="name",
+     *         in="path",
+     *         description="The operator name",
+     *         required=true,
+     *         @OA\Schema(type="string", maxLength=255)
+     *     ),
+     *     @OA\Parameter(
+     *         name="email",
+     *         in="path",
+     *         description="The operator email",
+     *         required=true,
+     *         @OA\Schema(type="string", maxLength=255)
+     *     ),
+     *     @OA\Parameter(
+     *         name="city",
+     *         in="path",
+     *         description="The operator city",
+     *         required=true,
+     *         @OA\Schema(type="string", maxLength=255)
+     *     ),
+     *     @OA\Parameter(
+     *         name="state",
+     *         in="path",
+     *         description="The operator state",
+     *         required=true,
+     *         @OA\Schema(type="string", maxLength=255)
+     *     ),
+     *     @OA\Parameter(
+     *         name="mobile_phone",
+     *         in="path",
+     *         description="The operator mobile phone",
+     *         required=true,
+     *         @OA\Schema(type="string", maxLength=100)
+     *     ),
+     *     @OA\Response(
+     *         response="201",
+     *         description="Returns the capture data.",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Error: Not Found. When capture not exists or not public.",
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="Error: Bad Param. When file not found or can not be deleted.",
+     *     ),
+     * )
+     *
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
