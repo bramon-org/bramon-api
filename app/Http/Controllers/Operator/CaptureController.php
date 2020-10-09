@@ -38,6 +38,21 @@ class CaptureController extends Controller
     /**
      * List all captures
      *
+     * @OA\Get(
+     *     path="/v1/operator/captures",
+     *     operationId="/v1/operator/captures",
+     *     tags={"Operators"},
+     *     @OA\Response(
+     *         response="200",
+     *         description="List all captures",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     *
      * @param Request $request
      * @return JsonResponse
      */
@@ -52,6 +67,39 @@ class CaptureController extends Controller
 
     /**
      * Upload files and create a capture register
+     *
+     * @OA\Post(
+     *     path="/v1/operator/captures",
+     *     operationId="/v1/operator/captures",
+     *     tags={"Operators"},
+     *     @OA\Parameter(
+     *         name="files[]",
+     *         in="path",
+     *         description="The capture files",
+     *         required=true,
+     *         @OA\Schema(type="array", items="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="station_id",
+     *         in="path",
+     *         description="The station identifier",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response="201",
+     *         description="Returns the capture data.",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Error: Not Found. When capture not exists or not public.",
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="Error: Bad Param. When file not found or can not be deleted.",
+     *     ),
+     * )
      *
      * @param Request $request
      * @return JsonResponse
@@ -76,6 +124,32 @@ class CaptureController extends Controller
 
     /**
      * Exclude captures files
+     *
+     * @OA\Delete(
+     *     path="/v1/operator/captures",
+     *     operationId="/v1/operator/captures",
+     *     tags={"Operators"},
+     *     @OA\Parameter(
+     *         name="filename",
+     *         in="path",
+     *         description="The capture filename",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response="204",
+     *         description="Returns a empty body when success.",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Error: Not Found. When capture not exists or not public.",
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="Error: Bad Param. When file not found or can not be deleted.",
+     *     ),
+     * )
      *
      * @param Request $request
      * @return JsonResponse
@@ -112,6 +186,28 @@ class CaptureController extends Controller
 
     /**
      * View a capture
+     *
+     * @OA\Get(
+     *     path="/v1/operator/captures/{capture}",
+     *     operationId="/v1/operator/captures/000-000-0000",
+     *     tags={"Operators"},
+     *     @OA\Parameter(
+     *         name="capture",
+     *         in="path",
+     *         description="The capture identifier",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns the capture details.",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Error: Not Found. When capture not exists or not public.",
+     *     ),
+     * )
      *
      * @param Request $request
      * @param string $id

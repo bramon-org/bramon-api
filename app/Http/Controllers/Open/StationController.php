@@ -35,7 +35,7 @@ class StationController extends Controller
      * @OA\Get(
      *     path="/v1/public/stations",
      *     operationId="/v1/public/stations",
-     *     tags={"get-public-stations"},
+     *     tags={"Public"},
      *     @OA\Response(
      *         response="200",
      *         description="List all stations",
@@ -68,7 +68,7 @@ class StationController extends Controller
      * @OA\Get(
      *     path="/v1/public/stations/{station}",
      *     operationId="/v1/public/stations/000-000-0000",
-     *     tags={"get-public-stations-single"},
+     *     tags={"Public"},
      *     @OA\Parameter(
      *         name="station",
      *         in="path",

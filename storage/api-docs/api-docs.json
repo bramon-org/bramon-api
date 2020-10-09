@@ -9,10 +9,207 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/v1/admin/captures": {
+            "get": {
+                "tags": [
+                    "Administrators"
+                ],
+                "summary": "List all captures",
+                "operationId": "/v1/admin/captures",
+                "responses": {
+                    "200": {
+                        "description": "List all captures",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Administrators"
+                ],
+                "summary": "Upload files and create a capture register",
+                "operationId": "/v1/admin/captures",
+                "parameters": [
+                    {
+                        "name": "files[]",
+                        "in": "path",
+                        "description": "The capture files",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": "string"
+                        }
+                    },
+                    {
+                        "name": "station_id",
+                        "in": "path",
+                        "description": "The station identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "The user identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns the capture data.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When capture not exists or not public."
+                    },
+                    "422": {
+                        "description": "Error: Bad Param. When file not found or can not be deleted."
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Administrators"
+                ],
+                "summary": "Exclude captures files",
+                "operationId": "/v1/admin/captures",
+                "parameters": [
+                    {
+                        "name": "filename",
+                        "in": "path",
+                        "description": "The capture filename",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Returns a empty body when success.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When capture not exists or not public."
+                    },
+                    "422": {
+                        "description": "Error: Bad Param. When file not found or can not be deleted."
+                    }
+                }
+            }
+        },
+        "/v1/admin/captures/{capture}": {
+            "get": {
+                "tags": [
+                    "Administrators"
+                ],
+                "summary": "View a capture",
+                "operationId": "/v1/admin/captures/000-000-0000",
+                "parameters": [
+                    {
+                        "name": "capture",
+                        "in": "path",
+                        "description": "The capture identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns the capture details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When capture not exists or not public."
+                    }
+                }
+            }
+        },
+        "/v1/admin/operators": {
+            "get": {
+                "tags": [
+                    "Administrators"
+                ],
+                "summary": "List all operators",
+                "operationId": "/v1/admin/operators",
+                "responses": {
+                    "200": {
+                        "description": "List all operators",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/v1/admin/operators/{operator}": {
+            "get": {
+                "tags": [
+                    "Administrators"
+                ],
+                "summary": "View an operator",
+                "operationId": "/v1/admin/operators/000-000-0000",
+                "parameters": [
+                    {
+                        "name": "operator",
+                        "in": "path",
+                        "description": "The operator identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns the operator details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When station not exists or not public."
+                    }
+                }
+            }
+        },
         "/v1/public/captures": {
             "get": {
                 "tags": [
-                    "get-public-captures"
+                    "Public"
                 ],
                 "summary": "List all captures",
                 "operationId": "/v1/public/captures",
@@ -34,7 +231,7 @@
         "/v1/public/captures/{capture}": {
             "get": {
                 "tags": [
-                    "get-public-captures-single"
+                    "Public"
                 ],
                 "summary": "View a capture",
                 "operationId": "/v1/public/captures/000-000-0000",
@@ -67,7 +264,7 @@
         "/v1/public/operators": {
             "get": {
                 "tags": [
-                    "get-public-operators"
+                    "Public"
                 ],
                 "summary": "List all operators",
                 "operationId": "/v1/public/operators",
@@ -89,7 +286,7 @@
         "/v1/public/operators/{operator}": {
             "get": {
                 "tags": [
-                    "get-public-operators-single"
+                    "Public"
                 ],
                 "summary": "View an operator",
                 "operationId": "/v1/public/operators/000-000-0000",
@@ -122,7 +319,7 @@
         "/v1/public/stations": {
             "get": {
                 "tags": [
-                    "get-public-stations"
+                    "Public"
                 ],
                 "summary": "List all stations",
                 "operationId": "/v1/public/stations",
@@ -144,7 +341,7 @@
         "/v1/public/stations/{station}": {
             "get": {
                 "tags": [
-                    "get-public-stations-single"
+                    "Public"
                 ],
                 "summary": "View a station",
                 "operationId": "/v1/public/stations/000-000-0000",
@@ -162,6 +359,194 @@
                 "responses": {
                     "200": {
                         "description": "Returns the station details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When station not exists or not public."
+                    }
+                }
+            }
+        },
+        "/v1/operator/captures": {
+            "get": {
+                "tags": [
+                    "Operators"
+                ],
+                "summary": "List all captures",
+                "operationId": "/v1/operator/captures",
+                "responses": {
+                    "200": {
+                        "description": "List all captures",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Operators"
+                ],
+                "summary": "Upload files and create a capture register",
+                "operationId": "/v1/operator/captures",
+                "parameters": [
+                    {
+                        "name": "files[]",
+                        "in": "path",
+                        "description": "The capture files",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": "string"
+                        }
+                    },
+                    {
+                        "name": "station_id",
+                        "in": "path",
+                        "description": "The station identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns the capture data.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When capture not exists or not public."
+                    },
+                    "422": {
+                        "description": "Error: Bad Param. When file not found or can not be deleted."
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Operators"
+                ],
+                "summary": "Exclude captures files",
+                "operationId": "/v1/operator/captures",
+                "parameters": [
+                    {
+                        "name": "filename",
+                        "in": "path",
+                        "description": "The capture filename",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Returns a empty body when success.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When capture not exists or not public."
+                    },
+                    "422": {
+                        "description": "Error: Bad Param. When file not found or can not be deleted."
+                    }
+                }
+            }
+        },
+        "/v1/operator/captures/{capture}": {
+            "get": {
+                "tags": [
+                    "Operators"
+                ],
+                "summary": "View a capture",
+                "operationId": "/v1/operator/captures/000-000-0000",
+                "parameters": [
+                    {
+                        "name": "capture",
+                        "in": "path",
+                        "description": "The capture identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns the capture details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When capture not exists or not public."
+                    }
+                }
+            }
+        },
+        "/v1/operator/operators": {
+            "get": {
+                "tags": [
+                    "Operators"
+                ],
+                "summary": "List all operators",
+                "operationId": "/v1/operator/operators",
+                "responses": {
+                    "200": {
+                        "description": "List all operators",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/v1/operator/operators/{operator}": {
+            "get": {
+                "tags": [
+                    "Operators"
+                ],
+                "summary": "View an operator",
+                "operationId": "/v1/operator/operators/000-000-0000",
+                "parameters": [
+                    {
+                        "name": "operator",
+                        "in": "path",
+                        "description": "The operator identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns the operator details.",
                         "content": {
                             "application/json": {
                                 "schema": {}

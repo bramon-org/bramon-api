@@ -35,7 +35,7 @@ class OperatorController extends Controller
      * @OA\Get(
      *     path="/v1/public/operators",
      *     operationId="/v1/public/operators",
-     *     tags={"get-public-operators"},
+     *     tags={"Public"},
      *     @OA\Response(
      *         response="200",
      *         description="List all operators",
@@ -67,7 +67,7 @@ class OperatorController extends Controller
      * @OA\Get(
      *     path="/v1/public/operators/{operator}",
      *     operationId="/v1/public/operators/000-000-0000",
-     *     tags={"get-public-operators-single"},
+     *     tags={"Public"},
      *     @OA\Parameter(
      *         name="operator",
      *         in="path",

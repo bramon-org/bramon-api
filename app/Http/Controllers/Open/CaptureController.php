@@ -35,7 +35,7 @@ class CaptureController extends Controller
      * @OA\Get(
      *     path="/v1/public/captures",
      *     operationId="/v1/public/captures",
-     *     tags={"get-public-captures"},
+     *     tags={"Public"},
      *     @OA\Response(
      *         response="200",
      *         description="List all captures",
@@ -65,7 +65,7 @@ class CaptureController extends Controller
      * @OA\Get(
      *     path="/v1/public/captures/{capture}",
      *     operationId="/v1/public/captures/000-000-0000",
-     *     tags={"get-public-captures-single"},
+     *     tags={"Public"},
      *     @OA\Parameter(
      *         name="capture",
      *         in="path",

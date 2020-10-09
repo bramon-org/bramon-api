@@ -32,6 +32,21 @@ class OperatorController extends Controller
     /**
      * List all operators
      *
+     * @OA\Get(
+     *     path="/v1/admin/operators",
+     *     operationId="/v1/admin/operators",
+     *     tags={"Administrators"},
+     *     @OA\Response(
+     *         response="200",
+     *         description="List all operators",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     *
      * @param Request $request
      * @return JsonResponse
      */
@@ -102,6 +117,28 @@ class OperatorController extends Controller
 
     /**
      * View an operator
+     *
+     * @OA\Get(
+     *     path="/v1/admin/operators/{operator}",
+     *     operationId="/v1/admin/operators/000-000-0000",
+     *     tags={"Administrators"},
+     *     @OA\Parameter(
+     *         name="operator",
+     *         in="path",
+     *         description="The operator identifier",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns the operator details.",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Error: Not Found. When station not exists or not public.",
+     *     ),
+     * )
      *
      * @param Request $request
      * @param string $id
