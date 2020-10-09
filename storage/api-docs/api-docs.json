@@ -413,6 +413,143 @@
                         "description": "Error: Bad request. When required parameters were not supplied."
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "Administrators"
+                ],
+                "summary": "Add a station",
+                "operationId": "/v1/admin/stations",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "The operator identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "The station name",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "latitude",
+                        "in": "path",
+                        "description": "The station latitude",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "longitude",
+                        "in": "path",
+                        "description": "The station longitude",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "azimuth",
+                        "in": "path",
+                        "description": "The station azimuth",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "elevation",
+                        "in": "path",
+                        "description": "The station elevation",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "fov",
+                        "in": "path",
+                        "description": "The station FOV",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "camera_model",
+                        "in": "path",
+                        "description": "The station camera model",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "camera_lens",
+                        "in": "path",
+                        "description": "The station camera lens",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "camera_capture",
+                        "in": "path",
+                        "description": "The station camera capture",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "source",
+                        "in": "path",
+                        "description": "The station capture source",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "UFO",
+                                "RMS"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns the capture data.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When capture not exists or not public."
+                    },
+                    "422": {
+                        "description": "Error: Bad Param. When file not found or can not be deleted."
+                    }
+                }
             }
         },
         "/v1/admin/stations/{station}": {
@@ -444,6 +581,143 @@
                     },
                     "404": {
                         "description": "Error: Not Found. When station not exists or not public."
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Administrators"
+                ],
+                "summary": "Update a station",
+                "operationId": "/v1/admin/stations/000-00000-00000",
+                "parameters": [
+                    {
+                        "name": "station",
+                        "in": "path",
+                        "description": "The station identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "The station name",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "latitude",
+                        "in": "path",
+                        "description": "The station latitude",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "longitude",
+                        "in": "path",
+                        "description": "The station longitude",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "azimuth",
+                        "in": "path",
+                        "description": "The station azimuth",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "elevation",
+                        "in": "path",
+                        "description": "The station elevation",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "fov",
+                        "in": "path",
+                        "description": "The station FOV",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "camera_model",
+                        "in": "path",
+                        "description": "The station camera model",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "camera_lens",
+                        "in": "path",
+                        "description": "The station camera lens",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "camera_capture",
+                        "in": "path",
+                        "description": "The station camera capture",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "source",
+                        "in": "path",
+                        "description": "The station capture source",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "UFO",
+                                "RMS"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns the capture data.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When capture not exists or not public."
+                    },
+                    "422": {
+                        "description": "Error: Bad Param. When file not found or can not be deleted."
                     }
                 }
             }
@@ -905,6 +1179,134 @@
                         "description": "Error: Bad request. When required parameters were not supplied."
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "Operators"
+                ],
+                "summary": "Add a station",
+                "operationId": "/v1/operator/stations",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "The station name",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "latitude",
+                        "in": "path",
+                        "description": "The station latitude",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "longitude",
+                        "in": "path",
+                        "description": "The station longitude",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "azimuth",
+                        "in": "path",
+                        "description": "The station azimuth",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "elevation",
+                        "in": "path",
+                        "description": "The station elevation",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "fov",
+                        "in": "path",
+                        "description": "The station FOV",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "camera_model",
+                        "in": "path",
+                        "description": "The station camera model",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "camera_lens",
+                        "in": "path",
+                        "description": "The station camera lens",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "camera_capture",
+                        "in": "path",
+                        "description": "The station camera capture",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "source",
+                        "in": "path",
+                        "description": "The station capture source",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "UFO",
+                                "RMS"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns the capture data.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When capture not exists or not public."
+                    },
+                    "422": {
+                        "description": "Error: Bad Param. When file not found or can not be deleted."
+                    }
+                }
             }
         },
         "/v1/operator/stations/{station}": {
@@ -936,6 +1338,143 @@
                     },
                     "404": {
                         "description": "Error: Not Found. When station not exists or not public."
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Operators"
+                ],
+                "summary": "Update a station",
+                "operationId": "/v1/operator/stations/000-00000-00000",
+                "parameters": [
+                    {
+                        "name": "station",
+                        "in": "path",
+                        "description": "The station identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "The station name",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "latitude",
+                        "in": "path",
+                        "description": "The station latitude",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "longitude",
+                        "in": "path",
+                        "description": "The station longitude",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "azimuth",
+                        "in": "path",
+                        "description": "The station azimuth",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "elevation",
+                        "in": "path",
+                        "description": "The station elevation",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "fov",
+                        "in": "path",
+                        "description": "The station FOV",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "camera_model",
+                        "in": "path",
+                        "description": "The station camera model",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "camera_lens",
+                        "in": "path",
+                        "description": "The station camera lens",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "camera_capture",
+                        "in": "path",
+                        "description": "The station camera capture",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "source",
+                        "in": "path",
+                        "description": "The station capture source",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "UFO",
+                                "RMS"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns the capture data.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When capture not exists or not public."
+                    },
+                    "422": {
+                        "description": "Error: Bad Param. When file not found or can not be deleted."
                     }
                 }
             }
