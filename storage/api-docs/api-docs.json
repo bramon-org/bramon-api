@@ -9,6 +9,116 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/v1/public/captures": {
+            "get": {
+                "tags": [
+                    "get-public-captures"
+                ],
+                "summary": "List all captures",
+                "operationId": "/v1/public/captures",
+                "responses": {
+                    "200": {
+                        "description": "List all captures",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/v1/public/captures/{capture}": {
+            "get": {
+                "tags": [
+                    "get-public-captures-single"
+                ],
+                "summary": "View a capture",
+                "operationId": "/v1/public/captures/000-000-0000",
+                "parameters": [
+                    {
+                        "name": "capture",
+                        "in": "path",
+                        "description": "The capture identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns the capture details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When capture not exists or not public."
+                    }
+                }
+            }
+        },
+        "/v1/public/operators": {
+            "get": {
+                "tags": [
+                    "get-public-operators"
+                ],
+                "summary": "List all operators",
+                "operationId": "/v1/public/operators",
+                "responses": {
+                    "200": {
+                        "description": "List all operators",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/v1/public/operators/{operator}": {
+            "get": {
+                "tags": [
+                    "get-public-operators-single"
+                ],
+                "summary": "View an operator",
+                "operationId": "/v1/public/operators/000-000-0000",
+                "parameters": [
+                    {
+                        "name": "operator",
+                        "in": "path",
+                        "description": "The operator identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns the operator details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When station not exists or not public."
+                    }
+                }
+            }
+        },
         "/v1/public/stations": {
             "get": {
                 "tags": [
@@ -51,7 +161,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Returns some sample category things",
+                        "description": "Returns the station details.",
                         "content": {
                             "application/json": {
                                 "schema": {}

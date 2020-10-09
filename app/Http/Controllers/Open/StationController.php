@@ -78,7 +78,7 @@ class StationController extends Controller
      *     ),
      *     @OA\Response(
      *         response="200",
-     *         description="Returns some sample category things",
+     *         description="Returns the station details.",
      *         @OA\JsonContent()
      *     ),
      *     @OA\Response(

@@ -32,6 +32,21 @@ class CaptureController extends Controller
     /**
      * List all captures
      *
+     * @OA\Get(
+     *     path="/v1/public/captures",
+     *     operationId="/v1/public/captures",
+     *     tags={"get-public-captures"},
+     *     @OA\Response(
+     *         response="200",
+     *         description="List all captures",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     *
      * @param Request $request
      * @return JsonResponse
      */
@@ -46,6 +61,28 @@ class CaptureController extends Controller
 
     /**
      * View a capture
+     *
+     * @OA\Get(
+     *     path="/v1/public/captures/{capture}",
+     *     operationId="/v1/public/captures/000-000-0000",
+     *     tags={"get-public-captures-single"},
+     *     @OA\Parameter(
+     *         name="capture",
+     *         in="path",
+     *         description="The capture identifier",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns the capture details.",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Error: Not Found. When capture not exists or not public.",
+     *     ),
+     * )
      *
      * @param Request $request
      * @param string $id
