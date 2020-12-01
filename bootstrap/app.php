@@ -68,6 +68,7 @@ $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(App\Providers\EventServiceProvider::class);
 $app->register(Fouladgar\EloquentBuilder\LumenServiceProvider::class);
 $app->register(Lorisleiva\LaravelDeployer\LaravelDeployerServiceProvider::class);
+$app->register(SwaggerLume\ServiceProvider::class);
 
 /**
  * Loading config files.
@@ -78,6 +79,7 @@ $app->configure('eloquent-builder');
 $app->configure('filesystems');
 $app->configure('logging');
 $app->configure('queue');
+$app->configure('swagger-lume');
 
 /*
 |--------------------------------------------------------------------------

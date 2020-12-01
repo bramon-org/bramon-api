@@ -31,7 +31,22 @@ class StationController extends Controller
     }
 
     /**
-     * List all stations from the current user
+     * List all stations
+     *
+     * @OA\Get(
+     *     path="/v1/operator/stations",
+     *     operationId="/v1/operator/stations",
+     *     tags={"Operators"},
+     *     @OA\Response(
+     *         response="200",
+     *         description="List all stations",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
      *
      * @param Request $request
      * @return JsonResponse
@@ -50,6 +65,95 @@ class StationController extends Controller
 
     /**
      * Add a station
+     *
+     * @OA\Post(
+     *     path="/v1/operator/stations",
+     *     operationId="/v1/operator/stations",
+     *     tags={"Operators"},
+     *     @OA\Parameter(
+     *         name="name",
+     *         in="path",
+     *         description="The station name",
+     *         required=true,
+     *         @OA\Schema(type="string", maxLength=255)
+     *     ),
+     *     @OA\Parameter(
+     *         name="latitude",
+     *         in="path",
+     *         description="The station latitude",
+     *         required=true,
+     *         @OA\Schema(type="string", maxLength=255)
+     *     ),
+     *     @OA\Parameter(
+     *         name="longitude",
+     *         in="path",
+     *         description="The station longitude",
+     *         required=true,
+     *         @OA\Schema(type="string", maxLength=255)
+     *     ),
+     *     @OA\Parameter(
+     *         name="azimuth",
+     *         in="path",
+     *         description="The station azimuth",
+     *         required=true,
+     *         @OA\Schema(type="string", maxLength=255)
+     *     ),
+     *     @OA\Parameter(
+     *         name="elevation",
+     *         in="path",
+     *         description="The station elevation",
+     *         required=true,
+     *         @OA\Schema(type="string", maxLength=255)
+     *     ),
+     *     @OA\Parameter(
+     *         name="fov",
+     *         in="path",
+     *         description="The station FOV",
+     *         required=true,
+     *         @OA\Schema(type="string", maxLength=255)
+     *     ),
+     *     @OA\Parameter(
+     *         name="camera_model",
+     *         in="path",
+     *         description="The station camera model",
+     *         required=true,
+     *         @OA\Schema(type="string", maxLength=255)
+     *     ),
+     *     @OA\Parameter(
+     *         name="camera_lens",
+     *         in="path",
+     *         description="The station camera lens",
+     *         required=true,
+     *         @OA\Schema(type="string", maxLength=255)
+     *     ),
+     *     @OA\Parameter(
+     *         name="camera_capture",
+     *         in="path",
+     *         description="The station camera capture",
+     *         required=true,
+     *         @OA\Schema(type="string", maxLength=255)
+     *     ),
+     *     @OA\Parameter(
+     *         name="source",
+     *         in="path",
+     *         description="The station capture source",
+     *         required=true,
+     *         @OA\Schema(type="string", enum={"UFO","RMS"})
+     *     ),
+     *     @OA\Response(
+     *         response="201",
+     *         description="Returns the capture data.",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Error: Not Found. When capture not exists or not public.",
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="Error: Bad Param. When file not found or can not be deleted.",
+     *     ),
+     * )
      *
      * @param Request $request
      * @return JsonResponse
@@ -89,6 +193,102 @@ class StationController extends Controller
 
     /**
      * Update a station
+     *
+     * @OA\Post(
+     *     path="/v1/operator/stations/{station}",
+     *     operationId="/v1/operator/stations/000-00000-00000",
+     *     tags={"Operators"},
+     *     @OA\Parameter(
+     *         name="station",
+     *         in="path",
+     *         description="The station identifier",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="name",
+     *         in="path",
+     *         description="The station name",
+     *         required=true,
+     *         @OA\Schema(type="string", maxLength=255)
+     *     ),
+     *     @OA\Parameter(
+     *         name="latitude",
+     *         in="path",
+     *         description="The station latitude",
+     *         required=true,
+     *         @OA\Schema(type="string", maxLength=255)
+     *     ),
+     *     @OA\Parameter(
+     *         name="longitude",
+     *         in="path",
+     *         description="The station longitude",
+     *         required=true,
+     *         @OA\Schema(type="string", maxLength=255)
+     *     ),
+     *     @OA\Parameter(
+     *         name="azimuth",
+     *         in="path",
+     *         description="The station azimuth",
+     *         required=true,
+     *         @OA\Schema(type="string", maxLength=255)
+     *     ),
+     *     @OA\Parameter(
+     *         name="elevation",
+     *         in="path",
+     *         description="The station elevation",
+     *         required=true,
+     *         @OA\Schema(type="string", maxLength=255)
+     *     ),
+     *     @OA\Parameter(
+     *         name="fov",
+     *         in="path",
+     *         description="The station FOV",
+     *         required=true,
+     *         @OA\Schema(type="string", maxLength=255)
+     *     ),
+     *     @OA\Parameter(
+     *         name="camera_model",
+     *         in="path",
+     *         description="The station camera model",
+     *         required=true,
+     *         @OA\Schema(type="string", maxLength=255)
+     *     ),
+     *     @OA\Parameter(
+     *         name="camera_lens",
+     *         in="path",
+     *         description="The station camera lens",
+     *         required=true,
+     *         @OA\Schema(type="string", maxLength=255)
+     *     ),
+     *     @OA\Parameter(
+     *         name="camera_capture",
+     *         in="path",
+     *         description="The station camera capture",
+     *         required=true,
+     *         @OA\Schema(type="string", maxLength=255)
+     *     ),
+     *     @OA\Parameter(
+     *         name="source",
+     *         in="path",
+     *         description="The station capture source",
+     *         required=true,
+     *         @OA\Schema(type="string", enum={"UFO","RMS"})
+     *     ),
+     *     @OA\Response(
+     *         response="201",
+     *         description="Returns the capture data.",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Error: Not Found. When capture not exists or not public.",
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="Error: Bad Param. When file not found or can not be deleted.",
+     *     ),
+     * )
      *
      * @param Request $request
      * @param string $id
@@ -133,6 +333,28 @@ class StationController extends Controller
 
     /**
      * View a station
+     *
+     * @OA\Get(
+     *     path="/v1/operator/stations/{station}",
+     *     operationId="/v1/operator/stations/000-000-0000",
+     *     tags={"Operators"},
+     *     @OA\Parameter(
+     *         name="station",
+     *         in="path",
+     *         description="The station identifier",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns the station details.",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Error: Not Found. When station not exists or not public.",
+     *     ),
+     * )
      *
      * @param Request $request
      * @param string $id

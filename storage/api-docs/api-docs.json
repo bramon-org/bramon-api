@@ -1,0 +1,1483 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "BRAMON API",
+        "contact": {
+            "name": "Support Team",
+            "email": "support@bramonmeteor.org"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/v1/admin/captures": {
+            "get": {
+                "tags": [
+                    "Administrators"
+                ],
+                "summary": "List all captures",
+                "operationId": "/v1/admin/captures",
+                "responses": {
+                    "200": {
+                        "description": "List all captures",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Administrators"
+                ],
+                "summary": "Upload files and create a capture register",
+                "operationId": "/v1/admin/captures",
+                "parameters": [
+                    {
+                        "name": "files[]",
+                        "in": "path",
+                        "description": "The capture files",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": "string"
+                        }
+                    },
+                    {
+                        "name": "station_id",
+                        "in": "path",
+                        "description": "The station identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "The user identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns the capture data.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When capture not exists or not public."
+                    },
+                    "422": {
+                        "description": "Error: Bad Param. When file not found or can not be deleted."
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Administrators"
+                ],
+                "summary": "Exclude captures files",
+                "operationId": "/v1/admin/captures",
+                "parameters": [
+                    {
+                        "name": "filename",
+                        "in": "path",
+                        "description": "The capture filename",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Returns a empty body when success.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When capture not exists or not public."
+                    },
+                    "422": {
+                        "description": "Error: Bad Param. When file not found or can not be deleted."
+                    }
+                }
+            }
+        },
+        "/v1/admin/captures/{capture}": {
+            "get": {
+                "tags": [
+                    "Administrators"
+                ],
+                "summary": "View a capture",
+                "operationId": "/v1/admin/captures/000-000-0000",
+                "parameters": [
+                    {
+                        "name": "capture",
+                        "in": "path",
+                        "description": "The capture identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns the capture details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When capture not exists or not public."
+                    }
+                }
+            }
+        },
+        "/v1/admin/operators": {
+            "get": {
+                "tags": [
+                    "Administrators"
+                ],
+                "summary": "List all operators",
+                "operationId": "/v1/admin/operators",
+                "responses": {
+                    "200": {
+                        "description": "List all operators",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Administrators"
+                ],
+                "summary": "Add an operator",
+                "operationId": "/v1/admin/operators",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "The operator name",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "path",
+                        "description": "The operator email",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "city",
+                        "in": "path",
+                        "description": "The operator city",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "state",
+                        "in": "path",
+                        "description": "The operator state",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "mobile_phone",
+                        "in": "path",
+                        "description": "The operator mobile phone",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 100
+                        }
+                    },
+                    {
+                        "name": "role",
+                        "in": "path",
+                        "description": "The operator role",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "admin",
+                                "operator",
+                                "editor"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns the operator data.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When capture not exists or not public."
+                    },
+                    "422": {
+                        "description": "Error: Bad Param. When file not found or can not be deleted."
+                    }
+                }
+            }
+        },
+        "/v1/admin/operators/{operator}": {
+            "get": {
+                "tags": [
+                    "Administrators"
+                ],
+                "summary": "View an operator",
+                "operationId": "/v1/admin/operators/000-000-0000",
+                "parameters": [
+                    {
+                        "name": "operator",
+                        "in": "path",
+                        "description": "The operator identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns the operator details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When station not exists or not public."
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Administrators"
+                ],
+                "summary": "Update an operator",
+                "operationId": "/v1/admin/operators/000-0000-00000",
+                "parameters": [
+                    {
+                        "name": "operator",
+                        "in": "path",
+                        "description": "The operator identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "The operator name",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "path",
+                        "description": "The operator email",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "city",
+                        "in": "path",
+                        "description": "The operator city",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "state",
+                        "in": "path",
+                        "description": "The operator state",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "mobile_phone",
+                        "in": "path",
+                        "description": "The operator mobile phone",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 100
+                        }
+                    },
+                    {
+                        "name": "role",
+                        "in": "path",
+                        "description": "The operator role",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "admin",
+                                "operator",
+                                "editor"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns the capture data.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When capture not exists or not public."
+                    },
+                    "422": {
+                        "description": "Error: Bad Param. When file not found or can not be deleted."
+                    }
+                }
+            }
+        },
+        "/v1/admin/stations": {
+            "get": {
+                "tags": [
+                    "Administrators"
+                ],
+                "summary": "List all stations",
+                "operationId": "/v1/admin/stations",
+                "responses": {
+                    "200": {
+                        "description": "List all stations",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Administrators"
+                ],
+                "summary": "Add a station",
+                "operationId": "/v1/admin/stations",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "The operator identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "The station name",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "latitude",
+                        "in": "path",
+                        "description": "The station latitude",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "longitude",
+                        "in": "path",
+                        "description": "The station longitude",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "azimuth",
+                        "in": "path",
+                        "description": "The station azimuth",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "elevation",
+                        "in": "path",
+                        "description": "The station elevation",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "fov",
+                        "in": "path",
+                        "description": "The station FOV",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "camera_model",
+                        "in": "path",
+                        "description": "The station camera model",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "camera_lens",
+                        "in": "path",
+                        "description": "The station camera lens",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "camera_capture",
+                        "in": "path",
+                        "description": "The station camera capture",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "source",
+                        "in": "path",
+                        "description": "The station capture source",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "UFO",
+                                "RMS"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns the capture data.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When capture not exists or not public."
+                    },
+                    "422": {
+                        "description": "Error: Bad Param. When file not found or can not be deleted."
+                    }
+                }
+            }
+        },
+        "/v1/admin/stations/{station}": {
+            "get": {
+                "tags": [
+                    "Administrators"
+                ],
+                "summary": "View a station",
+                "operationId": "/v1/admin/stations/000-000-0000",
+                "parameters": [
+                    {
+                        "name": "station",
+                        "in": "path",
+                        "description": "The station identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns the station details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When station not exists or not public."
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Administrators"
+                ],
+                "summary": "Update a station",
+                "operationId": "/v1/admin/stations/000-00000-00000",
+                "parameters": [
+                    {
+                        "name": "station",
+                        "in": "path",
+                        "description": "The station identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "The station name",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "latitude",
+                        "in": "path",
+                        "description": "The station latitude",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "longitude",
+                        "in": "path",
+                        "description": "The station longitude",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "azimuth",
+                        "in": "path",
+                        "description": "The station azimuth",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "elevation",
+                        "in": "path",
+                        "description": "The station elevation",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "fov",
+                        "in": "path",
+                        "description": "The station FOV",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "camera_model",
+                        "in": "path",
+                        "description": "The station camera model",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "camera_lens",
+                        "in": "path",
+                        "description": "The station camera lens",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "camera_capture",
+                        "in": "path",
+                        "description": "The station camera capture",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "source",
+                        "in": "path",
+                        "description": "The station capture source",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "UFO",
+                                "RMS"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns the capture data.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When capture not exists or not public."
+                    },
+                    "422": {
+                        "description": "Error: Bad Param. When file not found or can not be deleted."
+                    }
+                }
+            }
+        },
+        "/v1/public/captures": {
+            "get": {
+                "tags": [
+                    "Public"
+                ],
+                "summary": "List all captures",
+                "operationId": "/v1/public/captures",
+                "responses": {
+                    "200": {
+                        "description": "List all captures",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/v1/public/captures/{capture}": {
+            "get": {
+                "tags": [
+                    "Public"
+                ],
+                "summary": "View a capture",
+                "operationId": "/v1/public/captures/000-000-0000",
+                "parameters": [
+                    {
+                        "name": "capture",
+                        "in": "path",
+                        "description": "The capture identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns the capture details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When capture not exists or not public."
+                    }
+                }
+            }
+        },
+        "/v1/public/operators": {
+            "get": {
+                "tags": [
+                    "Public"
+                ],
+                "summary": "List all operators",
+                "operationId": "/v1/public/operators",
+                "responses": {
+                    "200": {
+                        "description": "List all operators",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/v1/public/operators/{operator}": {
+            "get": {
+                "tags": [
+                    "Public"
+                ],
+                "summary": "View an operator",
+                "operationId": "/v1/public/operators/000-000-0000",
+                "parameters": [
+                    {
+                        "name": "operator",
+                        "in": "path",
+                        "description": "The operator identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns the operator details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When station not exists or not public."
+                    }
+                }
+            }
+        },
+        "/v1/public/stations": {
+            "get": {
+                "tags": [
+                    "Public"
+                ],
+                "summary": "List all stations",
+                "operationId": "/v1/public/stations",
+                "responses": {
+                    "200": {
+                        "description": "List all stations",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/v1/public/stations/{station}": {
+            "get": {
+                "tags": [
+                    "Public"
+                ],
+                "summary": "View a station",
+                "operationId": "/v1/public/stations/000-000-0000",
+                "parameters": [
+                    {
+                        "name": "station",
+                        "in": "path",
+                        "description": "The station identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns the station details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When station not exists or not public."
+                    }
+                }
+            }
+        },
+        "/v1/operator/captures": {
+            "get": {
+                "tags": [
+                    "Operators"
+                ],
+                "summary": "List all captures",
+                "operationId": "/v1/operator/captures",
+                "responses": {
+                    "200": {
+                        "description": "List all captures",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Operators"
+                ],
+                "summary": "Upload files and create a capture register",
+                "operationId": "/v1/operator/captures",
+                "parameters": [
+                    {
+                        "name": "files[]",
+                        "in": "path",
+                        "description": "The capture files",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": "string"
+                        }
+                    },
+                    {
+                        "name": "station_id",
+                        "in": "path",
+                        "description": "The station identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns the capture data.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When capture not exists or not public."
+                    },
+                    "422": {
+                        "description": "Error: Bad Param. When file not found or can not be deleted."
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Operators"
+                ],
+                "summary": "Exclude captures files",
+                "operationId": "/v1/operator/captures",
+                "parameters": [
+                    {
+                        "name": "filename",
+                        "in": "path",
+                        "description": "The capture filename",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Returns a empty body when success.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When capture not exists or not public."
+                    },
+                    "422": {
+                        "description": "Error: Bad Param. When file not found or can not be deleted."
+                    }
+                }
+            }
+        },
+        "/v1/operator/captures/{capture}": {
+            "get": {
+                "tags": [
+                    "Operators"
+                ],
+                "summary": "View a capture",
+                "operationId": "/v1/operator/captures/000-000-0000",
+                "parameters": [
+                    {
+                        "name": "capture",
+                        "in": "path",
+                        "description": "The capture identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns the capture details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When capture not exists or not public."
+                    }
+                }
+            }
+        },
+        "/v1/operator/operators": {
+            "get": {
+                "tags": [
+                    "Operators"
+                ],
+                "summary": "List all operators",
+                "operationId": "/v1/operator/operators",
+                "responses": {
+                    "200": {
+                        "description": "List all operators",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/v1/operator/operators/{operator}": {
+            "get": {
+                "tags": [
+                    "Operators"
+                ],
+                "summary": "View an operator",
+                "operationId": "/v1/operator/operators/000-000-0000",
+                "parameters": [
+                    {
+                        "name": "operator",
+                        "in": "path",
+                        "description": "The operator identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns the operator details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When station not exists or not public."
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Operators"
+                ],
+                "summary": "Update an operator",
+                "operationId": "/v1/operator/operators/000-0000-00000",
+                "parameters": [
+                    {
+                        "name": "operator",
+                        "in": "path",
+                        "description": "The operator identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "The operator name",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "path",
+                        "description": "The operator email",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "city",
+                        "in": "path",
+                        "description": "The operator city",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "state",
+                        "in": "path",
+                        "description": "The operator state",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "mobile_phone",
+                        "in": "path",
+                        "description": "The operator mobile phone",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 100
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns the capture data.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When capture not exists or not public."
+                    },
+                    "422": {
+                        "description": "Error: Bad Param. When file not found or can not be deleted."
+                    }
+                }
+            }
+        },
+        "/v1/operator/stations": {
+            "get": {
+                "tags": [
+                    "Operators"
+                ],
+                "summary": "List all stations",
+                "operationId": "/v1/operator/stations",
+                "responses": {
+                    "200": {
+                        "description": "List all stations",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Operators"
+                ],
+                "summary": "Add a station",
+                "operationId": "/v1/operator/stations",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "The station name",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "latitude",
+                        "in": "path",
+                        "description": "The station latitude",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "longitude",
+                        "in": "path",
+                        "description": "The station longitude",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "azimuth",
+                        "in": "path",
+                        "description": "The station azimuth",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "elevation",
+                        "in": "path",
+                        "description": "The station elevation",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "fov",
+                        "in": "path",
+                        "description": "The station FOV",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "camera_model",
+                        "in": "path",
+                        "description": "The station camera model",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "camera_lens",
+                        "in": "path",
+                        "description": "The station camera lens",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "camera_capture",
+                        "in": "path",
+                        "description": "The station camera capture",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "source",
+                        "in": "path",
+                        "description": "The station capture source",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "UFO",
+                                "RMS"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns the capture data.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When capture not exists or not public."
+                    },
+                    "422": {
+                        "description": "Error: Bad Param. When file not found or can not be deleted."
+                    }
+                }
+            }
+        },
+        "/v1/operator/stations/{station}": {
+            "get": {
+                "tags": [
+                    "Operators"
+                ],
+                "summary": "View a station",
+                "operationId": "/v1/operator/stations/000-000-0000",
+                "parameters": [
+                    {
+                        "name": "station",
+                        "in": "path",
+                        "description": "The station identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns the station details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When station not exists or not public."
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Operators"
+                ],
+                "summary": "Update a station",
+                "operationId": "/v1/operator/stations/000-00000-00000",
+                "parameters": [
+                    {
+                        "name": "station",
+                        "in": "path",
+                        "description": "The station identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "The station name",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "latitude",
+                        "in": "path",
+                        "description": "The station latitude",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "longitude",
+                        "in": "path",
+                        "description": "The station longitude",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "azimuth",
+                        "in": "path",
+                        "description": "The station azimuth",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "elevation",
+                        "in": "path",
+                        "description": "The station elevation",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "fov",
+                        "in": "path",
+                        "description": "The station FOV",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "camera_model",
+                        "in": "path",
+                        "description": "The station camera model",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "camera_lens",
+                        "in": "path",
+                        "description": "The station camera lens",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "camera_capture",
+                        "in": "path",
+                        "description": "The station camera capture",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "source",
+                        "in": "path",
+                        "description": "The station capture source",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "UFO",
+                                "RMS"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns the capture data.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found. When capture not exists or not public."
+                    },
+                    "422": {
+                        "description": "Error: Bad Param. When file not found or can not be deleted."
+                    }
+                }
+            }
+        }
+    }
+}

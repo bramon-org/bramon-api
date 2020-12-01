@@ -11,4 +11,15 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     const DEFAULT_PAGINATION_SIZE = 15;
+
+    /**
+     * @OA\Info(
+     *   title="BRAMON API",
+     *   version="1.0.0",
+     *   @OA\Contact(
+     *     email="support@bramonmeteor.org",
+     *     name="Support Team"
+     *   )
+     * )
+     */
 }
