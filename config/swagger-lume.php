@@ -7,7 +7,7 @@ return [
         | Edit to set the api's title
         |--------------------------------------------------------------------------
          */
-        'title' => 'BRAMON API',
+        'title' => 'Swagger Lume API',
     ],
 
     'routes' => [
