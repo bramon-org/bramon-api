@@ -17,6 +17,8 @@ class IntervalFilter extends Filter
      */
     public function apply(Builder $builder, $value): Builder
     {
-        return $builder->whereBetween('captured_at', $value);
+        $filter = explode(',', $value);
+
+        return $builder->whereBetween('captured_at', $filter);
     }
 }
