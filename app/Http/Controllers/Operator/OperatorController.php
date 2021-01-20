@@ -56,6 +56,7 @@ class OperatorController extends Controller
                 ::to(User::class, $request->get('filter'))
                 ->where('active', true)
                 ->where('visible', true)
+                ->orderBy('name')
                 ->paginate($request->get('limit', static::DEFAULT_PAGINATION_SIZE));
 
         return response()->json($operators);
