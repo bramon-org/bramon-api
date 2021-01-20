@@ -13,7 +13,7 @@ class ChangeUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('files', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             $table->string('mobile_phone', 255)->change();
         });
     }
@@ -25,7 +25,7 @@ class ChangeUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('files', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             $table->string('mobile_phone', 255)->change();
         });
     }
