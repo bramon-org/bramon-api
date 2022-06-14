@@ -33,14 +33,7 @@ class AddMoreAnalyzedFieldsToCaptures extends Migration
     public function down()
     {
         Schema::table('captures', function (Blueprint $table) {
-            $table->dropColumn('dec1');
-            $table->dropColumn('dec2');
-            $table->dropColumn('alt');
-            $table->dropColumn('cx');
-            $table->dropColumn('cy');
-            $table->dropColumn('fps');
-            $table->dropColumn('frames');
-            $table->dropColumn('rotation');
+            $table->dropColumn(['dec1', 'dec2', 'alt', 'cx', 'cy', 'fps', 'frames', 'rotation']);
         });
     }
 }
