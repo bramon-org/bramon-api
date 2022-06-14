@@ -4,6 +4,13 @@
     "keywords": ["brazilian", "meteor", "observation", "network", "api", "BRAMON"],
     "license": "MIT",
     "type": "project",
+    "authors": [
+        {
+            "name": "Thiago Paes",
+            "email": "mrprompt@gmail.com",
+            "homepage": "https://mrprompt.github.io"
+        }
+    ],
     "require": {
         "php": ">=7.4",
         "ext-curl": "*",
