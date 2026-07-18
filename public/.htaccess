@@ -1,4 +1,7 @@
 <IfModule mod_rewrite.c>
+#    AddHandler fcgid-script .php 
+#    FCGIWrapper "/dh/cgi-system/php72.cgi" .php
+
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
     </IfModule>

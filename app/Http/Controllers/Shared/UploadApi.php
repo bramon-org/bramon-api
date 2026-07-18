@@ -195,7 +195,7 @@ trait UploadApi
             $station->name,
             $date->format('Y'),
             $date->format('Ym'),
-            $date->format('Ymd'),
+            $date->format('Ymd')
         );
     }
 

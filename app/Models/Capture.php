@@ -36,6 +36,7 @@ class Capture extends Model
         'capture_hash',
 
         'class',
+	'files',
 
         'fs',
         'fe',
@@ -78,7 +79,7 @@ class Capture extends Model
      */
     protected $with = [
         'station',
-        'files',
+        // 'files',
     ];
 
     /**
@@ -99,7 +100,9 @@ class Capture extends Model
      *
      * @var array
      */
-    protected $casts = [];
+    protected $casts = [
+	'files' => 'json',
+    ];
 
     /**
      * The "booting" method of the model.
@@ -126,8 +129,10 @@ class Capture extends Model
     /**
      * @return HasMany
      */
+    /*
     public function files()
     {
         return $this->hasMany(File::class);
     }
+    */
 }
