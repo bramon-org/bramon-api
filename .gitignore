@@ -5,3 +5,6 @@ Homestead.yaml
 .env
 /public/captures
 /storage/captures
+public/.dh-diag
+public/favicon.gif 
+public/favicon.ico
