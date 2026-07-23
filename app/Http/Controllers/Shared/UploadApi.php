@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Shared;
 
 use App\Drivers\DriverAbstract;
 use App\Models\Capture;
-use App\Models\File;
 use App\Models\Station;
 use DateTimeImmutable;
 use Illuminate\Http\Request;
@@ -155,27 +154,23 @@ trait UploadApi
         $originalExtension = $file->getClientOriginalExtension();
         $originalDateTime = $this->driver($station)->getFileDate($file->getClientOriginalName());
         $fileType = $file->getMimeType();
-
-        $capture->captured_at = $originalDateTime;
-        $capture->save();
-
         $pathPrefix = $this->capturePrefixPath($capture, $station);
-
         $hash = md5($capture->id . $originalName);
 
-        $captureFile = File::firstOrNew([
+        $captureFile = [
             'file_hash'  => $hash,
-            'capture_id' => $capture->id,
-        ]);
-
-        $captureFile->fill([
             'filename' => $originalName,
             'url' => "{$pathPrefix}/{$originalName}",
             'type' => $fileType,
             'extension' => $originalExtension,
             'captured_at' => $originalDateTime,
-        ]);
-        $captureFile->save();
+        ];
+
+	$files = $capture->files;
+	
+	$capture->files = array_merge($files, $captureFile);
+        $capture->captured_at = $originalDateTime;
+        $capture->save();
 
         return $captureFile;
     }
