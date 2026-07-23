@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Cache;
  */
 class CaptureController extends Controller
 {
-    const DEFAULT_CACHE_TIME = 120;
+    const DEFAULT_CACHE_TIME = 60;
 
     /**
      * Create a new controller instance.
@@ -54,7 +54,10 @@ class CaptureController extends Controller
     {
         $captures = EloquentBuilder
                 ::to(Capture::class, $request->get('filter'))
-                ->paginate($request->get('limit', static::DEFAULT_PAGINATION_SIZE));
+//		->whereHas('station', function($query) {
+//			$query->where('active', 1)->where('visible', 1);
+//		})
+                ->simplePaginate($request->get('limit', static::DEFAULT_PAGINATION_SIZE));
 
         return response()->json($captures);
     }

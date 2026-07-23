@@ -79,7 +79,6 @@ class Capture extends Model
      */
     protected $with = [
         'station',
-        // 'files',
     ];
 
     /**
@@ -125,14 +124,4 @@ class Capture extends Model
     {
         return $this->belongsTo(Station::class);
     }
-
-    /**
-     * @return HasMany
-     */
-    /*
-    public function files()
-    {
-        return $this->hasMany(File::class);
-    }
-    */
 }
