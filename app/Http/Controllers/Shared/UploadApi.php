@@ -47,7 +47,7 @@ trait UploadApi
 
             case Station::SOURCE_UFO:
                 $this->validate($request, [
-                    'files.*' => 'mimes:avi,txt,xml,bmp,jpg,mp4',
+                    'files.*' => 'mimes:avi,txt,xml,bmp,jpg,mp4,info',
                 ]);
                 break;
 
@@ -146,9 +146,9 @@ trait UploadApi
      * @param Station $station
      * @param Capture $capture
      * @param UploadedFile $file
-     * @return File
+     * @return array
      */
-    private function sanitizeFile(Station $station, Capture $capture, UploadedFile $file): File
+    private function sanitizeFile(Station $station, Capture $capture, UploadedFile $file): array
     {
         $originalName = $file->getClientOriginalName();
         $originalExtension = $file->getClientOriginalExtension();
@@ -166,9 +166,12 @@ trait UploadApi
             'captured_at' => $originalDateTime,
         ];
 
-	$files = $capture->files;
-	
-	$capture->files = array_merge($files, $captureFile);
+	if (!is_null($capture->files)) {
+		$capture->files[] = $captureFile;
+	} else {
+		$capture->files = [$captureFile];
+	}
+
         $capture->captured_at = $originalDateTime;
         $capture->save();
 
@@ -183,7 +186,14 @@ trait UploadApi
     public function capturePrefixPath(Capture $capture, Station $station): string
     {
         /* @var $date DateTimeImmutable */
-        $date = $capture->captured_at;
+        // $date = $capture->captured_at ? new \DateTime($capture->captured_at) : new \DateTime;
+	$date = new \DateTime;
+
+	if (is_object($capture->captured_at)) {
+		$date = $capture->captured_at;
+	} elseif (is_string($capture->captured_at)) {
+		$date = new \DateTimeImmutable($capture->captured_at);
+	}
 
         return sprintf(
             '%s/%s/%s/%s',
