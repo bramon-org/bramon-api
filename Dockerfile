@@ -9,27 +9,25 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.
 RUN ln -sf /dev/stdout /var/log/apache2/access.log && \
     ln -sf /dev/stderr /var/log/apache2/error.log
 
-RUN apt-get update && apt-get install -y libmcrypt-dev \
-    libmagickwand-dev libpq-dev git zip unzip libxml2-dev \
-    libzip-dev --no-install-recommends
+RUN apt-get update && apt-get install -y git zip unzip \
+    libmcrypt-dev libxml2-dev libzip-dev --no-install-recommends
 
-RUN pecl install -o -f imagick \
-    && pecl install -o -f mcrypt \
-    && pecl install -o -f zip \
-    && pecl install -o -f xdebug
+RUN pecl install -o -f mcrypt \
+    && pecl install -o -f zip
 
 RUN docker-php-ext-enable mcrypt \
-    && docker-php-ext-enable imagick \
-    && docker-php-ext-enable xdebug \
     && docker-php-ext-install pdo \
     && docker-php-ext-install pdo_mysql \
-    && docker-php-ext-install mysqli \
     && docker-php-ext-install zip \
-    && docker-php-ext-install soap \
-    && docker-php-ext-install sockets \
     && docker-php-ext-install opcache \
-    && docker-php-ext-install intl \
-    && docker-php-ext-install pcntl
+    && docker-php-ext-install intl
+
+RUN docker-php-ext-enable xdebug
+
+RUN echo "xdebug.mode=debug,develop" >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.client_host=172.17.0.1" >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.client_port=9003" >> /usr/local/etc/php/conf.d/xdebug.ini
+
 
 COPY php.ini-development.txt $PHP_INI_DIR/php.ini
 

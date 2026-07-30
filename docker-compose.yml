@@ -1,4 +1,3 @@
-version: '3.4'
 services:
   apache:
     container_name: bramon_api_apache
@@ -17,6 +16,9 @@ services:
       - mysqldb
     links:
       - mysqldb
+    extra_hosts:
+      # - "host.docker.internal:host-gateway"
+      - "host.docker.internal:172.17.0.1"
 
   mysqldb:
     container_name: bramon_api_database
