@@ -3,47 +3,35 @@
 namespace App\Http\Controllers\Operator;
 
 use App\Http\Controllers\Controller;
-use App\Services\PairingService;
+use App\Models\Pairing;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
 class PairingController extends Controller
 {
-    /**
-     * List probable pairings
-     *
-     * @OA\Get(
-     *     path="/v1/operator/pairings",
-     *     operationId="/v1/operator/pairings",
-     *     tags={"Operators"},
-     *     @OA\Parameter(
-     *         name="captured_date",
-     *         in="query",
-     *         description="Date (YYYY-MM-DD) to filter captures",
-     *         required=false,
-     *         @OA\Schema(type="string", format="date")
-     *     ),
-     *     @OA\Response(
-     *         response="200",
-     *         description="List pairings",
-     *         @OA\JsonContent()
-     *     ),
-     * )
-     */
-    public function index(Request $request): JsonResponse
+    public function precomputed(Request $request): JsonResponse
     {
         $this->validate($request, [
-            'captured_date' => 'sometimes|date_format:Y-m-d',
-            'captured_from' => 'sometimes|date',
-            'captured_to' => 'sometimes|date',
-            'max_distance_km' => 'sometimes|numeric',
-            'time_window_seconds' => 'sometimes|integer',
+            'pairing_date' => 'sometimes|date_format:Y-m-d',
+            'limit' => 'sometimes|integer',
+            'page' => 'sometimes|integer',
         ]);
 
-        $service = new PairingService();
+        $date = $request->get('pairing_date', Carbon::now()->format('Y-m-d'));
+        $limit = $request->get('limit', 50);
+        $page = $request->get('page', 1);
 
-        $result = $service->findPairings($request->all());
+        $query = Pairing::with(['captureA.station', 'captureB.station'])->where('pairing_date', $date)->orderBy('distance_km');
 
-        return response()->json($result, 200);
+        $total = $query->count();
+        $data = $query->skip(($page - 1) * $limit)->take($limit)->get();
+
+        return response()->json([
+            'total' => $total,
+            'per_page' => (int)$limit,
+            'page' => (int)$page,
+            'data' => $data,
+        ], 200);
     }
 }
