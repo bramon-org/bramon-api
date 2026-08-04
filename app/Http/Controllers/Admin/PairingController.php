@@ -9,6 +9,41 @@ use Illuminate\Http\JsonResponse;
 
 class PairingController extends Controller
 {
+    /**
+     * List probable pairings
+     *
+     * @OA\Get(
+     *     path="/v1/admin/pairings",
+     *     operationId="/v1/admin/pairings",
+     *     tags={"Administrators"},
+     *     @OA\Parameter(
+     *         name="captured_date",
+     *         in="query",
+     *         description="Date (YYYY-MM-DD) to filter captures",
+     *         required=false,
+     *         @OA\Schema(type="string", format="date")
+     *     ),
+     *     @OA\Parameter(
+     *         name="captured_from",
+     *         in="query",
+     *         description="Start datetime (ISO)",
+     *         required=false,
+     *         @OA\Schema(type="string", format="date-time")
+     *     ),
+     *     @OA\Parameter(
+     *         name="captured_to",
+     *         in="query",
+     *         description="End datetime (ISO)",
+     *         required=false,
+     *         @OA\Schema(type="string", format="date-time")
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="List pairings",
+     *         @OA\JsonContent()
+     *     ),
+     * )
+     */
     public function index(Request $request): JsonResponse
     {
         $this->validate($request, [
