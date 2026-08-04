@@ -4,28 +4,19 @@ namespace App\Services;
 
 use App\Models\Capture;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class PairingService
 {
     /**
      * Find probable pairings between captures.
      *
-     * Params supported:
-     * - captured_date (YYYY-MM-DD)
-     * - captured_from (ISO datetime)
-     * - captured_to (ISO datetime)
-     * - max_distance_km (float) default 500
-     * - time_window_seconds (int) default 5
-     * - azimuth (float) optional
-     * - az_tolerance_deg (float) default 5
-     * - elevation (float) optional
-     * - ev_tolerance_deg (float) default 5
-     * - fov (float) optional
-     * - fov_tolerance (float) default 1.0
-     * - limit (int) default 50
-     * - page (int) default 1
+     * This implementation uses a bounding-box prefilter to reduce candidate pairs:
+     * For each capture A we query captures B that are within the time window and inside
+     * a latitude/longitude box computed from max_distance_km around station A. Then
+     * we compute the precise Haversine distance before accepting the pair.
      *
-     * Returns array with keys: total, per_page, page, data[]
+     * See method findPairings for supported params.
      */
     public function findPairings(array $params): array
     {
@@ -75,32 +66,43 @@ class PairingService
             $to = $from->copy()->endOfDay();
         }
 
-        // Preload captures in time interval and that were analyzed (class not null)
-        $captures = Capture::whereNotNull('class')
+        // Get candidate captures A (analyzed in the interval)
+        $candidatesA = Capture::whereNotNull('class')
             ->whereBetween('captured_at', [$from->toDateTimeString(), $to->toDateTimeString()])
             ->with('station')
             ->get();
 
         $results = [];
 
-        // index captures by station to reduce repeated station lookups
-        $count = $captures->count();
-
-        for ($i = 0; $i < $count; $i++) {
-            $a = $captures[$i];
-
+        foreach ($candidatesA as $a) {
             if (!$a->station || !$this->hasCoordinates($a->station)) {
                 continue;
             }
 
-            // optional filter by az/ev/fov on capture A if provided
             if (!$this->captureMatchesOptional($a, $az, $azTol, $ev, $evTol, $fov, $fovTol)) {
                 continue;
             }
 
-            for ($j = $i + 1; $j < $count; $j++) {
-                $b = $captures[$j];
+            // compute bounding box around station A for maxDistanceKm
+            $bounds = $this->boundingBox((float)$a->station->latitude, (float)$a->station->longitude, $maxDistanceKm);
 
+            // time window for B candidates
+            $aTime = Carbon::parse($a->captured_at);
+            $bFrom = $aTime->copy()->subSeconds($timeWindow)->toDateTimeString();
+            $bTo = $aTime->copy()->addSeconds($timeWindow)->toDateTimeString();
+
+            // Query B candidates using prefilters: time window, station coordinates inside bounding box, and analyzed
+            $bCandidates = Capture::whereNotNull('class')
+                ->where('id', '!=', $a->id)
+                ->whereBetween('captured_at', [$bFrom, $bTo])
+                ->whereHas('station', function ($q) use ($bounds) {
+                    $q->whereBetween('latitude', [$bounds['min_lat'], $bounds['max_lat']])
+                      ->whereBetween('longitude', [$bounds['min_lng'], $bounds['max_lng']]);
+                })
+                ->with('station')
+                ->get();
+
+            foreach ($bCandidates as $b) {
                 if (!$b->station || !$this->hasCoordinates($b->station)) {
                     continue;
                 }
@@ -125,7 +127,6 @@ class PairingService
                     continue;
                 }
 
-                // optional refine by az/ev/fov for B as well
                 if (!$this->captureMatchesOptional($b, $az, $azTol, $ev, $evTol, $fov, $fovTol)) {
                     continue;
                 }
@@ -212,5 +213,24 @@ class PairingService
         $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
 
         return $earthRadius * $c;
+    }
+
+    /**
+     * Compute a latitude/longitude bounding box that contains a circle of radius $distanceKm
+     * around the point ($lat, $lng). Returns min_lat, max_lat, min_lng, max_lng.
+     * Uses simple equirectangular approximations which are sufficient for modest distances.
+     */
+    private function boundingBox(float $lat, float $lng, float $distanceKm): array
+    {
+        // approximate degrees per km
+        $degLat = $distanceKm / 110.574; // ~1 deg lat = 110.574 km
+        $degLng = $distanceKm / (111.320 * cos(deg2rad($lat)) + 1e-12);
+
+        return [
+            'min_lat' => $lat - $degLat,
+            'max_lat' => $lat + $degLat,
+            'min_lng' => $lng - $degLng,
+            'max_lng' => $lng + $degLng,
+        ];
     }
 }

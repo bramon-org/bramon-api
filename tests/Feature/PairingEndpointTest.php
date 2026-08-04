@@ -26,5 +26,17 @@ class PairingEndpointTest extends TestCase
         $this->assertIsArray($content);
         $this->assertArrayHasKey('total', $content);
         $this->assertArrayHasKey('data', $content);
+        $this->assertArrayHasKey('per_page', $content);
+        $this->assertArrayHasKey('page', $content);
+    }
+
+    public function testPairingServiceCanRunEmpty()
+    {
+        $service = new \App\Services\PairingService();
+        $result = $service->findPairings(['captured_date' => date('Y-m-d')]);
+
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('total', $result);
+        $this->assertArrayHasKey('data', $result);
     }
 }

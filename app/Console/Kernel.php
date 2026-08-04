@@ -6,6 +6,7 @@ use App\Console\Commands\ImportCapturesCommand;
 use App\Console\Commands\ImportOperatorsCommand;
 use App\Console\Commands\MakeStoragePublicCommand;
 use App\Console\Commands\SendOperatorsCredentialsCommand;
+use App\Console\Commands\ComputePairingsCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
 
@@ -21,6 +22,7 @@ class Kernel extends ConsoleKernel
         ImportCapturesCommand::class,
         SendOperatorsCredentialsCommand::class,
         MakeStoragePublicCommand::class,
+        ComputePairingsCommand::class,
     ];
 
     /**
