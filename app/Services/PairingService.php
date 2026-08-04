@@ -2,35 +2,28 @@
 
 namespace App\Services;
 
+use App\Helpers\Geohash;
 use App\Models\Capture;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class PairingService
 {
-    /**
-     * Find probable pairings between captures.
-     *
-     * This implementation uses a bounding-box prefilter to reduce candidate pairs:
-     * For each capture A we query captures B that are within the time window and inside
-     * a latitude/longitude box computed from max_distance_km around station A. Then
-     * we compute the precise Haversine distance before accepting the pair.
-     *
-     * See method findPairings for supported params.
-     */
     public function findPairings(array $params): array
     {
-        $maxDistanceKm = isset($params['max_distance_km']) ? (float)$params['max_distance_km'] : 500.0;
-        $timeWindow = isset($params['time_window_seconds']) ? (int)$params['time_window_seconds'] : 5;
+        $maxDistanceKm = isset($params['max_distance_km']) ? (float)$params['max_distance_km'] : config('pairings.max_distance_km', 500.0);
+        $timeWindow = isset($params['time_window_seconds']) ? (int)$params['time_window_seconds'] : config('pairings.time_window_seconds', 5);
+
+        $geohashPrecision = isset($params['geohash_precision']) ? (int)$params['geohash_precision'] : config('pairings.geohash_precision', 5);
 
         $az = isset($params['azimuth']) ? (float)$params['azimuth'] : null;
-        $azTol = isset($params['az_tolerance_deg']) ? (float)$params['az_tolerance_deg'] : 5.0;
+        $azTol = isset($params['az_tolerance_deg']) ? (float)$params['az_tolerance_deg'] : config('pairings.az_tolerance_deg', 5.0);
 
         $ev = isset($params['elevation']) ? (float)$params['elevation'] : null;
-        $evTol = isset($params['ev_tolerance_deg']) ? (float)$params['ev_tolerance_deg'] : 5.0;
+        $evTol = isset($params['ev_tolerance_deg']) ? (float)$params['ev_tolerance_deg'] : config('pairings.ev_tolerance_deg', 5.0);
 
         $fov = isset($params['fov']) ? (float)$params['fov'] : null;
-        $fovTol = isset($params['fov_tolerance']) ? (float)$params['fov_tolerance'] : 1.0;
+        $fovTol = isset($params['fov_tolerance']) ? (float)$params['fov_tolerance'] : config('pairings.fov_tolerance', 1.0);
 
         $limit = isset($params['limit']) ? max(1, (int)$params['limit']) : 50;
         $page = isset($params['page']) ? max(1, (int)$params['page']) : 1;
@@ -59,14 +52,12 @@ class PairingService
         }
 
         if ($from === null) {
-            // if only to provided, set from to 24h before
             $from = $to->copy()->subDay();
         }
         if ($to === null) {
             $to = $from->copy()->endOfDay();
         }
 
-        // Get candidate captures A (analyzed in the interval)
         $candidatesA = Capture::whereNotNull('class')
             ->whereBetween('captured_at', [$from->toDateTimeString(), $to->toDateTimeString()])
             ->with('station')
@@ -86,18 +77,22 @@ class PairingService
             // compute bounding box around station A for maxDistanceKm
             $bounds = $this->boundingBox((float)$a->station->latitude, (float)$a->station->longitude, $maxDistanceKm);
 
+            // also compute geohash prefix
+            $ghPrefix = Geohash::encode((float)$a->station->latitude, (float)$a->station->longitude, $geohashPrecision);
+
             // time window for B candidates
             $aTime = Carbon::parse($a->captured_at);
             $bFrom = $aTime->copy()->subSeconds($timeWindow)->toDateTimeString();
             $bTo = $aTime->copy()->addSeconds($timeWindow)->toDateTimeString();
 
-            // Query B candidates using prefilters: time window, station coordinates inside bounding box, and analyzed
+            // Query B candidates using prefilters: time window, station coordinates inside bounding box, geohash prefix, and analyzed
             $bCandidates = Capture::whereNotNull('class')
                 ->where('id', '!=', $a->id)
                 ->whereBetween('captured_at', [$bFrom, $bTo])
-                ->whereHas('station', function ($q) use ($bounds) {
+                ->whereHas('station', function ($q) use ($bounds, $ghPrefix) {
                     $q->whereBetween('latitude', [$bounds['min_lat'], $bounds['max_lat']])
-                      ->whereBetween('longitude', [$bounds['min_lng'], $bounds['max_lng']]);
+                      ->whereBetween('longitude', [$bounds['min_lng'], $bounds['max_lng']])
+                      ->where('geohash', 'like', $ghPrefix . '%');
                 })
                 ->with('station')
                 ->get();
@@ -196,9 +191,6 @@ class PairingService
         return true;
     }
 
-    /**
-     * Haversine distance between two lat/lng points in kilometers.
-     */
     private function haversineDistance(float $lat1, float $lon1, float $lat2, float $lon2): float
     {
         $earthRadius = 6371.0; // km
@@ -215,14 +207,8 @@ class PairingService
         return $earthRadius * $c;
     }
 
-    /**
-     * Compute a latitude/longitude bounding box that contains a circle of radius $distanceKm
-     * around the point ($lat, $lng). Returns min_lat, max_lat, min_lng, max_lng.
-     * Uses simple equirectangular approximations which are sufficient for modest distances.
-     */
     private function boundingBox(float $lat, float $lng, float $distanceKm): array
     {
-        // approximate degrees per km
         $degLat = $distanceKm / 110.574; // ~1 deg lat = 110.574 km
         $degLng = $distanceKm / (111.320 * cos(deg2rad($lat)) + 1e-12);
 

@@ -7,6 +7,7 @@ use App\Console\Commands\ImportOperatorsCommand;
 use App\Console\Commands\MakeStoragePublicCommand;
 use App\Console\Commands\SendOperatorsCredentialsCommand;
 use App\Console\Commands\ComputePairingsCommand;
+use App\Console\Commands\ComputeGeohashCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
 
@@ -23,6 +24,7 @@ class Kernel extends ConsoleKernel
         SendOperatorsCredentialsCommand::class,
         MakeStoragePublicCommand::class,
         ComputePairingsCommand::class,
+        ComputeGeohashCommand::class,
     ];
 
     /**
@@ -34,5 +36,11 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('queue:work --daemon')->everyMinute()->withoutOverlapping();
+
+        // Run pairing compute daily at 01:00 UTC
+        $schedule->command('compute:pairings')->dailyAt('01:00')->withoutOverlapping();
+
+        // Run geohash backfill weekly at 02:00 UTC (keep geohashes up to date)
+        $schedule->command('compute:geohash')->weekly()->dailyAt('02:00')->withoutOverlapping();
     }
 }
