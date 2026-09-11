@@ -26,4 +26,7 @@ Route::group(['prefix' => 'v1/public', 'namespace' => 'Open'], function () {
     # Captures
     Route::get('captures', 'CaptureController@index');
     Route::get('captures/{id}', 'CaptureController@show');
+
+    # Pairings
+    Route::get('pairings', 'PairingController@index');
 });

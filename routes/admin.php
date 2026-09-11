@@ -32,4 +32,7 @@ Route::group(['prefix' => 'v1/admin', 'namespace' => 'Admin', 'middleware' => ['
     Route::get('captures/{id}', 'CaptureController@show');
     Route::post('captures', 'CaptureController@create');
     Route::delete('captures', 'CaptureController@exclude');
+
+    # Pairings
+    Route::get('pairings', 'PairingController@index');
 });

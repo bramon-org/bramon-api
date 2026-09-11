@@ -1,23 +1,33 @@
 ---
-name: Auto-create station from capture analyze data
-about: Create stations automatically when importing/processsing A.XML captures
-labels: enhancement
-assignees: mrprompt
+title: "Add pairings route and PairingService"
+labels: [enhancement, api]
+assignees: []
 ---
 
-This PR implements automatic creation of Station records when processing UFO analyze files (A.XML) during import or upload. It addresses issue #12.
+This PR adds an endpoint to list probable pairings between captures. It implements the basic algorithm described in issue #4 and exposes it in admin, operator and public namespaces.
 
-What changed
-- The UfoDriver now attempts to find a Station from parsed analyze metadata and will create one if CAPTURE_AUTO_CREATE_USER_ID is configured.
-- The import:captures command will also attempt to auto-create stations using the driver when needed.
-- Adds a functional test verifying station auto-creation from an A.XML file.
-- Documents the CAPTURE_AUTO_CREATE_USER_ID environment variable.
+What I added
+- app/Services/PairingService.php — core algorithm to find pairings based on:
+  - only analyzed captures (class IS NOT NULL)
+  - date/time filters (captured_date OR captured_from/captured_to)
+  - time window between captures (query param time_window_seconds, default 5s)
+  - geographic distance filtering (Haversine, max_distance_km param, default 500km)
+  - optional refinement by azimuth, elevation and FOV with tolerances
+- Controllers: Admin/Operator/Open PairingController (thin wrappers)
+- Routes: GET /v1/{admin,operator,public}/pairings
 
-Configuration
-- To enable automatic station creation, set CAPTURE_AUTO_CREATE_USER_ID to a valid user UUID that will be set as the station owner.
+Defaults used
+- max_distance_km = 500
+- time_window_seconds = 5
+- az_tolerance_deg = 5
+- ev_tolerance_deg = 5
+- fov_tolerance = 1.0
 
-Behavior notes
-- Newly created stations are created with visible=false by default to avoid exposing incomplete stations in listings until they are reviewed.
-- Automatic creation is only performed when the env var is set.
+Notes & next steps
+- Current implementation loads captures in memory for the requested interval and compares them pairwise. This is simple and correct for small intervals but may be slow for large intervals; I recommend:
+  - adding a bounding-box prefilter in SQL using latitude/longitude to reduce candidates
+  - or precomputing pairings asynchronously when UFO Orbit output is uploaded
+  - adding unit/integration tests and OpenAPI annotations
 
-Closes: #12
+Linked issue: #4
+

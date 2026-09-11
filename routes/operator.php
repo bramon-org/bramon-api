@@ -31,4 +31,7 @@ Route::group(['prefix' => 'v1/operator', 'namespace' => 'Operator', 'middleware'
     Route::get('captures/{id}', 'CaptureController@show');
     Route::post('captures', 'CaptureController@create');
     Route::delete('captures', 'CaptureController@exclude');
+
+    # Pairings
+    Route::get('pairings', 'PairingController@index');
 });
