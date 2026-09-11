@@ -112,7 +112,39 @@ class ImportCapturesCommand extends Command
             try {
                 $stationObj = Station::where(['name' => $station, 'source' => Station::SOURCE_UFO])->firstOrFail();
             } catch (ModelNotFoundException $exception) {
-                continue;
+                // try to auto-create station by letting the driver parse an analyze file
+                $defaultUserId = env('CAPTURE_AUTO_CREATE_USER_ID', null);
+
+                if ($defaultUserId === null) {
+                    continue;
+                }
+
+                // pick first file from the first date block
+                $firstDate = array_key_first($date);
+                $firstFiles = $date[$firstDate];
+
+                $tempCapture = new Capture();
+
+                foreach ($firstFiles as $f) {
+                    try {
+                        $originalName = $f->getBasename();
+                        $uploaded = new UploadedFile($f->getRealPath(), $originalName, null, null, null, true);
+
+                        // driver will create station if configured via CAPTURE_AUTO_CREATE_USER_ID
+                        $this->driver->readAnalyzeData($uploaded, $tempCapture);
+
+                        if ($tempCapture->station_id) {
+                            $stationObj = Station::find($tempCapture->station_id);
+                            break;
+                        }
+                    } catch (\Exception $e) {
+                        continue;
+                    }
+                }
+
+                if (!isset($stationObj) || !$stationObj) {
+                    continue;
+                }
             }
 
             foreach ($date as $captureDate => $captureFiles) {
@@ -129,7 +161,7 @@ class ImportCapturesCommand extends Command
                     $originalExtension = $captureFile->getExtension();
                     $fileType = $captureFile->getType();
 
-                    $this->driver->readAnalyzeData(new UploadedFile($captureFile, $originalName), $capture);
+                    $this->driver->readAnalyzeData(new UploadedFile($captureFile->getRealPath(), $originalName, null, null, null, true), $capture);
 
                     $pathPrefix = $this->capturePrefixPath($capture, $stationObj);
 
@@ -144,17 +176,6 @@ class ImportCapturesCommand extends Command
                         'captured_at' => $captureDate,
                     ]);
                     $captureFile->save();
-
-                    /*
-                    $capture_path = sprintf(
-                        "%s/%s/%s",
-                        storage_path(),
-                        'captures',
-                        $this->captureStoragePath($capture, $stationObj)
-                    );
-
-                    copy($capture_path, $originalName);
-                    */
                 }
             }
         }
