@@ -13,7 +13,6 @@ Authorization: Bearer XOXOXOXOXOXOXOXO
 
 Onde `XOXOXOXOXOXOXOXO` é a chave de API do usuário.
 
-
 ## Namespaces
 
 - [Admin](admin/README.md)
@@ -47,3 +46,7 @@ Os filtros disponíveis estão separados por namespace/recurso:
 | country       | string (ex: Brasil)               |
 | state         | string (ex: SC)                   |
 | source        | UFO, RMS                          |
+
+### Auto-creating stations from capture analyze files
+
+To allow automatic creation of Station records when importing/processing capture analyze files (UFO A.XML), set the CAPTURE_AUTO_CREATE_USER_ID environment variable to a valid user UUID. The importer and UFO driver will use metadata parsed from the analyze XML to create a Station and associate the Capture to it. Newly created stations are created as visible=false by default so operators can review and adjust them.
