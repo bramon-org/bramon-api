@@ -1,6 +1,6 @@
 # BRAMON - API
 
-![tests](https://github.com/bramon-org/bramon-api/workflows/tests/badge.svg)
+[![Tests](https://github.com/bramon-org/bramon-api/actions/workflows/tests.yml/badge.svg)](https://github.com/bramon-org/bramon-api/actions/workflows/tests.yml)
 [![Codacy Security Scan](https://github.com/bramon-org/bramon-api/actions/workflows/codacy-analysis.yml/badge.svg)](https://github.com/bramon-org/bramon-api/actions/workflows/codacy-analysis.yml)
 
 API da BRAMON.
