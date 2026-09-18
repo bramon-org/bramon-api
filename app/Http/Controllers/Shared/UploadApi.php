@@ -85,8 +85,6 @@ trait UploadApi
 
         }
 
-        // event(new FileUploadEvent($capture->id));
-
         return $capturesRegistered;
     }
 
@@ -163,19 +161,35 @@ trait UploadApi
             'url' => "{$pathPrefix}/{$originalName}",
             'type' => $fileType,
             'extension' => $originalExtension,
-            'captured_at' => $originalDateTime,
+            'captured_at' => $originalDateTime->format('Y-m-d H:i:s'),
         ];
 
-	if (!is_null($capture->files)) {
-		$capture->files[] = $captureFile;
-	} else {
-		$capture->files = [$captureFile];
-	}
-
         $capture->captured_at = $originalDateTime;
+        $this->storeFileMetadata($capture, $captureFile);
         $capture->save();
 
         return $captureFile;
+    }
+
+    /**
+     * Add file metadata to the capture without creating a separate record.
+     *
+     * @param Capture $capture
+     * @param array $fileMetadata
+     * @return void
+     */
+    protected function storeFileMetadata(Capture $capture, array $fileMetadata): void
+    {
+        $files = $capture->files ?: [];
+
+        foreach ($files as $file) {
+            if (($file['file_hash'] ?? null) === $fileMetadata['file_hash']) {
+                return;
+            }
+        }
+
+        $files[] = $fileMetadata;
+        $capture->files = $files;
     }
 
     /**

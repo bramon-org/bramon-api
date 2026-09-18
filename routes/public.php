@@ -29,4 +29,5 @@ Route::group(['prefix' => 'v1/public', 'namespace' => 'Open'], function () {
 
     # Pairings
     Route::get('pairings', 'PairingController@index');
+    Route::get('pairings/precomputed', 'PairingController@precomputed');
 });

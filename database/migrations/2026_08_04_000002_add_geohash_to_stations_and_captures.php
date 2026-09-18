@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class AddGeohashToStationsAndCaptures extends Migration
@@ -47,19 +48,36 @@ class AddGeohashToStationsAndCaptures extends Migration
     {
         Schema::table('stations', function (Blueprint $table) {
             if (Schema::hasColumn('stations', 'geohash')) {
-                $table->dropIndex(['geohash']);
+                if (Schema::getConnection()->getDriverName() === 'sqlite') {
+                    DB::statement('DROP INDEX IF EXISTS stations_geohash_index');
+                } else {
+                    $table->dropIndex(['geohash']);
+                }
                 $table->dropColumn('geohash');
             }
-            $table->dropIndex(['latitude']);
-            $table->dropIndex(['longitude']);
+            if (Schema::getConnection()->getDriverName() === 'sqlite') {
+                DB::statement('DROP INDEX IF EXISTS stations_latitude_index');
+                DB::statement('DROP INDEX IF EXISTS stations_longitude_index');
+            } else {
+                $table->dropIndex(['latitude']);
+                $table->dropIndex(['longitude']);
+            }
         });
 
         Schema::table('captures', function (Blueprint $table) {
             if (Schema::hasColumn('captures', 'geohash')) {
-                $table->dropIndex(['geohash']);
+                if (Schema::getConnection()->getDriverName() === 'sqlite') {
+                    DB::statement('DROP INDEX IF EXISTS captures_geohash_index');
+                } else {
+                    $table->dropIndex(['geohash']);
+                }
                 $table->dropColumn('geohash');
             }
-            $table->dropIndex(['captured_at']);
+            if (Schema::getConnection()->getDriverName() === 'sqlite') {
+                DB::statement('DROP INDEX IF EXISTS captures_captured_at_index');
+            } else {
+                $table->dropIndex(['captured_at']);
+            }
         });
     }
 }

@@ -5,6 +5,8 @@ Homestead.yaml
 .env
 /public/captures
 /storage/captures
+/storage/pairings
 public/.dh-diag
 public/favicon.gif 
 public/favicon.ico
+.phpunit.result.cache

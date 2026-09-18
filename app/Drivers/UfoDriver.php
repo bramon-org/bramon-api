@@ -124,6 +124,10 @@ final class UfoDriver extends DriverAbstract
 
             // Fill capture fields from analyzed data
             $capture->fill($captureData);
+            $capture->captured_at = $capture->captured_at
+                ?: $this->getFileDate($file->getClientOriginalName());
+            $capture->capture_hash = $capture->capture_hash
+                ?: md5($file->getClientOriginalName());
 
             // Attempt to find or create the station based on parsed stationData
             $station = null;

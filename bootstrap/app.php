@@ -1,5 +1,8 @@
 <?php
 
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+ini_set('display_errors', '0');
+
 require_once __DIR__.'/../vendor/autoload.php';
 
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(dirname(__DIR__)))->bootstrap();
@@ -15,6 +18,7 @@ require_once __DIR__.'/../vendor/autoload.php';
 |
 */
 $app = new Laravel\Lumen\Application(dirname(__DIR__));
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
 $app->withFacades();
 $app->withEloquent();
 

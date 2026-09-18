@@ -1,7 +1,6 @@
 services:
   apache:
     container_name: bramon_api_apache
-    image: 'php:7.4-apache'
     build:
       context: .
       target: dev
@@ -11,14 +10,19 @@ services:
     ports:
       - '80:80'
     volumes:
-      - .:/var/www/html
+      - .:/var/www/html:Z
     depends_on:
       - mysqldb
     links:
       - mysqldb
     extra_hosts:
-      # - "host.docker.internal:host-gateway"
-      - "host.docker.internal:172.17.0.1"
+      - "host.docker.internal:host-gateway"
+      # - "host.docker.internal:172.17.0.1"
+    environment:
+      - APACHE_WEB_ROOT=/var/www/html
+      - APACHE_DOCUMENT_ROOT=/var/www/html
+      - APACHE_RUN_USER=www-data
+      - APACHE_RUN_GROUP=www-data
 
   mysqldb:
     container_name: bramon_api_database

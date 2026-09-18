@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use App\Drivers\UfoDriver;
 use App\Http\Controllers\Shared\UploadApi;
 use App\Models\Capture;
-use App\Models\File;
 use App\Models\Station;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -167,15 +166,15 @@ class ImportCapturesCommand extends Command
 
                     $hash = md5($capture->id . $originalName);
 
-                    $captureFile = File::firstOrNew(['file_hash' => $hash, 'capture_id' => $capture->id]);
-                    $captureFile->fill([
+                    $this->storeFileMetadata($capture, [
+                        'file_hash' => $hash,
                         'filename' => $originalName,
                         'url' => "{$pathPrefix}/{$originalName}",
                         'type' => $fileType,
                         'extension' => $originalExtension,
-                        'captured_at' => $captureDate,
+                        'captured_at' => $captureDate->format('Y-m-d H:i:s'),
                     ]);
-                    $captureFile->save();
+                    $capture->save();
                 }
             }
         }

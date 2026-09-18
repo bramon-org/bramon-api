@@ -62,6 +62,8 @@ class UfoDriverTest extends TestCase
      */
     public function getFileDateMustReturnFalseWhenInvalidFilename($filename)
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         (new UfoDriver)->getFileDate($filename);
     }
 

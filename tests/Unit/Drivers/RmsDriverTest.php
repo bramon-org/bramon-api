@@ -41,6 +41,8 @@ class RmsDriverTest extends TestCase
      */
     public function getFileDateMustReturnFalseWhenInvalidFilename($filename)
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         (new RmsDriver)->getFileDate($filename);
     }
 

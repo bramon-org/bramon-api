@@ -11,8 +11,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: [7.4]
-        lumen: [^5.8]
+        php: [8.4]
+        lumen: [^8.3]
 
     name: P${{ matrix.php }} - L${{ matrix.lumen }}
 
