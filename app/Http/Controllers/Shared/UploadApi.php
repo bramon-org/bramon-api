@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Shared;
 
 use App\Drivers\DriverAbstract;
 use App\Models\Capture;
+use App\Models\File as CaptureFile;
 use App\Models\Station;
 use DateTimeImmutable;
 use Illuminate\Http\Request;
@@ -166,14 +167,13 @@ trait UploadApi
             'captured_at' => $originalDateTime,
         ];
 
-	if (!is_null($capture->files)) {
-		$capture->files[] = $captureFile;
-	} else {
-		$capture->files = [$captureFile];
-	}
-
         $capture->captured_at = $originalDateTime;
         $capture->save();
+
+        CaptureFile::create(array_merge(
+            ['capture_id' => $capture->id],
+            $captureFile
+        ));
 
         return $captureFile;
     }

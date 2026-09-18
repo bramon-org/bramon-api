@@ -90,8 +90,8 @@ class PairingService
                 ->where('id', '!=', $a->id)
                 ->whereBetween('captured_at', [$bFrom, $bTo])
                 ->whereHas('station', function ($q) use ($bounds, $ghPrefix) {
-                    $q->whereBetween('latitude', [$bounds['min_lat'], $bounds['max_lat']])
-                      ->whereBetween('longitude', [$bounds['min_lng'], $bounds['max_lng']])
+                                        $q->whereRaw('CAST(latitude AS DECIMAL(10, 6)) BETWEEN ? AND ?', [$bounds['min_lat'], $bounds['max_lat']])
+                                            ->whereRaw('CAST(longitude AS DECIMAL(10, 6)) BETWEEN ? AND ?', [$bounds['min_lng'], $bounds['max_lng']])
                       ->where('geohash', 'like', $ghPrefix . '%');
                 })
                 ->with('station')

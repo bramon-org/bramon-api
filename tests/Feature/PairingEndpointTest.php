@@ -1,19 +1,9 @@
 <?php
 
-use Laravel\Lumen\Testing\TestCase;
+use Tests\Functional\TestCase;
 
 class PairingEndpointTest extends TestCase
 {
-    /**
-     * Creates the application.
-     *
-     * @return \Laravel\Lumen\Application
-     */
-    public function createApplication()
-    {
-        return require __DIR__ . '/../../bootstrap/app.php';
-    }
-
     public function testPairingsEndpointReturnsExpectedStructure()
     {
         $date = date('Y-m-d');

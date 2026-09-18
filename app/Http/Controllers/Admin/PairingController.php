@@ -28,7 +28,7 @@ class PairingController extends Controller
         $limit = $request->get('limit', 50);
         $page = $request->get('page', 1);
 
-        $query = Pairing::with(['captureA.station', 'captureB.station'])->where('pairing_date', $date)->orderBy('distance_km');
+        $query = Pairing::with(['captureA.station', 'captureB.station'])->whereDate('pairing_date', $date)->orderBy('distance_km');
 
         $total = $query->count();
         $data = $query->skip(($page - 1) * $limit)->take($limit)->get();

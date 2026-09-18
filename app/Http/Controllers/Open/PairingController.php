@@ -4,12 +4,20 @@ namespace App\Http\Controllers\Open;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pairing;
+use App\Services\PairingService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
 class PairingController extends Controller
 {
+    public function index(Request $request): JsonResponse
+    {
+        $result = (new PairingService())->findPairings($request->all());
+
+        return response()->json($result, 200);
+    }
+
     public function precomputed(Request $request): JsonResponse
     {
         $this->validate($request, [
@@ -22,7 +30,7 @@ class PairingController extends Controller
         $limit = $request->get('limit', 50);
         $page = $request->get('page', 1);
 
-        $query = Pairing::with(['captureA.station', 'captureB.station'])->where('pairing_date', $date)->orderBy('distance_km');
+        $query = Pairing::with(['captureA.station', 'captureB.station'])->whereDate('pairing_date', $date)->orderBy('distance_km');
 
         $total = $query->count();
         $data = $query->skip(($page - 1) * $limit)->take($limit)->get();

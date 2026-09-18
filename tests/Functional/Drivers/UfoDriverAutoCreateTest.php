@@ -32,7 +32,7 @@ XML;
         $tmpFile = sys_get_temp_dir() . '/test_A.XML';
         file_put_contents($tmpFile, $xml);
 
-        $uploaded = new UploadedFile($tmpFile, 'M20200608_005550_TLP_5A.XML', null, null, null, true);
+        $uploaded = new UploadedFile($tmpFile, 'M20200608_005550_TLP_5A.XML', null, null, false, true);
 
         $capture = new Capture();
         $driver = new UfoDriver();
