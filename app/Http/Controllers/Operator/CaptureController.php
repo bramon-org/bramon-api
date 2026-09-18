@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Operator;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Shared\UploadApi;
 use App\Models\Capture;
-use App\Models\File;
 use App\Models\Station;
 use EloquentBuilder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -162,21 +161,19 @@ class CaptureController extends Controller
             'files'         => 'required|array|between:1,20',
         ]);
 
-        $request['user_id'] = $request->user()->id;
+        $filesToDelete = $request->get('files');
+        $captures = Capture::where('station_id', $request->get('station_id'))->get();
 
-        $files = File::whereIn('filename', $request->get('files'))->get();
+        foreach ($captures as $capture) {
+            $captureFiles = $capture->files ?: [];
+            $remainingFiles = array_values(array_filter($captureFiles, function (array $file) use ($filesToDelete): bool {
+                return !in_array($file['filename'] ?? null, $filesToDelete, true);
+            }));
 
-        foreach ($files as $file) {
-            $capture = $file->capture;
-
-            if (!$capture) {
-                continue;
-            }
-
-            $station = $capture->station;
-
-            if ($station->user->id === $request->user()->id) {
-                $file->delete();
+            if (count($remainingFiles) !== count($captureFiles)
+                && $capture->station->user->id === $request->user()->id
+            ) {
+                $capture->files = $remainingFiles;
                 $capture->delete();
             }
         }

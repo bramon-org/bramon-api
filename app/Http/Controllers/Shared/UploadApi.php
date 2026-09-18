@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Shared;
 
 use App\Drivers\DriverAbstract;
 use App\Models\Capture;
-use App\Models\File as CaptureFile;
 use App\Models\Station;
 use DateTimeImmutable;
 use Illuminate\Http\Request;
@@ -86,8 +85,6 @@ trait UploadApi
 
         }
 
-        // event(new FileUploadEvent($capture->id));
-
         return $capturesRegistered;
     }
 
@@ -164,18 +161,35 @@ trait UploadApi
             'url' => "{$pathPrefix}/{$originalName}",
             'type' => $fileType,
             'extension' => $originalExtension,
-            'captured_at' => $originalDateTime,
+            'captured_at' => $originalDateTime->format('Y-m-d H:i:s'),
         ];
 
         $capture->captured_at = $originalDateTime;
+        $this->storeFileMetadata($capture, $captureFile);
         $capture->save();
 
-        CaptureFile::create(array_merge(
-            ['capture_id' => $capture->id],
-            $captureFile
-        ));
-
         return $captureFile;
+    }
+
+    /**
+     * Add file metadata to the capture without creating a separate record.
+     *
+     * @param Capture $capture
+     * @param array $fileMetadata
+     * @return void
+     */
+    protected function storeFileMetadata(Capture $capture, array $fileMetadata): void
+    {
+        $files = $capture->files ?: [];
+
+        foreach ($files as $file) {
+            if (($file['file_hash'] ?? null) === $fileMetadata['file_hash']) {
+                return;
+            }
+        }
+
+        $files[] = $fileMetadata;
+        $capture->files = $files;
     }
 
     /**

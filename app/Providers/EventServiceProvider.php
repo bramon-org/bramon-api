@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use App\Events\FileUploadEvent;
-use App\Listeners\FileUploadListener;
 use Laravel\Lumen\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -13,9 +11,5 @@ class EventServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $listen = [
-        FileUploadEvent::class => [
-            FileUploadListener::class,
-        ],
-    ];
+    protected $listen = [];
 }
