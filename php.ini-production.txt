@@ -1897,5 +1897,23 @@ opcache.fast_shutdown=1
 ; "true"    - always enabled
 ;ffi.enable=preload
 
+[opcache]
+; Habilita a extensão
+opcache.enable=1
+opcache.enable_cli=0
+
+; Alocação de memória (ajuste de acordo com o tamanho do servidor)
+opcache.memory_consumption=128
+opcache.interned_strings_buffer=16
+opcache.max_accelerated_files=10000
+
+; Desativa a verificação de alteração de arquivos em disco (MÁXIMA PERFORMANCE)
+opcache.validate_timestamps=0
+opcache.revalidate_freq=0
+
+; Otimizações adicionais de código e chamadas
+opcache.save_comments=1
+opcache.fast_shutdown=1
+
 ; List of headers files to preload, wildcard patterns allowed.
 ;ffi.preload=
